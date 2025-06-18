@@ -9,6 +9,8 @@ import  Login  from "../pages/Login"; // Importing Login and Logout components
 import  Logout from "../pages/Logout"; // Importing Login and Logout components
 import Signup from "../pages/Signup"; // Importing Signup component
 
+import DashBoard from "../components/Dashboard/FtsDashboard";
+
 const Routes = () => {
 
     // we get the token from the compoenent that provides and consumes the context
@@ -51,6 +53,10 @@ const Routes = () => {
         {
           path: "/logout",
           element: <Logout />,
+        },
+        {
+          path: "/fts",
+          element: <DashBoard />,
         },
       ],
     },

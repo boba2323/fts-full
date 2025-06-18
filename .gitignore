@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.log
+*.sqlite3
+*.db
+.env
+.venv/
+venv/
+ENV/
+env/
+*.pem
+*.key
+*.pub
+*.crt
+
+# React / Node.js
+node_modules/
+dist/
+build/
+*.log
+.env.local
+.env.development
+.env.production
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor Files
+.vscode/
+.idea/
+*.swp

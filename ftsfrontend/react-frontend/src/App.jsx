@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 // import './App.css'
 
 // =========for authentication==========
-import AuthProvider from "./authentication/authProvider";
+import {AuthProvider} from "./authentication/authProvider";
 // we import from the index in routes
 import Routes from "./routes";
 // ======================================
@@ -19,7 +19,7 @@ function App() {
       >
       Hello world!
     </h1> */}
-    
+
     <AuthProvider>
       <Routes />
     </AuthProvider>

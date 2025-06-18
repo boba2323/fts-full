@@ -3,6 +3,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth} from "../authentication/authProvider";
 import { ProtectedRoute } from "./ProtectedRoutes";
+import { Navigate, Outlet } from "react-router-dom";
 
 import  Login  from "../pages/Login"; // Importing Login and Logout components
 import  Logout from "../pages/Logout"; // Importing Login and Logout components
@@ -13,12 +14,16 @@ const Routes = () => {
     // we get the token from the compoenent that provides and consumes the context
   const { userIn , loading  } = useAuth();
 
-  if (userIn === undefined || loading) {
+  if ( !loading) {
     return <div>Loading...</div>; // or a spinner
   }
 
   // Define public routes accessible to all users
   const routesForPublic = [
+    {
+      path: "/",
+      element: <div>Home Page</div>,
+    },
     {
       path: "/service",
       element: <div>Service Page</div>,
@@ -45,7 +50,7 @@ const Routes = () => {
         },
         {
           path: "/logout",
-          element: <div><Logout /></div>,
+          element: <Logout />,
         },
       ],
     },
@@ -53,17 +58,14 @@ const Routes = () => {
 
   // Define routes accessible only to non-authenticated users
   const routesForNotAuthenticatedOnly = [
-    {
-      path: "/",
-      element: <div>Home Page</div>,
-    },
+    
     {
       path: "/login",
-      element: <div><Login /></div>,
+      element: <Login />,
     },
     {
       path: "/signup",
-      element: <div><Signup /></div>,
+      element: <Signup />,
     }
   ];
 
@@ -71,7 +73,11 @@ const Routes = () => {
   const router = createBrowserRouter([
     ...routesForPublic,
     ...(userIn ? routesForAuthenticatedOnly : []),
-    ...(!userIn ? routesForNotAuthenticatedOnly : []),
+    ...(userIn === null ? routesForNotAuthenticatedOnly:[]),
+    {
+      path: "*",
+      element: <Navigate to={userIn ? "/profile" : "/login"} replace />
+    }
   ]);
 
   // Provide the router configuration using RouterProvider

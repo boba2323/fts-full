@@ -9,12 +9,16 @@ export const ProtectedRoute = () => {
   // in other words, the context has already been consumed elesewhere and just used here? maybe right maybe wrong
 
   // destructuring going on, only token extracted and setToken ignored
-  const { userIn } = useAuth();
+  const { userIn, loading } = useAuth();
+
+  if (!loading) {
+    return <div>Loading...</div>; // Or a proper spinner
+  }
 
   // Check if the user is authenticated
   if (!userIn) {
     // If not authenticated, redirect to the login page
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   // If authenticated, render the child routes

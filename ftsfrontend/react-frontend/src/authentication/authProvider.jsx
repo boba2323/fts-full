@@ -4,10 +4,14 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+// we export here to fix this error
+//  Could not Fast Refresh ("useAuth" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+// this is the AuthProvider component that wraps around the children components
+// authprovider is used to wrapped the routes component in App.jsx
+export const AuthProvider = ({ children }) => {
   // this function puts the userIn value inside the child components via context. we apply it at app.jsx
   const [userIn, setUserIn] = useState(undefined) //we can udefined or nothing
-  const [loading, setLoading] = useState(true)  //this is for making sure we only load the pages when the endpoints are done hitted
+  const [loading, setLoading] = useState(false)  //this is for making sure we only load the pages when the endpoints are done hitted
   //  we will hit the me endpoint only once. it makes sense since otherwise we would be hitting them on each render
   // to not do that, we put it inside a useeffect with no dependency
   // then we can put the value(the user) we return in a context so we can move the value around other components
@@ -23,7 +27,7 @@ const AuthProvider = ({ children }) => {
             })
         if (response.status === 200) {
           // success login 
-            console.log("yes yes you are logged in:", response.data);
+            console.log("yes yes you can access me in auth you are logged in:", response.data);
             
           } else {
             console.error("you did not log in", response.data)
@@ -32,7 +36,7 @@ const AuthProvider = ({ children }) => {
        } catch (error) {
         setUserIn(null)
        } finally {
-        setLoading(false)  //loading is over now wecan call the pages
+        setLoading(true)  //loading is over now wecan call the pages
        }
       }
       
@@ -55,5 +59,5 @@ export const useAuth = () => {
 
 
 // this is the AuthProvider component that wraps around the children components
-export default AuthProvider;
+// export default AuthProvider;
 // authprovider is used to wrapped the routes component in App.jsx

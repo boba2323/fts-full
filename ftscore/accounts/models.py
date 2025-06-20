@@ -94,6 +94,7 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
         return self.is_supervisor
     
     def get_team_membership(self):
+        # cool way of getting a model without the silly circular import issue
         TeamMembership = apps.get_model('permissions', 'TeamMembership')
         if self.memberships.exists():
             team_membership_of_user = self.memberships.first()

@@ -138,4 +138,21 @@ class LoggedUserView(generics.RetrieveUpdateDestroyAPIView):
         user_serialised = UserSerializer(user, context={'request': request})
         return Response(user_serialised.data)
 
+# https://stackoverflow.com/questions/14401398/how-to-delete-cookies-in-django
+# https://stackoverflow.com/questions/54385269/django-delete-cookie-from-request
+# You can't delete cookie from a request, or rather it would be an exercise in futility. The way you "delete" (and set) a cookie from the server side is by issuing a specific header on the response. The request only contains headers sent by the client.
+class LogoutView(generics.GenericAPIView):
+    serializer_class=UserSerializer
+
+    def post(self, request):
+        # deleting the token from cookies
+        response = Response({"success": ("Successfully logged out.")},
+                    status=status.HTTP_200_OK)
+        response.delete_cookie("access")
+        response.delete_cookie('refresh')
+
+        # deleting the session token from request?
+        if "token" in self.request.session.keys():
+            del self.request.session["token"]
+        return response
         

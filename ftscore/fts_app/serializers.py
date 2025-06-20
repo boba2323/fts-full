@@ -82,10 +82,11 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
     owner_username_at_creation = serializers.PrimaryKeyRelatedField(read_only=True)
     download_url = serializers.SerializerMethodField()
     team = serializers.SerializerMethodField()
+    access_code_code = serializers.SerializerMethodField()
     class Meta:
         model = File
         fields = ['url', 'id', 'file_data', 'name', 'owner', 'owner_username_at_creation', 'date_created','permissions', 
-                   'folder', 'tags', 'download_url', "access_code", "team"] 
+                   'folder', 'tags', 'download_url', "access_code", "team", "access_code_code"] 
         
     # def validate(self, data):
     #     '''if we are updating if file already exists, then the same file will be kept because the browser api field says no file chosen'''
@@ -102,6 +103,10 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
     # # the best way to handle this is via front end
 
     #     return super().validate(data)
+    def get_access_code_code(self, obj):
+        if not obj.access_code:
+            return None
+        return obj.access_code.code
 
     def get_team(self, obj):
         if not obj.access_code:

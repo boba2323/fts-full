@@ -11,7 +11,7 @@ export const ProtectedRoute = () => {
   // destructuring going on, only token extracted and setToken ignored
   const { userIn, loading } = useAuth();
 
-  if (!loading) {
+  if (loading) {
     return <div>Loading...</div>; // Or a proper spinner
   }
 

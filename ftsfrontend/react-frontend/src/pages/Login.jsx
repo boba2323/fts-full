@@ -47,7 +47,8 @@ const Login = () => {
        // success login 
         console.log("Successfully logged in:", response.data);
         setMessage("Login successfull");
-        navigate("/", { replace: true });
+        // we seeit can navigate to unprotected routes but not to protected routes
+        navigate("/service", { replace: true });
       }
 
       
@@ -88,12 +89,6 @@ const Login = () => {
       setLoading(false);
     }
   }
-
-
-  // setTimeout(() => {
-  //   handleLogin();
-  // }, 3 * 1000);
-
   return (
   <>
   <div className="flex flex-col justify-center items-center h-screen pt-14 pb-10">

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from permissions.serializers import TeamSerializer
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,17 +14,22 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True
     )  # Reverse relation to AccessCode model
 
+    team = serializers.SerializerMethodField()
     belongs_to_team = serializers.SerializerMethodField()
     team_access_level = serializers.SerializerMethodField()
     role = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'email', 'password', 'belongs_to_team', "team_access_level", 'created_access_codes'
+        fields = ['url', 'id', 'username', 'email', 'password', "team", 'belongs_to_team', "team_access_level", 'created_access_codes'
                   ,'role']  # Include 'url' field
         # extra_kwargs = {'password': {'write_only': True}}
 
     # to set hashed password in serialiser. its better than setting it in view or models
   # https://docs.djangoproject.com/en/5.2/ref/contrib/auth/#django.contrib.auth.models.User.set_password
+
+    def get_team(self, obj):
+        return {"id":obj.get_team_membership().team.id,
+                "name": obj.get_team_membership().team.name}
 
     def create(self, validated_data):
         password = validated_data.pop('password')

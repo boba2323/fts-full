@@ -16,7 +16,7 @@ const Routes = () => {
     // we get the token from the compoenent that provides and consumes the context
   const { userIn , loading  } = useAuth();
 
-  if ( !loading) {
+  if ( loading) {
     return <div>Loading...</div>; // or a spinner
   }
 

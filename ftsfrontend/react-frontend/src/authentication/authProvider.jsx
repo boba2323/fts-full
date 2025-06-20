@@ -11,7 +11,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   // this function puts the userIn value inside the child components via context. we apply it at app.jsx
   const [userIn, setUserIn] = useState(undefined) //we can udefined or nothing
-  const [loading, setLoading] = useState(false)  //this is for making sure we only load the pages when the endpoints are done hitted
+  const [loading, setLoading] = useState(true)  //this is for making sure we only load the pages when the endpoints are done hitted
   //  we will hit the me endpoint only once. it makes sense since otherwise we would be hitting them on each render
   // to not do that, we put it inside a useeffect with no dependency
   // then we can put the value(the user) we return in a context so we can move the value around other components
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
        } catch (error) {
         setUserIn(null)
        } finally {
-        setLoading(true)  //loading is over now wecan call the pages
+        setLoading(false)  //loading is over now wecan call the pages
        }
       }
       

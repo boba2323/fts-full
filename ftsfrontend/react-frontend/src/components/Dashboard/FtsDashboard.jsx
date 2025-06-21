@@ -1,11 +1,16 @@
-import React from "react"
+import React, { useState } from "react"
 import Header from "../Header/Header"
 import Header2 from "../Header2/Header2"
 import Sidebar from "../Sidebar/Sidebar"
 import Rightbar from "../RightBar/Rightbar"
 import DashboardMain from "../DashboardMain/DashboardMain"
+import FileUpload from "../FileUpload/FileUpload"
 
 const DashBoard = () =>{
+    const [isUpload, setIsUpload] = useState(true);
+    
+
+
     return (
         <>
             <Header />
@@ -16,7 +21,7 @@ const DashBoard = () =>{
                     <Sidebar />
                 </div>
                 <div className="col-span-9 overflow-auto bg-white">
-                    <DashboardMain/>
+                    <FileUpload/>
                 </div>
                 <div className="col-span-2">
                     <Rightbar/>

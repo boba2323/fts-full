@@ -7,7 +7,7 @@ import { useState } from "react";
 // for api
 import axios from 'axios';
 const Login = () => {
-  const { setToken } = useAuth();
+  const { userIn, setUserIn, hitMeandFetch } = useAuth();
   const navigate = useNavigate();
 
   // this is for loading state, i want to put a spinner while the form is sbumitting
@@ -39,16 +39,26 @@ const Login = () => {
           'Content-Type': 'application/json'
         },
         withCredentials: true, // Optional: only needed if cookies are set
-        
       });
       console.log("hitting the login")
+      // The login did not navigate to fts or next page at once
+    // This is because the userIn state was not set at once after login, we manually set it after login to fix
+
+      // setUserIn(response.data)
 
       if (response.status === 200) {
        // success login 
         console.log("Successfully logged in:", response.data);
+
+        // we set userIn with function instead of just the state setter. this sets the userIn so the protected routes work
+        await hitMeandFetch();
         setMessage("Login successfull");
         // we seeit can navigate to unprotected routes but not to protected routes
-        navigate("/service", { replace: true });
+        // for protected routes we have to set userIn in state so the protectedroutes component can access it when we 
+        // apply it in routes/index.
+        // moreover we can also make it redirect to a non protected page and proceed from there but we chose to
+        // naviagate to fts now 
+        navigate("/fts", { replace: true });
       }
 
       

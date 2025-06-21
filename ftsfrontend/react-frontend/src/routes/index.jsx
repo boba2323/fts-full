@@ -11,13 +11,30 @@ import Signup from "../pages/Signup"; // Importing Signup component
 
 import DashBoard from "../components/Dashboard/FtsDashboard";
 
+import Loading from "../components/Loading/Loading";
+
+
+const FallbackRedirect = () => {
+  const { userIn, loading } = useAuth();
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (userIn) {
+    return <Navigate to="/fts" replace />;
+  } else {
+    return <Navigate to="/login" replace />;
+  }
+};
+
 const Routes = () => {
 
     // we get the token from the compoenent that provides and consumes the context
   const { userIn , loading  } = useAuth();
 
   if ( loading) {
-    return <div>Loading...</div>; // or a spinner
+    return <Loading/>; // or a spinner
   }
 
   // Define public routes accessible to all users
@@ -82,7 +99,7 @@ const Routes = () => {
     ...(userIn === null ? routesForNotAuthenticatedOnly:[]),
     {
       path: "*",
-      element: <Navigate to={userIn ? "/profile" : "/login"} replace />
+      element: <FallbackRedirect />
     }
   ]);
 

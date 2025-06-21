@@ -1,3 +1,6 @@
+// https://dev.to/sanjayttg/jwt-authentication-in-react-with-react-router-1d03
+// refer to the link
+
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../authentication/authProvider";
 
@@ -18,7 +21,7 @@ export const ProtectedRoute = () => {
   // Check if the user is authenticated
   if (!userIn) {
     // If not authenticated, redirect to the login page
-    return <Navigate to="/" />;
+    return <Navigate to="/service" />;
   }
 
   // If authenticated, render the child routes

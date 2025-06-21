@@ -15,8 +15,15 @@ export const AuthProvider = ({ children }) => {
   //  we will hit the me endpoint only once. it makes sense since otherwise we would be hitting them on each render
   // to not do that, we put it inside a useeffect with no dependency
   // then we can put the value(the user) we return in a context so we can move the value around other components
-  useEffect (() => {
-    const hitMeandFetch =async ()=> {
+
+  // setUserin will also be used in login so the userIn object is set to state immediately on successfull login
+
+  // the problem in authProvider is that its mounted in App.js meanign its usually called before we ever login thus the 
+  // userIn is mostly null. unless we login in and a jwt cookie is set and then we refresh and the app and the 
+  // authprovider component runs again including the hitandfetch function thus setting a userIn which is valid this time
+  // so to fix the userIn setting null, we export the hitmeandfetch function as context.
+  // setUserin also worked but sending the function is better
+  const hitMeandFetch =async ()=> {
       try{
         const response = await axios.get('http://127.0.0.1:8000/accounts/me/', {
             headers: {
@@ -39,13 +46,13 @@ export const AuthProvider = ({ children }) => {
         setLoading(false)  //loading is over now wecan call the pages
        }
       }
-      
-
+      // function kept out of useeffect since it needs to be used elsewherer
+  useEffect (() => {
     hitMeandFetch()
   },[])
   return (
     // thus you see what this component via context provides is the userIn object and the setter method. this is what we focus on
-    <AuthContext.Provider value={{ userIn, setUserIn, loading }}>
+    <AuthContext.Provider value={{ userIn, setUserIn, loading, hitMeandFetch }}>
       {children}
     </AuthContext.Provider>
   )

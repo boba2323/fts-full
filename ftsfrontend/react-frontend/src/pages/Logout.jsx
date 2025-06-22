@@ -42,12 +42,15 @@ const Logout = () => {
                     )} */}
                   <div className="mb-3"></div>
                   <AuthButton buttonText={"Logout"} />
+                  {/* https://stackoverflow.com/questions/30915173/react-router-go-back-a-page-how-do-you-configure-history/62341050#62341050 */}
+                  
                 </div>
                 <div className="register-div flex flex-col items-center justify-center pt-2 sm:text-xs
                   tracking-tight font-light
                   ">
                 </div> 
               </form>
+              <button>cancel</button>
             </div>
           </div>
       </div>

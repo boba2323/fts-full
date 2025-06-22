@@ -9,10 +9,11 @@ import  Login  from "../pages/Login"; // Importing Login and Logout components
 import  Logout from "../pages/Logout"; // Importing Login and Logout components
 import Signup from "../pages/Signup"; // Importing Signup component
 
-import DashBoard from "../components/Dashboard/FtsDashboard";
-
 import Loading from "../components/Loading/Loading";
 
+import FileUpload from "../components/FileUpload/FileUpload";
+import DashBoard from "../components/Dashboard/FtsDashboard";
+import DashboardMain from "../components/DashboardMain/DashboardMain";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -55,6 +56,7 @@ const Routes = () => {
 
   // Define routes accessible only to authenticated users
   const routesForAuthenticatedOnly = [
+    // https://reactrouter.com/6.28.0/start/tutorial#nesting-routes
     {
       path: "/",
       element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
@@ -74,6 +76,31 @@ const Routes = () => {
         {
           path: "/fts",
           element: <DashBoard />,
+          // https://reactrouter.com/6.28.0/start/tutorial#nesting-routes
+          // the places where we want the child component to be i.e the component we will replace with int he child url route
+          // will be represented by <Outlet/>
+          children: [
+            {
+                path: "",
+                element: <h1>Welcome to FTS</h1>
+              },
+              {
+                path: "upload-file",
+                element: <div><FileUpload/></div>,
+              },
+              {
+                path: "files",
+                element: <div><DashboardMain/></div>,
+              },
+              {
+                path: "teams",
+                element: <div>User Profile</div>,
+              },
+              {
+                path: "admin",
+                element: <div>User Profile</div>,
+              }
+            ]
         },
       ],
     },

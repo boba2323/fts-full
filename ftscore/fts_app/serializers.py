@@ -83,6 +83,8 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
     download_url = serializers.SerializerMethodField()
     team = serializers.SerializerMethodField()
     access_code_code = serializers.SerializerMethodField()
+    # https://stackoverflow.com/questions/34989915/write-only-read-only-fields-in-django-rest-framework
+    owner = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = File
         fields = ['url', 'id', 'file_data', 'name', 'owner', 'owner_username_at_creation', 'date_created','permissions', 
@@ -101,6 +103,11 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
     #     # "The submitted data was not a file. Check the encoding type on the form."
     #     # ]
     # # the best way to handle this is via front end
+
+    def get_owner(self, obj):
+        if not obj.owner:
+            return None
+        return obj.owner.username
 
     #     return super().validate(data)
     def get_access_code_code(self, obj):
@@ -132,7 +139,8 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
     def save(self, **kwargs):
         request = self.context.get('request')
         # check if its being saved first time or updated
-        is_it_being_updated = self.instance is not None
+        is_it_being_updated = self.instance is not None  #true is true =true= if it created
+                                                         #false is true = false=if it is being updated
 
 
         # https://stackoverflow.com/questions/72003550/how-can-i-access-the-created-instance-by-a-serializer-in-a-view
@@ -144,6 +152,12 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
         user_membership = user.get_team_membership()
         if not user_membership:
             raise ValueError("You are not in a team")
+        
+        # auto save owner to model
+        if not is_it_being_updated:
+            file_instance.owner=user
+            file_instance.save()
+
         user_team_name = user_membership.team.name
         user_team_level = user_membership.team.level
         user_role = user_membership.role

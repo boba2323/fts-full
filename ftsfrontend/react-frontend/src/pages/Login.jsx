@@ -67,28 +67,28 @@ const Login = () => {
     } catch (error) {
       if (error.response) {
         // first we get hold of the error data
-      const errorData = error.response.data
-      // the data we will get will be an object with keys username, email, password. we will extract them
-      // however the values of these may be a single string or an array of strings, hence we need to check
-      // if they are just a string or an array of strings in that case we will join all the strings together with a comma
-      const getErrorMessage = (field) => {
-        if (Array.isArray(field)) 
-          return field.join(', ');
-        if (typeof field === "string") {
-          return field;
-        } else {
-          return ''
-        }
-      }
-        
-      console.log(errorData)
-      const emailError = getErrorMessage(errorData.email);
-      const passwordError = getErrorMessage(errorData.password);
-      const loginDetail = getErrorMessage(errorData.detail);
-      console.log("no login")
-      const finalMessage = [ emailError || passwordError || loginDetail || "Error found" ]
-        setMessage(finalMessage);
-        console.error('Error response:', error.response.data);
+          const errorData = error.response.data
+          // the data we will get will be an object with keys username, email, password. we will extract them
+          // however the values of these may be a single string or an array of strings, hence we need to check
+          // if they are just a string or an array of strings in that case we will join all the strings together with a comma
+          const getErrorMessage = (field) => {
+            if (Array.isArray(field)) 
+              return field.join(', ');
+            if (typeof field === "string") {
+              return field;
+            } else {
+              return ''
+            }
+          }
+            
+          console.log(errorData)
+          const emailError = getErrorMessage(errorData.email);
+          const passwordError = getErrorMessage(errorData.password);
+          const loginDetail = getErrorMessage(errorData.detail);
+          console.log("no login")
+          const finalMessage = [ emailError || passwordError || loginDetail || "Error found" ]
+          setMessage(finalMessage);
+          console.error('Error response:', error.response.data);
       } else {
         console.error("Axios config/setup error:", error.message);
         setMessage('Error: Could not connect to server.');

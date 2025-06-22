@@ -21,8 +21,10 @@ class RefreshJWTMiddleware:
             try:
                 jwt.decode(access_token, self.secret_key, algorithms=["HS256"])
             except ExpiredSignatureError:
+                print("access token has expired the refresh middleware is running")
                 # Try to refresh using the refresh token
                 if refresh_token:
+                    print("theres a refresh token")
                     try:
                         jwt.decode(refresh_token, self.secret_key, algorithms=["HS256"])
 

@@ -17,11 +17,14 @@ const Header = () => {
             {userIn?
                 <>
                     <div className="userInfo pe-3">
-                        <p className='text-xs text-gray-50 font-normal'>User Name something</p>
-                        <p className='text-xs text-gray-100 font-thin'>something</p>
+                        <p className='text-xs text-gray-50 font-normal'>{userIn.email}</p>
+                        {userIn.belongs_to_team
+                        ?<p className='text-xs text-gray-100 font-thin'>Team: {userIn.belongs_to_team}</p>
+                        :<p className='text-xs text-gray-100 font-thin'>Team: None</p>}
+                        
                     </div>
                     <div className="userbox border-1  bg-green-700 p-2 rounded">
-                        <p className='text-xs text-gray-50'>User</p>
+                        <p className='text-xs text-gray-50'>{userIn.username}</p>
                     </div>
                 
                 </> :<div className="userbox border-1  bg-green-700 p-2 rounded">

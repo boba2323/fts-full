@@ -14,6 +14,7 @@ import Loading from "../components/Loading/Loading";
 import FileUpload from "../components/FileUpload/FileUpload";
 import DashBoard from "../components/Dashboard/FtsDashboard";
 import DashboardMain from "../components/DashboardMain/DashboardMain";
+import Team from "../components/Team/Team";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -94,7 +95,7 @@ const Routes = () => {
               },
               {
                 path: "teams",
-                element: <div>User Profile</div>,
+                element: <div><Team/></div>,
               },
               {
                 path: "admin",

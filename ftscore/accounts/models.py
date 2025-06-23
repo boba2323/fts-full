@@ -37,6 +37,9 @@ class MyuserManager(BaseUserManager):
         )
         user.is_admin = True
         user.is_superuser = True  # Ensure the user is a superuser
+
+        user.is_supervisor = True #adding this for making every supeuser a supervidor too
+
         user.save(using=self._db)
         return user
     

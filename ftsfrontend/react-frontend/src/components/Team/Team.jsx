@@ -1,24 +1,84 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import Loading from '../Loading/Loading.jsx'
+import moment from 'moment'
+import { format } from 'date-fns';
 
 const Team = () => {
-  const [teamData, setTeamData] =useState()
+  const [teamData, setTeamData] =useState([])
   const [loading, setLoading] = useState()
 
-  useEffect =()=>{
-    const fetchData = async ()=>{
+  useEffect (()=>{
+    const fetchTeamData = async ()=>{
         setLoading(true)
         try {
-            const response = await axios.get('http://127.0.0.1:8000/drf/teams/')
+            const response = await axios.get('http://127.0.0.1:8000/drf/teams/',
+              {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              withCredentials: true, // Optional: only needed if cookies are set
+              }
+            )
+            setTeamData(response.data)
         } catch {
-
+          console.error("Error fetching file data:", error)
+          setTeamData([])
+        } finally {
+          setLoading(false)
         }
-    }
-
-  }
+      }
+      fetchTeamData()
+    }, [])
   return (
     <div>
-      
+      <div className="liststyle overflow-x-auto">
+        <table className=' w-full'>
+          <thead>
+            <tr className='border-b-2 border-gray-200 h-6'>
+                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Team Name</th>
+                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Date Created</th>
+                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Access Code</th>
+                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Leader</th>
+                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Workers</th>
+                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading
+            ? (<tr>
+                <td colSpan={4} className="flex justify-center items-center ps-5 py-3 text-sm text-gray-500">
+                  <Loading/>
+                </td>
+              </tr>)
+            : (teamData.map((team) => (
+                                  <tr key={team.id} className='border-b-2 border-gray-50 h-8'>
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={team.url}>{team.name }</a></td>
+                                    {/* <td className='ps-5'>{format(new Date(file.date_created), 'dd MMM yyyy')}</td> */}
+                                    <td className='ps-5
+                                    text-xs font-light font-sans text-gray-700'
+                                    >{moment(format(new Date(team.created_at), 'yyyy-MM-dd')).fromNow(true)} ago</td>
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.access_code_code }</td>
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'>leader {team.leader_name }</td>
+                                    {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.membership_users }</td> */}
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'>
+                                      {team.workers.map((worker)=>{
+                                          return (<p>{worker.user}</p>
+                                          )
+                                      }) }
+                                    </td>
+                                    {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.memberships }</td> */}
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.level }</td>
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={team.download_url}>Download</a></td>
+                                    
+                                  </tr>
+                              ))
+                            
+            )
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

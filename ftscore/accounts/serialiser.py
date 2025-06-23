@@ -18,14 +18,40 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     belongs_to_team = serializers.SerializerMethodField()
     team_access_level = serializers.SerializerMethodField()
     role = serializers.SerializerMethodField()
+
+    is_superuser  = serializers.SerializerMethodField()
+    is_staff  = serializers.SerializerMethodField()
+    is_supervisor  = serializers.SerializerMethodField()
+    is_Team_L1  = serializers.SerializerMethodField()
+    is_leader = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'email', 'password', "team", 'belongs_to_team', "team_access_level", 'created_access_codes'
-                  ,'role']  # Include 'url' field
+                  ,'role',
+                  "is_superuser",
+                  "is_staff",
+                  "is_supervisor",
+                  "is_Team_L1",
+                  "is_leader",
+                  ]  # Include 'url' field
         # extra_kwargs = {'password': {'write_only': True}}
 
     # to set hashed password in serialiser. its better than setting it in view or models
   # https://docs.djangoproject.com/en/5.2/ref/contrib/auth/#django.contrib.auth.models.User.set_password
+    def get_is_superuser(self, obj):
+        return obj.is_superuser
+    
+    def get_is_staff(self, obj):
+        return obj.is_staff
+    
+    def get_is_supervisor(self, obj):
+        return obj.supervisor
+    
+    def get_is_Team_L1(self, obj):
+        return obj.is_team_level_L1()
+    def get_is_leader(self, obj):
+        return obj.is_team_leader()
+
 
     def get_team(self, obj):
         return {"id":obj.get_team_membership().team.id,

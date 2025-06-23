@@ -40,13 +40,27 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     # leader= UserSerializer()
     # bad idea, it should not be read only since we need to actively fill it. even when its writable, it does not link to existing leaders
     # but makes us create one
-
+    access_code_code = serializers.SerializerMethodField()
     workers=serializers.SerializerMethodField()
+    leader_name = serializers.SerializerMethodField()
     class Meta:
         model = Team
-        fields = ('id', 'name', 'url', 'name', 'created_at', 'leader', 'membership_users',
+        fields = ('id', 'name', 'url', 'name', 'created_at', 'leader','leader_name', 'membership_users',
                    'workers',
-                     'memberships', 'level', 'access_codes' )
+                     'memberships', 'level', 'access_codes', "access_code_code" )
+        
+    
+    def get_leader_name(self, obj):
+        if obj.leader:
+            return obj.leader.username
+        return None
+
+    def get_access_code_code(self, obj):
+        if obj.access_codes.exists():
+            access_code_inst = obj.access_codes.first()
+            code = access_code_inst.code
+            return code
+        return None
 
     def get_workers(self, obj):
         # getting the request body in the serialiser. its not the same as getting the request body in biews

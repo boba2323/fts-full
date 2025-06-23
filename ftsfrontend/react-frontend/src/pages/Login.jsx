@@ -104,6 +104,7 @@ const Login = () => {
   <div className="flex flex-col justify-center items-center h-screen pt-14 pb-10">
         <div className="formdiv w-1/3 px-10 border border-gray-200 h-full">
           <AuthBanner title = {"Welcome Back"} subtitle={"Please enter your details here"}/>
+          <p className="flex justify-center items-center sm:text-xs text-green-700 mb-4">We encourage you to use a fake email to view this app</p>
           <div className="formcard">
             <form onSubmit={onLoginHandler}>
               <div className="flex flex-col">

@@ -1,4 +1,5 @@
 // this is the index file for routes meaning we can simply export from ./routes
+// https://reactrouter.com/6.28.0/start/tutorial#nesting-routes
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth} from "../authentication/authProvider";
@@ -15,6 +16,9 @@ import FileUpload from "../components/FileUpload/FileUpload";
 import DashBoard from "../components/Dashboard/FtsDashboard";
 import DashboardMain from "../components/DashboardMain/DashboardMain";
 import Team from "../components/Team/Team";
+import AdminPanel from "../components/AdminSupervisor/AdminPanel";
+
+import CreateTeam from "../components/AdminSupervisor/CreateTeam";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -99,7 +103,13 @@ const Routes = () => {
               },
               {
                 path: "admin",
-                element: <div>User Profile</div>,
+                element: <div><AdminPanel/></div>,
+                children: [
+                    {
+                      path: "create-team",
+                      element: <h1><CreateTeam/></h1>
+                    }
+                  ]
               }
             ]
         },

@@ -1,8 +1,9 @@
 import { Outlet, Link } from "react-router-dom";
-
 import {useAuth} from "../../authentication/authProvider"
-const Sidebar = ({onClickHandler}) => {
-  const { userIn, setUserIn, hitMeandFetch } = useAuth();
+const Sidebar = ({
+    onClickHandler
+  }) => {
+  const { userIn, setUserIn, loading, hitMeandFetch } = useAuth();
   const onClickHandlerNative =()=>{
     // console.log(isUpload)
     // if (isUpload){
@@ -22,7 +23,12 @@ const Sidebar = ({onClickHandler}) => {
   return (
     
     <div className="flex flex-col h-screen bg-gray-50 text-gray-600 p-4">
+      {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
+        ?<Link to={`admin`} ><div>admin</div></Link>
+        :<></>
+      }
       <button onClick={testClick} >usertest</button>
+      {userIn.In}
       <h2 className="text-sm font-bold mb-6 ps-2">FTS</h2>
       <nav>
         {/* https://reactrouter.com/6.28.0/start/tutorial#nesting-routes */}

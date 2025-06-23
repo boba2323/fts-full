@@ -18,8 +18,7 @@ const Signup = () => {
   // this is for loading state, i want to put a spinner while the form is sbumitting
   const [loading, setLoading] = useState(false);
 
-  const { setToken } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
     const {name, value} = e.target;

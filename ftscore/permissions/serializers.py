@@ -5,16 +5,59 @@ from .models import Team, TeamMembership, AccessCode  # Import your models
 from rest_framework.reverse import reverse
 from fts_app.serializers import UserSerializer
 from pprint import pprint
+from rest_framework.validators import UniqueTogetherValidator,UniqueValidator
 User = get_user_model()
 
 class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='teammembership-detail',
+        
     )
+    # https://www.django-rest-framework.org/api-guide/validators/#uniquevalidator
+    user=serializers.HyperlinkedIdentityField(
+        view_name="myuser-detail",
+        validators=[UniqueValidator(queryset=TeamMembership.objects.all(),
+                                    message="A user can only be part of one team at a time only once-unique constraint of teammembership.")]
 
+    )
+# teammembership in models is complex especially the validations. and we need to bring all those validations
+# to the api here. some we will do through the constraints 
+# https://dev.to/soldatov-ss/why-django-rest-framework-doesnt-show-your-custom-validation-error-messages-and-what-to-do-about-2dcl
+# others we will validate()
     class Meta:
         model = TeamMembership
         fields = ('id', 'url', 'team', 'user', 'role')
+
+    def validate(self, attrs):
+        # while model did the constraint with q objects we cannot use it in drf so we do it manually
+        team_membership_model = self.Meta.model
+        user = attrs.get('user')
+        team =attrs.get('team')
+        role = attrs.get('role')
+
+        query_of_user_already_existing_in_tm = team_membership_model.objects.filter(user=user)
+        if self.instance:
+            # incase  user already exists in TM then we raise a error
+            # however in case of update, the TM instance already exists, thus the user also exists in a TM, so we have to exclude the 
+            # particular user from the TM, basically ensuring that the user is saved as part of the TM every time(if we select the same user)
+            # unless the user exists elsewhere in the TM which is basically impossible since we constraint user as unique anyway
+            if query_of_user_already_existing_in_tm.exclude(pk=self.instance.pk).exists():
+                raise serializers.ValidationError("The user is already a team member elsewhere!")
+        
+        if query_of_user_already_existing_in_tm.exists():
+            raise serializers.ValidationError("The user is already a team member elsewhere!")   
+
+            
+        if role == "leader":
+            # check if leader occurs more than once
+            tm_instance = team_membership_model.objects.filter(team=team, role=role)
+            # for updates
+            if self.instance:
+                tm_instance= tm_instance.exclude(pk=self.instance.pk)
+            if tm_instance.exists():
+                raise serializers.ValidationError("Theres already a leader for this team")
+        return attrs
+
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     url= serializers.HyperlinkedIdentityField(
@@ -74,8 +117,29 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
             'team':query.team.name,
             'team_url':reverse('team-detail', args=[query.team.id], request=request),
         } for query in worker_query]
-    
 
+    def validate(self, attrs):
+        # now we validate all fucking serialisers since the api wont access them from model backend
+        # https://stackoverflow.com/questions/53704002/find-the-model-name-from-a-django-rest-framework-serializer
+        # get model name
+        team_model = self.Meta.model
+        leader = attrs.get('leader') #basically just a user
+        if self.instance:
+            # checksif the user is a leader exists in another team
+            does_user_exist_as_leader_in_another_team = team_model.objects.filter(leader=leader).exclude(pk=self.instance.pk).exists()
+            if does_user_exist_as_leader_in_another_team:
+                raise serializers.ValidationError("This user is a leader in another team already.")
+            does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exclude(pk=self.instance.pk).exists()
+            if does_user_exist_as_worker_in_another_team:
+                raise serializers.ValidationError("This user is a worker in another team already.")
+
+        does_user_exist_as_leader_in_another_team = team_model.objects.filter(leader=leader).exists()
+        if does_user_exist_as_leader_in_another_team:
+            raise serializers.ValidationError("This user is a leader in another team already.")
+        does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exists()
+        if does_user_exist_as_worker_in_another_team:
+            raise serializers.ValidationError("This user is a worker in another team already.")
+        return attrs
 
 class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(

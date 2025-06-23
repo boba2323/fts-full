@@ -246,7 +246,7 @@ class TeamMembership(models.Model):
         constraints = [
             # user will not be repeated meaning a user is assigned a team/role only once
             models.UniqueConstraint(fields=['user'], name='one_team_per_user',
-                                    violation_error_message="A user can only be part of one team at a time-unique constraint of teammembership."),
+                                    violation_error_message="A user can be part of only one team at a time-unique constraint of teammembership."),
 
             # if one user is given Leader, the leader role cannot be given to another use in the same teammembership
             # if u1 is leader once, he wont be leader again anywhere, (u1, leader), (u2, leader) this wont happenanother time
@@ -263,7 +263,7 @@ class TeamMembership(models.Model):
             # if a team and a leader occurs, it wont occur again (T1, leader) (t2, leader). they will never occur again, thus 1 leader per team
             models.UniqueConstraint(fields=['team'], name='one_leader_per_team',
                                     condition=Q(role='leader'),
-                                    violation_error_message="all team can have only 1 leader-unique constraint of teammembership.")
+                                    violation_error_message="A team can have only 1 leader-unique constraint of teammembership.")
         
         
         ]

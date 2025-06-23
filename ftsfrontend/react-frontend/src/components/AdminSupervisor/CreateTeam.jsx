@@ -23,10 +23,11 @@ const CreateTeam = () => {
           })
 
     const [loadingFields, setLoadingFields] = useState(true)
-    const [postLoading, setPostLoading] = useState(true)
+    const [postSuccessful, setPostSuccessful] = useState(false)
     const [errors, setErrors] = useState({
                                         global: [],
-                                        fields: {}
+                                        fields: {},
+                                        success:''
                                         });
     const [formIsSubmitted, setFormIsSubmitted] = useState(false)
 
@@ -38,7 +39,6 @@ const CreateTeam = () => {
                 
             }))
     }
-
 
 
     const leaderSelectHandler =(e)=>{
@@ -90,10 +90,14 @@ const CreateTeam = () => {
     const handleSubmit= async (e)=>{
         e.preventDefault()
         if (!inputData.name) {
-            setErrorMessage("All fields are required.");
+            setErrors({
+                 global: ["All fields are required"],
+                 fields: {},
+                 success: ""
+            });
             return;
         }
-        setPostLoading(true)
+        setPostSuccessful(false)
         try {
             const response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
                 {
@@ -107,13 +111,17 @@ const CreateTeam = () => {
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
-            console.log("Successfully sent form:", response.data)
+            console.log("Team created successfully!:", response.data)
             if (response.status === 200 || response.data === 201) {
             // success login 
-                console.log("Successfully sent form:", response.data);
+                console.log("Team created successfully!:", response.data);
                 }
-            setErrorMessage("File Successully uploaded")
-            console.log("Successfully sent form:", response.data);
+            setErrors({
+                 global: [],
+                 fields: {},
+                 success: "Team created successfully!"
+            })
+            console.log("Team Successully created:", response.data);
             setFormIsSubmitted(true)
 
             // reset the form
@@ -153,15 +161,16 @@ const CreateTeam = () => {
                         globalErrors.push(getErrorMessage(errorDataJson[key]))      //array of global errors
                     }
                 })
-                setErrors(()=>({                
+                setErrors({      
                     global:globalErrors,
-                    fields:fieldErrors
-                }))
+                    fields:fieldErrors,
+                    success:''
+                })
+                
                 console.log("error data object",errorData)
                 console.log( "error json",errorDataJson)
                 }
         } finally {
-        setPostLoading(false)
         console.log(errors)
         }
         }
@@ -169,13 +178,11 @@ const CreateTeam = () => {
     const displayFieldErrors=(fieldName)=>{   //basically render the field errors depemding on which field we set remember errors.fields is a json obj
             if (errors.fields[fieldName]) {
                 return (
-                <div className={`mb-3 border rounded-lg flex justify-center items-center ${getFormMessageColor()}`}>
+                <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
                     {errors.fields[fieldName]}
                 </div>)
             }
-
     }
-
     const getFormMessageColor=()=>{
         if (!formIsSubmitted){
             return "text-red-500 border-red-500 bg-red-50"
@@ -191,8 +198,13 @@ const CreateTeam = () => {
         <div className="w-2/3">
             <div className="fileUpload p-4">
                 {errors?.global.length > 0 && (
-                    <div className={`mb-3 border rounded-lg flex justify-center items-center ${getFormMessageColor()}`}>
+                    <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
                       {errors.global}
+                    </div>
+                  )}
+                  {errors?.success && (
+                    <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
+                      {errors.success}
                     </div>
                   )}
                   
@@ -207,6 +219,7 @@ const CreateTeam = () => {
                 />
                 <Space2/>
                 {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
+                {displayFieldErrors("leader")}
                 <SelectInput
                     name="selectedUser"  //make sure the name is unique and matches the state name
                     value={inputData.leader}
@@ -220,6 +233,7 @@ const CreateTeam = () => {
                     serialiserTpe="url"
                 />
                 <Space2/>
+                {displayFieldErrors("level")}
                 <SelectInput
                     name="selectedLevel"
                     value={inputData.level}

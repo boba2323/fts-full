@@ -42,8 +42,10 @@ const Sidebar = ({
         <Link to={`teams`}  >
           <div className="block my-3 ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Teams</div>
         </Link>
+        <Link to={`users`}>
+          <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Users</div>
+        </Link>
         
-        <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Settings</div>
         <a href="http://127.0.0.1:5173/logout" className="my-3 block ps-1 hover:bg-red-200 rounded text-xs hover:border border-green-100">Logout</a>
       </nav>
     </div>

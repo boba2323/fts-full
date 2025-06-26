@@ -75,8 +75,8 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
                                     :<></>
                                     }
                                     {supervisor?<td className='text-xs p-2  font-medium font-sans text-gray-200'><Link to={`delete/${team.id}`} >
-                                                <div className='flex justify-center items-center rounded bg-red-500 align-middle p-1'>Delete</div></Link>
-                                            </td>
+                                        <div className='flex justify-center items-center rounded bg-red-500 align-middle p-1'>Delete</div></Link>
+                                    </td>
                                     :<></>
                                     }
                                   </tr>

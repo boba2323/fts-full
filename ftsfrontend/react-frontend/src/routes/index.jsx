@@ -26,6 +26,9 @@ import AdminTeam from "../components/AdminSupervisor/AdminTeam";
 import AdminUser from "../components/AdminSupervisor/AdminUser"
 import AdminTeamDelete from "../components/AdminSupervisor/AdminTeamDelete";
 
+import UserList from "../components/UsersList/UserList";
+import AdminUserDelete from '../components/AdminSupervisor/AdminUserDelete'
+
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -101,6 +104,10 @@ const Routes = () => {
                 element: <div><FileUpload/></div>,
               },
               {
+                path: "users",
+                element: <div><UserList/></div>,
+              },
+              {
                 path: "files",
                 element: <div><DashboardMain/></div>,
               },
@@ -135,6 +142,10 @@ const Routes = () => {
               {
                 path: "admin/admin-user",
                 element: <><AdminUser/></>
+              },
+              {
+                path: "admin/admin-user/delete/:userId",
+                element: <><AdminUserDelete/></>
               },
               
             ]

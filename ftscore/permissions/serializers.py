@@ -14,8 +14,9 @@ class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
         
     )
     # https://www.django-rest-framework.org/api-guide/validators/#uniquevalidator
-    user=serializers.HyperlinkedIdentityField(
+    user=serializers.HyperlinkedRelatedField(
         view_name="myuser-detail",
+        queryset=User.objects.all(),
         validators=[UniqueValidator(queryset=TeamMembership.objects.all(),
                                     message="A user can only be part of one team at a time only once-unique constraint of teammembership.")]
 

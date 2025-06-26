@@ -5,10 +5,10 @@ import Modal from '../Modal/ModalDeleteTeam';
 
 const AdminTeamDelete =() => {
     const [open, setOpen] = useState(true)
-    const {teamId} = useParams()
+    const {userId} = useParams()
     const handleDeleteSubmit = async () => {
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
+            const response = await axios.delete(`http://127.0.0.1:8000/drf/users/${userId}/`, 
                 {
                 headers: {
                 'Content-Type': 'application/json'
@@ -16,12 +16,12 @@ const AdminTeamDelete =() => {
                 withCredentials: true, // Optional: only needed if cookies are set
             });
             
-            console.log("Team created successfully!:", response.data)
+            console.log("User deleted!:", response.data)
             if (response.status === 200 || response.status === 204) {
             // success login 
-                console.log("Team deleted successfully!:", response.data);
+                console.log("User deleted successfully!:", response.data);
                 }
-            console.log("Team deleted created:", response.data);
+            console.log("User deleted :", response.data);
         } catch (error) {
             console.log(error.response)
         } finally {
@@ -30,11 +30,7 @@ const AdminTeamDelete =() => {
     
   return (
     <div>
-        <Modal open={open} 
-        setOpen={setOpen} 
-        handleDelete={handleDeleteSubmit} 
-        target='team'
-        routeToGoBackTo={"/fts/admin/admin-team"} />
+        <Modal open={open} setOpen={setOpen} handleDelete={handleDeleteSubmit} target="user" routeToGoBackTo={"/fts/admin/admin-user"}/>
     </div>
   )
 }

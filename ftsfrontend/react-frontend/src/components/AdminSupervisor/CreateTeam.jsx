@@ -6,11 +6,15 @@ import SelectInput from '../SelectInputs/SelectInput';
 import Space2 from '../SpaceBetweenFields/Space2';
 import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
+import Team from '../Team/Team';
+import { useParams } from 'react-router-dom';
 
-const CreateTeam = () => {
-    const INITIAL_STATE = {
-    }
 
+const CreateTeam = ({mode}) => {   //mode:create or update
+    // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
+    //  passed in url and in team.jsx where the value is passed to it
+    const {teamId} = useParams() 
+    const [finishloadingTeamUpdateData, setFinishLoadingTeamUpdateData] = useState(false)
     const [inputData, setInputData ] = useState({
             name:"",
             leader:"",
@@ -31,6 +35,46 @@ const CreateTeam = () => {
                                         });
     const [formIsSubmitted, setFormIsSubmitted] = useState(false)
 
+
+
+    useEffect(()=>{
+        // ========================GET INDIVIDUAL TEAM==============================
+        const createInitalUpdateData = async()=>{
+            setFinishLoadingTeamUpdateData(false)
+            console.log("in the createinit data")
+            try {
+                console.log("in the try block")
+                const response = await axios.get(`http://127.0.0.1:8000/drf/teams/${teamId}/`, {
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    withCredentials: true,
+                })
+                const iniData=response.data
+                const INITIALUPDATEDATA = {
+                            name:iniData['name'],
+                            leader:iniData['leader'],
+                            level:iniData['level']
+                            }
+                setInputData((prev) => ({
+                ...prev,
+                ...INITIALUPDATEDATA
+                }));
+                console.log("teams api hit")
+                
+            } catch (error){
+                console.log("in the catch block")
+                console.log(error)
+            } finally {
+                setFinishLoadingTeamUpdateData(true)  
+                console.log("in the final block")       
+            }}
+        console.log("in use effect")
+        if (mode==="update" || teamId){
+                createInitalUpdateData()
+            }
+    }, [mode, teamId])
+
     const onChangeHandler = (e) => {
         const {name, value} = e.target;
             setInputData(prev =>({
@@ -39,7 +83,6 @@ const CreateTeam = () => {
                 
             }))
     }
-
 
     const leaderSelectHandler =(e)=>{
         const {name, value} = e.target;
@@ -99,7 +142,9 @@ const CreateTeam = () => {
         }
         setPostSuccessful(false)
         try {
-            const response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
+            let response
+            if (mode==="create"){
+                response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
                 {
                     'name':inputData.name,
                     'leader':inputData.leader,
@@ -111,6 +156,21 @@ const CreateTeam = () => {
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
+            } else if (mode==="update"){
+                response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
+                {
+                    'name':inputData.name,
+                    'leader':inputData.leader,
+                    'level':inputData.level,
+                },
+                {
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                withCredentials: true, // Optional: only needed if cookies are set
+            });
+            }
+            
             console.log("Team created successfully!:", response.data)
             if (response.status === 200 || response.data === 201) {
             // success login 
@@ -119,7 +179,7 @@ const CreateTeam = () => {
             setErrors({
                  global: [],
                  fields: {},
-                 success: "Team created successfully!"
+                 success: "Team updated successfully!"
             })
             console.log("Team Successully created:", response.data);
             setFormIsSubmitted(true)

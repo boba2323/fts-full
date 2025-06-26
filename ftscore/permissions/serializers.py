@@ -20,13 +20,19 @@ class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
                                     message="A user can only be part of one team at a time only once-unique constraint of teammembership.")]
 
     )
+    username=serializers.SerializerMethodField()
 # teammembership in models is complex especially the validations. and we need to bring all those validations
 # to the api here. some we will do through the constraints 
 # https://dev.to/soldatov-ss/why-django-rest-framework-doesnt-show-your-custom-validation-error-messages-and-what-to-do-about-2dcl
 # others we will validate()
     class Meta:
         model = TeamMembership
-        fields = ('id', 'url', 'team', 'user', 'role')
+        fields = ('id', 'url', 'team', 'user', 'role', "username")
+
+    def get_username(self, obj):
+        user_name = obj.user.username
+        if user_name:
+            return user_name
 
     def validate(self, attrs):
         # while model did the constraint with q objects we cannot use it in drf so we do it manually
@@ -126,14 +132,15 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         leader = attrs.get('leader') #basically just a user
         if self.instance:
             # checksif the user is a leader exists in another team
-            does_user_exist_as_leader_in_another_team = team_model.objects.filter(leader=leader).exclude(pk=self.instance.pk).exists()
+            does_user_exist_as_leader_in_another_team = Team.objects.filter(leader=leader).exclude(pk=self.instance.pk).exists()
             if does_user_exist_as_leader_in_another_team:
-                raise serializers.ValidationError("This user is a leader in another team already.")
-            does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exclude(pk=self.instance.pk).exists()
+                raise serializers.ValidationError("update-This user is a leader in another team already.")
+            does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exclude(team=self.instance).exists()
             if does_user_exist_as_worker_in_another_team:
-                raise serializers.ValidationError("This user is a worker in another team already.")
+                raise serializers.ValidationError("update-This user is a worker in another team already.")
+            return attrs
 
-        does_user_exist_as_leader_in_another_team = team_model.objects.filter(leader=leader).exists()
+        does_user_exist_as_leader_in_another_team = Team.objects.filter(leader=leader).exists()
         if does_user_exist_as_leader_in_another_team:
             raise serializers.ValidationError("This user is a leader in another team already.")
         does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exists()

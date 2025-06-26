@@ -81,7 +81,7 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
             return True
         return perm in self.get_all_permissions( obj=obj)
 
-    def has_module_perms(self, blogapp):
+    def has_module_perms(self):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
@@ -121,7 +121,7 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
         if team_membership:
             if team_membership.team.access_codes.exists():
                 team_access_code_instance = team_membership.team.access_codes.first()
-                return team_access_code_instance
+                return team_access_code_instance.code
             return None
             
         return None

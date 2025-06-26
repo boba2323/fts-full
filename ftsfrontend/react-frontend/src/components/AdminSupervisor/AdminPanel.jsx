@@ -1,6 +1,6 @@
 import React from 'react'
 import AdminModelCard from './AdminModelCard'
-import { Navigate, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 const AdminPanel = () => {
@@ -10,7 +10,7 @@ const AdminPanel = () => {
   
   return (
     <>
-    {
+    {/* {
       adminPanel?<div>
         Welcome Superviser. You have full control here
         you can create teams, modufy teams, delete teams
@@ -23,7 +23,10 @@ const AdminPanel = () => {
         <div className="card-canvas flex flex-col">
           <div className="row-top flex flex-row justify-center items-center justify-content-between my-3">
             <nav className='flex flex-row space-x-8'>
-              <AdminModelCard teamname={"Teams" } membercount={"View all the teams that have been created. Make new teams and edit or delete the existing ones"}/>
+              <Link to={`admin-team`}>
+                <AdminModelCard teamname={"Teams" } membercount={"View all the teams that have been created. Make new teams and edit or delete the existing ones"}/>
+              </Link>
+              
               <AdminModelCard teamname={"Files" }  membercount={"5"}/>
               <AdminModelCard teamname={"Users" }  membercount={"5"}/>
             </nav>
@@ -37,12 +40,12 @@ const AdminPanel = () => {
           </div>
         </div>
     </div>:adminTeamCreate?
-    <Outlet/>:
-    <></>
-    }
-    {/* <Outlet/> */}
+      <Outlet/>
+      :<></>
+    } */}
     
-    {/* <div>
+    
+    <div>
         Welcome Superviser. You have full control here
         you can create teams, modufy teams, delete teams
         CUD teams
@@ -54,9 +57,13 @@ const AdminPanel = () => {
         <div className="card-canvas flex flex-col">
           <div className="row-top flex flex-row justify-center items-center justify-content-between my-3">
             <nav className='flex flex-row space-x-8'>
-              <AdminModelCard teamname={"Teams" } membercount={"View all the teams that have been created. Make new teams and edit or delete the existing ones"}/>
+              <Link to={`admin-team`}>
+                <AdminModelCard teamname={"Teams" } membercount={"View all the teams that have been created. Make new teams and edit or delete the existing ones"}/>
+              </Link>
               <AdminModelCard teamname={"Files" }  membercount={"5"}/>
-              <AdminModelCard teamname={"Users" }  membercount={"5"}/>
+              <Link to={`admin-user`}>
+                <AdminModelCard teamname={"Users" }  membercount={"5"}/>
+              </Link>
             </nav>
           </div>
 
@@ -67,7 +74,8 @@ const AdminPanel = () => {
             </nav>
           </div>
         </div>
-    </div> */}
+    </div>
+    {/* <Outlet/> */}
     </>
     
   )

@@ -19,7 +19,7 @@ const DashBoard = () =>{
     return (
         <>
             <Header />
-            <Header2 onClick={changeDashComponent} />
+            <Header2 />
 
             <div className="grid grid-cols-12 h-screen">
                 <div className="col-span-1">

@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import Loading from '../Loading/Loading.jsx'
 import moment from 'moment'
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 
-const Team = () => {
+const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between team update
   const [teamData, setTeamData] =useState([])
   const [loading, setLoading] = useState()
 
@@ -63,14 +64,21 @@ const Team = () => {
                                     {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.membership_users }</td> */}
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>
                                       {team.workers.map((worker)=>{
-                                          return (<p>{worker.user}</p>
+                                          return (<p key={worker.id} >{worker.user}</p>
                                           )
                                       }) }
                                     </td>
                                     {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.memberships }</td> */}
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.level }</td>
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={team.download_url}>Download</a></td>
-                                    
+                                    {supervisor?<td className='ps-5 text-xs font-medium font-sans text-gray-700'><Link to={`${team.id}`} >Update</Link></td>
+                                    :<></>
+                                    }
+                                    {supervisor?<td className='text-xs p-2  font-medium font-sans text-gray-200'><Link to={`delete/${team.id}`} >
+                                                <div className='flex justify-center items-center rounded bg-red-500 align-middle p-1'>Delete</div></Link>
+                                            </td>
+                                    :<></>
+                                    }
                                   </tr>
                               ))
                             

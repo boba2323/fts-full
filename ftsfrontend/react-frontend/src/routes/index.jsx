@@ -1,6 +1,9 @@
 // this is the index file for routes meaning we can simply export from ./routes
 // https://reactrouter.com/6.28.0/start/tutorial#nesting-routes
 
+
+// https://reactrouter.com/start/data/routing
+
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth} from "../authentication/authProvider";
 import { ProtectedRoute } from "./ProtectedRoutes";
@@ -19,6 +22,10 @@ import Team from "../components/Team/Team";
 import AdminPanel from "../components/AdminSupervisor/AdminPanel";
 
 import CreateTeam from "../components/AdminSupervisor/CreateTeam";
+import AdminTeam from "../components/AdminSupervisor/AdminTeam";
+import AdminUser from "../components/AdminSupervisor/AdminUser"
+import AdminTeamDelete from "../components/AdminSupervisor/AdminTeamDelete";
+
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -101,16 +108,32 @@ const Routes = () => {
                 path: "teams",
                 element: <div><Team/></div>,
               },
-              {
+              {// https://dev.to/tywenk/how-to-use-nested-routes-in-react-router-6-4jhd
+                  // https://reactrouter.com/start/data/routing
                 path: "admin",
                 element: <div><AdminPanel/></div>,
-                children: [
-                    {
-                      path: "create-team",
-                      element: <h1><CreateTeam/></h1>
-                    }
-                  ]
-              }
+              },
+              {
+                path: "admin/admin-team",
+                element: <h1><AdminTeam/></h1>,
+              },
+              {
+                path: "admin/create-team",
+                element: <h1><CreateTeam mode="create"/></h1>
+              },
+              {
+                path: "admin/admin-team/:teamId",
+                element: <><CreateTeam mode="update"/></>
+              },
+              {
+                path: "admin/admin-team/delete/:teamId",
+                element: <h1><AdminTeamDelete/></h1>,
+              },
+              {
+                path: "admin/admin-user",
+                element: <><AdminUser/></>
+              },
+              
             ]
         },
       ],

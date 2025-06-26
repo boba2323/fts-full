@@ -54,8 +54,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
     def get_team(self, obj):
-        return {"id":obj.get_team_membership().team.id,
-                "name": obj.get_team_membership().team.name}
+        if obj.get_team_membership():
+            return {"id":obj.get_team_membership().team.id,
+                    "name": obj.get_team_membership().team.name}
+        return None
 
     def create(self, validated_data):
         password = validated_data.pop('password')

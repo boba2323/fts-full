@@ -23,17 +23,18 @@ const Sidebar = ({
   return (
     
     <div className="flex flex-col h-screen bg-gray-50 text-gray-600 p-4">
-      {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
-        ?<Link to={`admin`} ><div>admin</div></Link>
-        :<></>
-      }
+      
       <button onClick={testClick} >usertest</button>
       {userIn.In}
       <h2 className="text-sm font-bold mb-6 ps-2">FTS</h2>
+      {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
+        ?<Link to={`admin`} ><div className="mb-3 block ps-1 hover:bg-green-50 rounded text-sm text-green-800 hover:border border-green-100 font-bold cursor-pointer">Admin</div ></Link>
+        :<></>
+      }
       <nav>
         {/* https://reactrouter.com/6.28.0/start/tutorial#nesting-routes */}
         <Link to={`files`} >
-          <div className="mb-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Dashboard</div>
+          <div className="mb-3 block ps-1 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer">Dashboard</div>
         </Link>
         
         <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Files</div>

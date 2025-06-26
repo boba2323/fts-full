@@ -20,12 +20,34 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     belongs_to_team = serializers.SerializerMethodField()
     team_access_level = serializers.SerializerMethodField()
+    all_teams = serializers.SerializerMethodField()
     role = serializers.SerializerMethodField()
+    all_roles = serializers.SerializerMethodField()
+    access_code = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'email', 'password', 'belongs_to_team', "team_access_level", 'owned_files', 'created_access_codes'
-                  ,'role']  # Include 'url' field
+        fields = ['url', 'id', 'username', 'email',"all_teams", "all_roles", 'password', 'belongs_to_team', "team_access_level", 'owned_files', 'created_access_codes',
+                  "access_code",'role']  # Include 'url' field
         # extra_kwargs = {'password': {'write_only': True}}
+
+    def get_access_code(self, user):
+        return user.get_access_code_instance()
+
+    def get_all_teams(self, user):
+        tm = user.memberships.all()
+        team_list = []
+        if tm:
+            for membership in tm:
+                team_list.append(membership.team.name)
+        return team_list
+    
+    def get_all_roles(self, user):
+        tm = user.memberships.all()
+        role_list = []
+        if tm:
+            for membership in tm:
+                role_list.append(membership.role)
+        return role_list
 
     def get_belongs_to_team(self, user):
         team_membership=user.memberships.first()

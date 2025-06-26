@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
+import Modal from '../Modal/ModalDeleteTeam';
 
 const AdminTeamDelete =() => {
+    const [open, setOpen] = useState(true)
     const {teamId} = useParams()
     const handleDeleteSubmit = async () => {
         try {
@@ -28,9 +30,7 @@ const AdminTeamDelete =() => {
     
   return (
     <div>
-      <form onSubmit={handleDeleteSubmit}>
-        <button>delete</button>
-      </form>
+        <Modal open={open} setOpen={setOpen} handleDelete={handleDeleteSubmit} />
     </div>
   )
 }

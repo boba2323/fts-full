@@ -22,7 +22,7 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
               }
             )
             setTeamData(response.data)
-        } catch {
+        } catch (error) {
           console.error("Error fetching file data:", error)
           setTeamData([])
         } finally {

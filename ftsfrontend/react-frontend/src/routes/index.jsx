@@ -113,6 +113,9 @@ const Routes = () => {
                 path: "admin",
                 element: <div><AdminPanel/></div>,
               },
+              // to figure out what the relative urls shuld be, check the urls where the components are nbeing rendered in 
+              // the routes in other words in the indedx of the Routes. Then the child compoenet should be rendered 
+              // at a path relative from there
               {
                 path: "admin/admin-team",
                 element: <h1><AdminTeam/></h1>,

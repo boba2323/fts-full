@@ -27,15 +27,16 @@ const CreateTeam = ({mode}) => {   //mode:create or update
           })
 
     const [loadingFields, setLoadingFields] = useState(true)
-    const [postSuccessful, setPostSuccessful] = useState(false)
     const [errors, setErrors] = useState({
                                         global: [],
                                         fields: {},
                                         success:''
                                         });
     const [formIsSubmitted, setFormIsSubmitted] = useState(false)
+    const [addWorker, setAddWorker] = useState(false)
+    const [inputWorker, setInputWorker] = useState()
 
-
+    // ==================get team data==============================
 
     useEffect(()=>{
         // ========================GET INDIVIDUAL TEAM==============================
@@ -92,6 +93,13 @@ const CreateTeam = ({mode}) => {   //mode:create or update
         }))
     }
 
+
+    // ===================================onchange memberships=============================
+    const workerChangeHandler=(e)=>{
+        const {name, value} = e.target
+        setInputWorker(value)
+    }
+
     const levelSelectHandler =(e)=>{
         const {name, value} = e.target;
         setInputData(prev =>({
@@ -104,7 +112,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
     const fetchFolderAPI =async()=>{
         setLoadingFields(true)
         try {
-            const response = await axios.get("http://127.0.0.1:8000/drf/users/", {
+            const response = await axios.get("http://127.0.0.1:8000/drf/nonteamusers/", {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -128,6 +136,11 @@ const CreateTeam = ({mode}) => {   //mode:create or update
     fetchFolderAPI()
     }, [])
 
+    // =====================handle worker
+    const handleAddWorker=()=>{
+        setAddWorker(true)
+    }
+
     
     // ===================SUBMIT FUNCTIION=====================
     const handleSubmit= async (e)=>{
@@ -140,9 +153,9 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             });
             return;
         }
-        setPostSuccessful(false)
         try {
             let response
+            let responseMembership
             if (mode==="create"){
                 response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
                 {
@@ -156,12 +169,28 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
+             
             } else if (mode==="update"){
                 response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
                 {
                     'name':inputData.name,
                     'leader':inputData.leader,
                     'level':inputData.level,
+                },
+                {
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                withCredentials: true, // Optional: only needed if cookies are set
+            });
+            }
+            if (addWorker){
+                console.log(response.data.url, inputWorker)
+                responseMembership = await axios.post('http://127.0.0.1:8000/drf/teammembership/', 
+                {
+                    'user':inputWorker,
+                    'team':response.data.url,
+                    'role':'worker',
                 },
                 {
                 headers: {
@@ -254,65 +283,92 @@ const CreateTeam = ({mode}) => {   //mode:create or update
     
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-row'>
-        <div className="w-2/3">
-            <div className="fileUpload p-4">
-                {errors?.global.length > 0 && (
-                    <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
-                      {errors.global}
-                    </div>
-                  )}
-                  {errors?.success && (
-                    <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
-                      {errors.success}
-                    </div>
-                  )}
-                  
-                {displayFieldErrors("name")}
-                <InputLabel
-                    labelName={"Name"}
-                    name="name"
-                    inputType="text"
-                    inputValue={inputData.name}
-                    placeholder="Name"
-                    onChange={onChangeHandler}
-                />
-                <Space2/>
-                {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
-                {displayFieldErrors("leader")}
-                <SelectInput
-                    name="selectedUser"  //make sure the name is unique and matches the state name
-                    value={inputData.leader}
-                    onChange={leaderSelectHandler}
-                    labelName="Select Leader"
-                    selectField="Choose a user"
-                    fieldOptions={inputData.leaderOptions}
-                    loading={loadingFields}
-                    keyType="id"
-                    fieldDefiner="username"
-                    serialiserTpe="url"
-                />
-                <Space2/>
-                {displayFieldErrors("level")}
-                <SelectInput
-                    name="selectedLevel"
-                    value={inputData.level}
-                    onChange={levelSelectHandler}
-                    labelName="Select Level"
-                    selectField="Choose level"
-                    fieldOptions={inputData.LEVELOPTIONS}
-                    loading={loadingFields}
-                    keyType="level"      //will have l1, l2, l3 keys
-                    fieldDefiner="def"  //
-                    serialiserTpe="level"  //this is key to value. the values should be strings "L1" .... we will have field["level"] = "L1"
-                />
+    <div>
+        <form onSubmit={handleSubmit} className='flex flex-row'>
+            <div className="w-2/3">
+                <div className="fileUpload p-4">
+                    {errors?.global.length > 0 && (
+                        <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
+                        {errors.global}
+                        </div>
+                    )}
+                    {errors?.success && (
+                        <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
+                        {errors.success}
+                        </div>
+                    )}
+                    
+                    {displayFieldErrors("name")}
+                    <InputLabel
+                        labelName={"Name"}
+                        name="name"
+                        inputType="text"
+                        inputValue={inputData.name}
+                        placeholder="Name"
+                        onChange={onChangeHandler}
+                    />
+                    <Space2/>
+                    {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
+                    {displayFieldErrors("leader")}
+                    <SelectInput
+                        name="selectedUser"  //make sure the name is unique and matches the state name
+                        value={inputData.leader}
+                        onChange={leaderSelectHandler}
+                        labelName="Select Leader"
+                        selectField="Choose a user"
+                        fieldOptions={inputData.leaderOptions}
+                        loading={loadingFields}
+                        keyType="id"
+                        fieldDefiner="username"
+                        serialiserTpe="url"
+                    />
+                    <Space2/>
+                    {displayFieldErrors("level")}
+                    <SelectInput
+                        name="selectedLevel"
+                        value={inputData.level}
+                        onChange={levelSelectHandler}
+                        labelName="Select Level"
+                        selectField="Choose level"
+                        fieldOptions={inputData.LEVELOPTIONS}
+                        loading={loadingFields}
+                        keyType="level"      //will have l1, l2, l3 keys
+                        fieldDefiner="def"  //
+                        serialiserTpe="level"  //this is key to value. the values should be strings "L1" .... we will have field["level"] = "L1"
+                    />
+                </div>
             </div>
-        </div>
-        {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}
-        <div className="flex flex-col w-1/3 m-5">
-            <AuthButton buttonText="Save Team"/>
-        </div>
-        
-    </form>
+            {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}
+            <div className="flex flex-col w-1/3 m-5">
+            {/* https://stackoverflow.com/questions/37462047/how-to-create-several-submit-buttons-in-a-react-js-form/41288712 */}
+                <AuthButton buttonText="Add worker" type='button' onClick={handleAddWorker}/>
+                {addWorker? <button type="button" className='mt-2 py-1 flex border-2 border-red-300 text-center align-middle justify-center rounded-md' 
+                onClick={()=>setAddWorker(false)}>Cancel</button>
+                          : <></>}
+                <AuthButton buttonText="Save Team"/>
+                {addWorker?<>
+                            <Space2/>
+                            {displayFieldErrors("user")}
+                            <SelectInput 
+                            name="selectedWorkers"
+                            value={inputWorker}
+                            onChange={workerChangeHandler}
+                            labelName="Add a Worker"
+                            selectField="Choose a user as worker"
+                            fieldOptions={inputData.leaderOptions}
+                            loading={loadingFields}
+                            keyType="id"
+                            fieldDefiner="username"
+                            serialiserTpe="url"
+                            />
+                        </>
+                        
+                          :<></>}
+            </div>
+            <div>
+            </div>
+        </form>
+    </div>
+    
   )}
 export default CreateTeam

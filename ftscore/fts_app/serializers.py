@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from .models import File, Folder, Modification, Tag, ActionLog  # Import your models
+from permissions.models import TeamMembership
 from rest_framework.reverse import reverse
 from pprint import pprint
 User = get_user_model()
@@ -28,7 +29,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['url', 'id', 'username', 'email',"all_teams", "all_roles", 'password', 'belongs_to_team', "team_access_level", 'owned_files', 'created_access_codes',
                   "access_code",'role']  # Include 'url' field
-        # extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}}
+
+
+
 
     def get_access_code(self, user):
         return user.get_access_code_instance()

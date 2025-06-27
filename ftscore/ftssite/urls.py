@@ -38,6 +38,7 @@ router.register(r'folders', fts_app_views.FolderViewSet, basename='folder')
 
 router.register(r'modifications', fts_app_views.ModificationViewSet, basename='modification')
 router.register(r'actionlog', fts_app_views.ActionLogViewSet, basename='actionlog')
+router.register(r'nonteamusers', fts_app_views.UserNonTeamViewSet, basename="myuser-nonteam")
 
 router.register(r'teams', permissions_views.TeamViewSet, basename='team')
 router.register(r'teammembership', permissions_views.TeamMembershipViewSet, basename='teammembership')

@@ -31,7 +31,7 @@ from .permissions import IsAuthorOrReadOnly, TeamsAndRolesFiles,DownloadPermissi
 from permissions.models import Team, TeamMembership, AccessCode
 
 
-
+from .service_layer import UserServices
 
 User = get_user_model()
 class IndexView(generic.TemplateView):
@@ -57,6 +57,11 @@ class UsersViewSet(viewsets.ModelViewSet):
     permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
     authentication_classes = [JWTAuthentication]
 
+class UserNonTeamViewSet(viewsets.ModelViewSet):
+    queryset = UserServices.get_available_non_team_users()
+    serializer_class = UserSerializer
+    permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
+    authentication_classes = [JWTAuthentication]
     
 
 class FileViewSet(viewsets.ModelViewSet):

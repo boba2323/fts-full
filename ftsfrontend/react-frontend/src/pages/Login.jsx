@@ -6,6 +6,7 @@ import AuthBanner from "./AuthBanner";
 import { useState } from "react";
 // for api
 import axios from 'axios';
+import Cookies from 'js-cookie';
 const Login = () => {
   const { userIn, setUserIn, hitMeandFetch } = useAuth();
   const navigate = useNavigate();
@@ -36,7 +37,9 @@ const Login = () => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/accounts/api/token/', inputData, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          
+          'X-CSRFToken': Cookies.get('csrftoken')
         },
         withCredentials: true, // Optional: only needed if cookies are set
       });
@@ -101,10 +104,14 @@ const Login = () => {
   }
   return (
   <>
-  <div className="flex flex-col justify-center items-center h-screen pt-14 pb-10">
-        <div className="formdiv w-1/3 px-10 border border-gray-200 h-full">
+  {/* https://tailwindcss.com/docs/width#arbitrary-values
+  for w-[95%] */}
+  <div className="flex flex-col justify-center items-center h-screen pt-16 pb-14 md:pt-14 md:pb-10">
+        <div className="formdiv w-[90%] sm:w-3/4 md:w-1/3 lg:w-1/3 xl:w-1/3
+        mx-6 md:mx-0
+         px-4 sm:px-6 md:px-10 border border-gray-200 h-full">
           <AuthBanner title = {"Welcome Back"} subtitle={"Please enter your details here"}/>
-          <p className="flex justify-center items-center sm:text-xs text-green-700 mb-4">We encourage you to use a fake email to view this app</p>
+          <p className="flex align-middle justify-center items-center text-center text-xs sm:text-xs text-green-700 mb-4">We encourage you to use a fake email to view this app</p>
           <div className="formcard">
             <form onSubmit={onLoginHandler}>
               <div className="flex flex-col">
@@ -130,13 +137,13 @@ const Login = () => {
                   placeholder="password"
                   onChange={onChangeHandler} 
                 />
-                <span className="flex flex-end justify-end sm:text-xs text-green-700 italic">
+                <span className="flex flex-end justify-end text-xs sm:text-xs text-green-700 italic">
                   <a href="">Forgot password?</a>
                 </span>
                 <div className="mb-3"></div>
                 <AuthButton buttonText={"Login"} />
               </div>
-              <div className="register-div flex flex-col items-center justify-center pt-2 sm:text-xs
+              <div className="register-div flex flex-col items-center justify-center pt-2 text-xs sm:text-xs
                 tracking-tight font-light
                 ">
                   <p>If you dont have an account, <a href="" className="text-green-700 italic font-semibold">register here</a></p>

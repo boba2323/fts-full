@@ -19,6 +19,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             name:"",
             leader:"",
             level:'',
+            workers:[],
             leaderOptions:[],
             LEVELOPTIONS:[  {"level":"L1", "def": "Level 1 - Full Access"},
                             {"level":"L2", "def":"Level 2 - Limited Access"},
@@ -55,13 +56,16 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 const INITIALUPDATEDATA = {
                             name:iniData['name'],
                             leader:iniData['leader'],
-                            level:iniData['level']
+                            level:iniData['level'],
+                            workers:iniData['workers']
                             }
                 setInputData((prev) => ({
                 ...prev,
                 ...INITIALUPDATEDATA
                 }));
                 console.log("teams api hit")
+                console.log(iniData['workers'])
+                console.log(inputData)
                 
             } catch (error){
                 console.log("in the catch block")
@@ -107,12 +111,12 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             level:value
         }))
     }
-// =======================================USER LEADER API===================================
+// =======================================USER  API===================================
     useEffect(()=>{
-    const fetchFolderAPI =async()=>{
+    const fetchUserNonTeamApi =async()=>{
         setLoadingFields(true)
         try {
-            const response = await axios.get("http://127.0.0.1:8000/drf/nonteamusers/", {
+            const response = await axios.get("http://127.0.0.1:8000/drf/users/", {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -123,7 +127,6 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 leaderOptions: response.data
             }))
         } catch (error) {
-
             console.error(error)
             setInputData((prev)=>({
                 ...prev,
@@ -133,14 +136,36 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             setLoadingFields(false)
         }
     }
-    fetchFolderAPI()
-    }, [])
+    fetchUserNonTeamApi()
+    }, [inputData.workers])  //evertime we try to add a worker, workers array length changes triggering a re fetching of users that will populate the workerrs display?
 
-    // =====================handle worker
+    // =====================handle worker===========================
     const handleAddWorker=()=>{
         setAddWorker(true)
     }
-
+// ==========================delete worker=============================
+    const removeWoker = async( url, workerId)=>{
+        try {
+            const response = await axios.delete(url, 
+                {
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                withCredentials: true, // Optional: only needed if cookies are set
+            });
+            setInputData((prev)=>{
+                const updatedWorkers = prev.workers.filter(worker=> worker.id !== workerId)  // it does not select the workers that we have removed 
+                return ({
+                    ...prev,
+                workers:updatedWorkers
+            })
+                
+            })
+        } catch (error) {
+            console.error(error)
+        } finally {
+        }
+    }
     
     // ===================SUBMIT FUNCTIION=====================
     const handleSubmit= async (e)=>{
@@ -198,7 +223,12 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
-            }
+                setInputData(prev=>(
+                    {...prev,
+                        workers:[...prev.workers, inputWorker]
+                    }
+                ))
+        }
             
             console.log("Team created successfully!:", response.data)
             if (response.status === 200 || response.data === 201) {
@@ -337,12 +367,28 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         serialiserTpe="level"  //this is key to value. the values should be strings "L1" .... we will have field["level"] = "L1"
                     />
                 </div>
+                <div className="workers p-4 flex flex-col">
+                    <h1 className='text-gray-700 my-1 sm:text-base font-bold mb-2'>WORKERS</h1>
+                    {inputData?.workers?.length > 0
+                    ?inputData.workers.map((worker)=>(
+                        <div key={worker.id} className='userrow mt-2 flex flex-row border border-green-100 rounded-lg w-full justify-between align-middle items-center'>
+                            <div className='px-2 flex flex-row align-middle items-center text-gray-700 sm:text-sm font-semibold py-1'>{worker.user}</div>
+                            <button type='button' onClick={()=>{removeWoker(worker.team_membership, worker.id)}}
+                                className='px-2 flex flex-row align-middle items-center bg-red-50 rounded-lg py-1 text-gray-700 sm:text-sm font-semibold'
+                                >Remove Worker</button>
+                        </div>
+                    ))
+                    :<div>no workers</div>}
+                </div>
             </div>
             {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}
             <div className="flex flex-col w-1/3 m-5">
             {/* https://stackoverflow.com/questions/37462047/how-to-create-several-submit-buttons-in-a-react-js-form/41288712 */}
                 <AuthButton buttonText="Add worker" type='button' onClick={handleAddWorker}/>
-                {addWorker? <button type="button" className='mt-2 py-1 flex border-2 border-red-300 text-center align-middle justify-center rounded-md' 
+                {/* {inputData?.workers?.length > 0? <button type="button" className='mt-2 py-1 flex border-2 border-red-300 text-center align-middle justify-center rounded-md' 
+                onClick={removeWoker}>Remove Worker</button>
+                                   :<></> } */}
+                {addWorker? <button type="button" className='mt-2 py-1 flex border-2 bg-red-300 border-red-300 text-center align-middle justify-center rounded-md' 
                 onClick={()=>setAddWorker(false)}>Cancel</button>
                           : <></>}
                 <AuthButton buttonText="Save Team"/>
@@ -361,7 +407,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                             fieldDefiner="username"
                             serialiserTpe="url"
                             />
-                        </>
+                            </>
                         
                           :<></>}
             </div>

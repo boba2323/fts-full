@@ -5,6 +5,8 @@ from django.conf import settings
 from pprint import pprint
 # your models
 from .models import File, Folder, Modification, Tag, ActionLog
+from accounts.authenticate import CustomAuthentication
+
 
 # Create your views here.
 from rest_framework import permissions, viewsets
@@ -32,8 +34,12 @@ User = get_user_model()
 class TeamViewSet(viewsets.ModelViewSet):
     serializer_class= TeamSerializer
     queryset = Team.objects.all()
-    permission_classes = [AllowAny]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [CustomAuthentication]
+    
+    def list(self, request, *args, **kwargs):
+        print(request.user)
+        return super().list(request, *args, **kwargs)
 
     # def get_permissions(self):
     #     if self.action in ['create', 'update', 'partial_update', 'destroy']:

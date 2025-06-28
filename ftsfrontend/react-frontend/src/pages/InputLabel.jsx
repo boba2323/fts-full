@@ -12,7 +12,7 @@ return (
     <>
         <div className="passworddiv flex flex-start items-center justify-start w-full ">
                 <label
-                 className="text-gray-700 my-1 sm:text-xs font-bold mb-2"
+                 className="text-gray-700 my-1 text-xs sm:text-xs font-bold mb-2"
                  htmlFor={name}
                  >
                     {labelName}

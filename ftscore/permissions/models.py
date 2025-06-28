@@ -35,6 +35,10 @@ from guardian.shortcuts import remove_perm
 # =====================x=========================
 
 
+# ===========================service============================
+from permissions.service_layer import TeamService
+
+
 class Team(models.Model):
     '''This will be the team that will have a leader and workers. the teams will have
     3 levels, L1, L2  and L3. L1 teams will have full access to all files and folders and perform CRUD operations.
@@ -170,33 +174,23 @@ class Team(models.Model):
         for membership in self.memberships.all():
             membership.apply_permissions_to_team_members()
 
-    def create_or_update_TM(self, created_first_time, previous_leader):
-        '''with flags created first time, it checks if the team instance exists, if it does, it finds the 
-        TM related to the team and leader and updates the TM with new leader, if team does not exist, it create a new
-        TM with the leader in the current team field'''
-        if not created_first_time: #check if the team instance already exists so we can find the related TM instance
-            try:
-                existing_teammembership=TeamMembership.objects.get(user=previous_leader, team=self, role="leader")
-                existing_teammembership.user=self.leader
-                existing_teammembership.role='leader'
-                existing_teammembership.save()
-            except Exception as e:
-                # If no existing membership for old leader, create for new leader
-                TeamMembership.objects.get_or_create(user=self.leader, team=self, role='leader')
-        # when team is saved first time, it will also create a teammembership through instance that saves the TM.user as the leader
-        # with role as leader
-        else: #meaning this particular team instance is being created for first time
-            TeamMembership.objects.get_or_create(user=self.leader, team=self, role='leader')
+    def create_or_update_TM(self, team, new_leader, created_first_time, previous_leader):
+        TeamService.create_or_update_team_membership(self, team, new_leader, created_first_time, previous_leader)
 
     def save(self, *args, **kwargs):
         # we can add some validation here to check if the team name is unique
         # validation to check a user can be leader of only 1 team
         # .exclude is to ensure that we are not checking the same user if he is already the leader in the object we are updating
         does_user_exist_as_leader_in_another_team = Team.objects.filter(leader=self.leader).exclude(pk=self.pk).exists()
+        does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=self.leader, role="worker").exists()
         if does_user_exist_as_leader_in_another_team:
             # if the user is already a leader of another team, we will raise a validation error
             # this is to ensure that a user can only be a leader of one team at a time
-            raise ValidationError("A user can only be a leader of one team at a time.")
+            raise ValidationError("A user cannot be a leader in this team if they’re already a leader in another team")
+        if does_user_exist_as_worker_in_another_team:
+            # if the user is already a leader of another team, we will raise a validation error
+            # this is to ensure that a user can only be a leader of one team at a time
+            raise ValidationError("A user cannot be a leader in this team if they’re already a worker in another team")
         
         # lets check if the teammembership instance for this particular team instance exists. then we will know
         previous_leader = None
@@ -207,7 +201,7 @@ class Team(models.Model):
 
         # the team model should be saved first as good code practices
         super().save(*args, **kwargs)
-        self.create_or_update_TM(created_first_time, previous_leader)
+        self.create_or_update_TM(self, self.leader, created_first_time, previous_leader)
 
     
 

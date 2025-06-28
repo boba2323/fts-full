@@ -115,7 +115,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     def get_workers(self, obj):
         # getting the request body in the serialiser. its not the same as getting the request body in biews
         request = self.context.get('request')
-        worker_query = obj.get_workers_of_the_team()
+        worker_query = obj.get_workers_of_the_team() #this is a query of membership obejcts
         # we turn them in json objects??
         return [{
             'id':query.user.id,
@@ -123,6 +123,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
             'user_url':reverse('myuser-detail', args=[query.user.id], request=request),
             'team':query.team.name,
             'team_url':reverse('team-detail', args=[query.team.id], request=request),
+            'team_membership':reverse('teammembership-detail', args=[query.id], request=request)
         } for query in worker_query]
 
     def validate(self, attrs):
@@ -131,6 +132,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         # get model name
         team_model = self.Meta.model
         leader = attrs.get('leader') #basically just a user
+        
         if self.instance:
             # checksif the user is a leader exists in another team
             does_user_exist_as_leader_in_another_team = Team.objects.filter(leader=leader).exclude(pk=self.instance.pk).exists()
@@ -139,6 +141,9 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
             does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exclude(team=self.instance).exists()
             if does_user_exist_as_worker_in_another_team:
                 raise serializers.ValidationError("update-This user is a worker in another team already.")
+            is_user_a_worker_in_the_team_already = TeamMembership.objects.filter(team= self.instance, user=leader, role="worker").exists()
+            if is_user_a_worker_in_the_team_already:
+                raise serializers.ValidationError("update-This user is a worker in this team already.")   
             return attrs
 
         does_user_exist_as_leader_in_another_team = Team.objects.filter(leader=leader).exists()

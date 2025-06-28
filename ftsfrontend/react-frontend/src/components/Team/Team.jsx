@@ -4,6 +4,7 @@ import Loading from '../Loading/Loading.jsx'
 import moment from 'moment'
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between team update
   const [teamData, setTeamData] =useState([])
@@ -11,12 +12,14 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
 
   useEffect (()=>{
     const fetchTeamData = async ()=>{
+      console.log("csrftoken = ", Cookies.get('csrftoken'))
         setLoading(true)
         try {
             const response = await axios.get('http://127.0.0.1:8000/drf/teams/',
               {
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': Cookies.get('csrftoken')
               },
               withCredentials: true, // Optional: only needed if cookies are set
               }

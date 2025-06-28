@@ -65,10 +65,12 @@ AUTH_USER_MODEL = 'accounts.Myuser'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # now since we customised the JWTAuthentication in accounts,authenticate.py we will plug it here
+        'accounts.authenticate.CustomAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
 
         # from the book REST api with django
         # 'rest_framework.authentication.SessionAuthentication',
@@ -99,10 +101,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # this was added
-    'fts_app.middleware.jwt_token_retrieve.CustomTokenMiddleware',
+    # 'fts_app.middleware.jwt_token_retrieve.CustomTokenMiddleware',
     # -----x------
       # jwt refresh token                 
-    "fts_app.middleware.refresh_token.RefreshJWTMiddleware",
+    # "fts_app.middleware.refresh_token.RefreshJWTMiddleware",
 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

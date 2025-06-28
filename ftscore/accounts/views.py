@@ -7,12 +7,14 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
 from .serialiser import UserSerializer
 from fts_app.serializers import MyTokenObtainPairSerializer
-
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
 
 # views for obtaining the jwt and store it in HTTPOnly cookie
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from accounts.authenticate import CustomAuthentication
 
 User = get_user_model()
 # # Create your views here.
@@ -22,7 +24,6 @@ class RegisterView(CreateAPIView):
     authentication_classes = []  # No authentication required for registration
     permission_classes = [AllowAny]  # Allow any user to access this view
     serializer_class = UserSerializer
-    
 
     def post(self, request, format=None):
         serializer_context = {
@@ -46,7 +47,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         # for browsable api. when we move to frontend we drop it
         serializer = MyTokenObtainPairSerializer(data=request.data, context={'request': request})
         # get the token
-
+        # print("inside token pair view")
         # https://www.django-rest-framework.org/api-guide/serializers/#raising-an-exception-on-invalid-data
 
         # automatically raises exception if not true
@@ -55,7 +56,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         access_token = serializer.validated_data['access']
         refresh_token = serializer.validated_data['refresh']
 
-
+        # print("access token pairview",  access_token)
         # the code below is wrong since we are passing the tokens in the response. remember
         # the tokens are in the validated data since the jwt adds them to the returned data.
         # thus we have to set something else
@@ -78,6 +79,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                             httponly=True,
                             secure=False,
                             samesite='Lax')
+        # print("cookies", response.cookies)
         return response
 
 
@@ -123,6 +125,7 @@ class CustomRefreshTokenView(TokenRefreshView):
             secure=False,  # True in production
             samesite='Lax',
             max_age=3600
+
         )
         return response
 
@@ -142,9 +145,14 @@ class LoggedUserView(generics.RetrieveUpdateDestroyAPIView):
 # https://stackoverflow.com/questions/54385269/django-delete-cookie-from-request
 # You can't delete cookie from a request, or rather it would be an exercise in futility. The way you "delete" (and set) a cookie from the server side is by issuing a specific header on the response. The request only contains headers sent by the client.
 class LogoutView(generics.GenericAPIView):
+
+    permission_classes=[IsAuthenticated]
+    authentication_classes = [CustomAuthentication]
+    # https://medium.com/@iampankajk/building-a-scalable-authentication-system-with-django-and-postgresql-c96cc88b4b1d
     serializer_class=UserSerializer
 
     def post(self, request):
+        print("logout view")
         # deleting the token from cookies
         response = Response({"success": ("Successfully logged out.")},
                     status=status.HTTP_200_OK)

@@ -87,6 +87,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 # a access token can expire pretty quick. to renew we get a refresh token by htiting the refresh token url endpoint
 # in our case we neet to enter the refresh token inside the cookie again just like the access token
 class CustomRefreshTokenView(TokenRefreshView):
+    authentication_classes = [CustomAuthentication]
 
     def post(self, request, *args, **kwargs):
         # when we hit this endpoint, we may think we need to pass the jwt manually but the frontend does it for us
@@ -133,6 +134,7 @@ class CustomRefreshTokenView(TokenRefreshView):
 class LoggedUserView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = [CustomAuthentication]
 
     def get(self, request):
         user = request.user

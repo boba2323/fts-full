@@ -50,7 +50,7 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
     queryset = TeamMembership.objects.all()  # Adjust this to your actual queryset
     serializer_class = TeamMembershipSerializer
     permission_classes = [AllowAny]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
     # def get_permissions(self):
     #     if self.action in ['create', 'update', 'partial_update', 'destroy']:
@@ -61,7 +61,7 @@ class AccessCodeViewSet(viewsets.ModelViewSet):
     queryset = AccessCode.objects.all()  # Adjust this to your actual queryset
     serializer_class = AccessCodeSerializer
     permission_classes = [AllowAny]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
     # def get_permissions(self):
     #     if self.action in ['create', 'update', 'partial_update', 'destroy']:

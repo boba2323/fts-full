@@ -22,7 +22,8 @@ const TeamPostApi = async()=>{
             },
             {
             headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRFToken': Cookies.get('csrftoken')
             },
             withCredentials: true, // Optional: only needed if cookies are set
         });

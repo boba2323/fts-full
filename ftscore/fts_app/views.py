@@ -33,6 +33,8 @@ from permissions.models import Team, TeamMembership, AccessCode
 
 from .service_layer import UserServices
 
+from accounts.authenticate import CustomAuthentication
+
 User = get_user_model()
 class IndexView(generic.TemplateView):
     template_name = "fts_app/index.html"
@@ -55,13 +57,15 @@ class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
+
 
 class UserNonTeamViewSet(viewsets.ModelViewSet):
     queryset = UserServices.get_available_non_team_users()
     serializer_class = UserSerializer
     permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
+
     
 
 class FileViewSet(viewsets.ModelViewSet):
@@ -69,7 +73,7 @@ class FileViewSet(viewsets.ModelViewSet):
     serializer_class = FileSerializer
     # new permissions from permisisons.py added
     permission_classes = [TeamsAndRolesFiles]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
     #  checking for request meta
     def list(self, request, *args, **kwargs):
@@ -188,20 +192,20 @@ class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [TeamsAndRolesFiles]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [TeamsAndRolesFiles]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
 
 class FolderViewSet(viewsets.ModelViewSet):
     queryset = Folder.objects.all()
     serializer_class = FolderSerializer
     permission_classes = [TeamsAndRolesFolders]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
     # https://stackoverflow.com/questions/72197928/drf-viewset-extra-action-action-serializer-class
     def get_queryset(self):
@@ -224,12 +228,12 @@ class ModificationViewSet(viewsets.ModelViewSet):
     queryset = Modification.objects.all()
     serializer_class = ModificationSerializer
     permission_classes = [TeamsAndRolesFiles]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
 class ActionLogViewSet(viewsets.ModelViewSet):
     queryset = ActionLog.objects.all()
     serializer_class = ActionLogSerializer
     permission_classes = [TeamsAndRolesFiles]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomAuthentication]
 
     

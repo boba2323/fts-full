@@ -155,7 +155,8 @@ const FileUpload = () => {
                 },
                 {
                 headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'X-CSRFToken': Cookies.get('csrftoken')
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });

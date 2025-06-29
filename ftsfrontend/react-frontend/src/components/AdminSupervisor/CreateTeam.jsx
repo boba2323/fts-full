@@ -9,7 +9,7 @@ import AuthButton from '../../pages/AuthButton';
 import Team from '../Team/Team';
 import { useParams } from 'react-router-dom';
 
-
+import Cookies from 'js-cookie';
 const CreateTeam = ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
@@ -37,10 +37,17 @@ const CreateTeam = ({mode}) => {   //mode:create or update
     const [addWorker, setAddWorker] = useState(false)
     const [inputWorker, setInputWorker] = useState()
 
+
+    useEffect(() => {
+            console.log(" useeffect Updated workers list:", inputData.workers);
+            }, [inputData.workers]);
+
+
+
     // ==================get team data==============================
 
     useEffect(()=>{
-        // ========================GET INDIVIDUAL TEAM==============================
+        // ========================GET INDIVIDUAL TEAM and the data with it aong with the workers==============================
         const createInitalUpdateData = async()=>{
             setFinishLoadingTeamUpdateData(false)
             console.log("in the createinit data")
@@ -78,7 +85,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
         if (mode==="update" || teamId){
                 createInitalUpdateData()
             }
-    }, [mode, teamId])
+    }, [mode, teamId ])
 
     const onChangeHandler = (e) => {
         const {name, value} = e.target;
@@ -156,12 +163,18 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             });
             setInputData((prev)=>{
                 const updatedWorkers = prev.workers.filter(worker=> worker.id !== workerId)  // it does not select the workers that we have removed 
+                console.log("old wokers vs ")
+                console.log(prev.workers)
+                console.log("updated not state workers after delete")
+                console.log(updatedWorkers)
                 return ({
                     ...prev,
                 workers:updatedWorkers
             })
-                
             })
+            console.log("state after setting")
+            console.log(inputData.workers)
+            
         } catch (error) {
             console.error(error)
         } finally {
@@ -222,28 +235,44 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 {
                 headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': Cookies.get('csrftoken')
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
-            });
+                });
+                
+                console.log( "response data",responseMembership.data)
+                const team_url = responseMembership.data.team
+                console.log("membership team url", team_url)
+                console.log("team url" ,team_url)
+                const teamData = await axios.get(team_url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': Cookies.get('csrftoken')
+                    },
+                    withCredentials: true
+                });
+                console.log("teamData",  teamData)
+                const team = teamData.data
+                console.log('team', team)
+                console.log('team data workers', team.workers)
                 setInputData(prev=>(
                     {...prev,
-                        workers:[...prev.workers, inputWorker]
+                        workers:team.workers
                     }
                 ))
-        }
+
+            }
             
             console.log("Team created successfully!:", response.data)
             if (response.status === 200 || response.data === 201) {
             // success login 
-                console.log("Team created successfully!:", response.data);
                 }
             setErrors({
                  global: [],
                  fields: {},
                  success: "Team updated successfully!"
             })
-            console.log("Team Successully created:", response.data);
             setFormIsSubmitted(true)
 
             // reset the form
@@ -254,6 +283,8 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             level: '',
         }));
         } catch (error) {
+            console.error(error)
+            console.log("team crate error")
             setFormIsSubmitted(false)
             // we get this from login boiler code
             if (error.response) {
@@ -374,7 +405,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                     <h1 className='text-gray-700 my-1 sm:text-base font-bold mb-2'>WORKERS</h1>
                     {inputData?.workers?.length > 0
                     ?inputData.workers.map((worker)=>(
-                        <div key={worker.id} className='userrow mt-2 flex flex-row border border-green-100 rounded-lg w-full justify-between align-middle items-center'>
+                        <div key={worker.url} className='userrow mt-2 flex flex-row border border-green-100 rounded-lg w-full justify-between align-middle items-center'>
                             <div className='px-2 flex flex-row align-middle items-center text-gray-700 sm:text-sm font-semibold py-1'>{worker.user}</div>
                             <button type='button' onClick={()=>{removeWoker(worker.team_membership, worker.id)}}
                                 className='px-2 flex flex-row align-middle items-center bg-red-50 rounded-lg py-1 text-gray-700 sm:text-sm font-semibold'
@@ -400,7 +431,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                             {displayFieldErrors("user")}
                             <SelectInput 
                             name="selectedWorkers"
-                            value={inputWorker}
+                            value={inputWorker}  // the value is an url not an object 
                             onChange={workerChangeHandler}
                             labelName="Add a Worker"
                             selectField="Choose a user as worker"

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Modal from '../Modal/ModalDeleteTeam';
-
+import Cookies from 'js-cookie';
 const AdminTeamDelete =() => {
     const [open, setOpen] = useState(true)
     const {teamId} = useParams()

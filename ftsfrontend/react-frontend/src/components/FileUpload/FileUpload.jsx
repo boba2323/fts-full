@@ -6,7 +6,7 @@ import SelectInput from '../SelectInputs/SelectInput';
 import Space2 from '../SpaceBetweenFields/Space2';
 import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
-
+import Cookies from 'js-cookie';
 // https://www.geeksforgeeks.org/reactjs/file-uploading-in-react-js/
 const FileUpload = () => {
 
@@ -179,6 +179,8 @@ const FileUpload = () => {
         }));
         } catch (error) {
             setFormIsSubmitted(false)
+            console.log("fileupload error")
+            console.error(error)
             // we get this from login boiler code
             if (error.response) {
                 const errorData = error.response.data
@@ -206,7 +208,7 @@ const FileUpload = () => {
 
         } finally {
         setPostLoading(false)
-        console.log(errorMessage)
+        console.error(errorMessage)
         }
         }
 

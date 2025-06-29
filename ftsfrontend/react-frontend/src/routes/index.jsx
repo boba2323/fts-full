@@ -28,7 +28,7 @@ import AdminTeamDelete from "../components/AdminSupervisor/AdminTeamDelete";
 
 import UserList from "../components/UsersList/UserList";
 import AdminUserDelete from '../components/AdminSupervisor/AdminUserDelete'
-
+import AdminAC from "../components/AdminSupervisor/AdminAC";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -147,6 +147,10 @@ const Routes = () => {
                 path: "admin/admin-user/delete/:userId",
                 element: <><AdminUserDelete/></>
               },
+              {
+                path:"admin/admin-accesscode",
+                element:<AdminAC/>
+              }
               
             ]
         },

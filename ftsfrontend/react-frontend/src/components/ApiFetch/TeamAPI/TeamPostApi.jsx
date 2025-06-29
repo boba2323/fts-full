@@ -8,7 +8,7 @@ import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
 import Team from '../Team/Team';
 import { useParams } from 'react-router-dom';
-
+import Cookies from 'js-cookie';
 
 const TeamPostApi = async()=>{
     try {

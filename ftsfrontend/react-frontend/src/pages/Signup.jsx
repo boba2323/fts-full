@@ -7,7 +7,7 @@ import { useState } from "react";
 
 // for api
 import axios from 'axios';
-
+import Cookies from 'js-cookie';
 const Signup = () => {
   const [message, setMessage] = useState(null);
   const [inputData, setInputData ] = useState({

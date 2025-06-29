@@ -71,6 +71,9 @@ const AdminPanel = () => {
             <nav className='flex flex-row space-x-10'>
               <AdminModelCard teamname={"Modification"}   membercount={"5"}/>
               <AdminModelCard teamname={"ActionLog" } membercount={"5"}/>
+              <Link to={`admin-accesscode`}>
+                <AdminModelCard teamname={"Access Codes" } membercount={"5"}/>
+              </Link>
             </nav>
           </div>
         </div>

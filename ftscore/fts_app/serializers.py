@@ -176,7 +176,7 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
         if not user.is_authenticated:
             raise ValueError("You are not logged in what the hell")
         user_membership = user.get_team_membership()
-        if not user_membership:
+        if not user_membership and not user.supervisor:
             raise ValueError("You are not in a team")
         
         # auto save owner to model

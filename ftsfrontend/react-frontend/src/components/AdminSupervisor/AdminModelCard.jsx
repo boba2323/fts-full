@@ -1,5 +1,6 @@
 import React from 'react'
-
+import { FaArrowUpFromBracket } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
 const AdminModelCard = ({
     teamname,
     membercount,
@@ -11,24 +12,27 @@ const AdminModelCard = ({
         transition-all duration-500 group
         cursor-pointer
         ">
-
+          <div className='flex justify-center items-center'>
+            <FaArrowUpFromBracket size="25"/>
+          </div>
+          
       {/* Team Name */}
-      <h1 className="teamname flex justify-center items-center 
-          text-xl font-bold text-gray-700 mt-3 py-2
-          transition-all duration-500 ease-out
-          group-hover:translate-y-[-2px] group-hover:scale-105 group-hover:text-green-600
-          delay-100">
-          {teamname}
-      </h1>
+        <h1 className="teamname flex justify-center items-center 
+            text-xl font-bold text-gray-700 mt-3 py-2
+            transition-all duration-500 ease-out
+            group-hover:translate-y-[-2px] group-hover:scale-105 group-hover:text-green-600
+            delay-100">
+            {teamname}
+        </h1>
 
-      {/* Content Count */}
-      <h1 className="contentnumber flex justify-start ps-7
-          text-sm font-light text-gray-600
-          transition-all duration-500 ease-out
-          group-hover:translate-y-[-1px] group-hover:scale-105 group-hover:text-emerald-700
-          delay-300">
-          {membercount}
-      </h1>
+        {/* Content Count */}
+        <h1 className="contentnumber flex justify-start ps-7
+            text-sm font-light text-gray-600
+            transition-all duration-500 ease-out
+            group-hover:translate-y-[-1px] group-hover:scale-105 group-hover:text-emerald-700
+            delay-300">
+            {membercount}
+        </h1>
     </div>
   )
 }

@@ -159,6 +159,7 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
         view_name='accesscode-detail',
     )
     team_name=serializers.SerializerMethodField()
+    
     class Meta:
         model = AccessCode
         fields = ( 'url', 'code', 'team', 'team_name', 'created_by', 'created_at', 'expires_at', 'is_active', 'optional_description')

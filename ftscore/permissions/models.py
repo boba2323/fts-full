@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 import uuid
 from django.contrib.auth.models import Permission
 
+import random
+
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 # =====================x=======================
@@ -453,6 +455,7 @@ class AccessCode(models.Model):
     # if null=true, then we were unable to set contrainsts for it
     # setting NULL WILL CAUSE ERROR IN THE CONSTRAINT
     team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='access_codes')
+    masked_id = models.PositiveIntegerField(unique=True, null=True, blank=True)
 
     class Meta:
         # PERMISSIONS we need to enforce for access
@@ -471,20 +474,9 @@ class AccessCode(models.Model):
         return f"Access Code:  Belonging to {self.team.name}"
         # for Team: {self.team.name} by {self.created_by.username if self.team.exists() else 'Unknown'}"
 
-     
-
     def save(self, *args, **kwargs):
-
+        if self.masked_id is None:
+            # https://www.geeksforgeeks.org/python/how-to-do-select-max-in-django/
+            last_id = AccessCode.objects.aggregate(models.Max('masked_id'))['masked_id__max'] or 0  #masked_id__max is the auto created key name 
+            self.masked_id = last_id + 1
         super().save(*args, **kwargs)
-        # request=kwargs.get('request')
-        # if request.user:
-        #     ac_creator=request.user
-        #     if ac_creator.led_teams.exists(): #meaning he is the leader
-        #         # if the user is a leader of a team, we can assign the access code to the team
-        #         # this will be used to create the access code for the team
-        #         self.team = ac_creator.led_teams.first()
-        #         self.created_by = ac_creator
-        #     else:
-        #         raise ValueError("Access code must be created by a team leader.")
-        # else:
-        #     raise ValueError("Access code must be created by a user.")

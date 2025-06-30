@@ -2,6 +2,9 @@ import React from 'react'
 import AdminModelCard from './AdminModelCard'
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
+import { FaArrowUpFromBracket } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
+
 
 const AdminPanel = () => {
   let location = useLocation();

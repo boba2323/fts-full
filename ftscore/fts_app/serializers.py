@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from .models import File, Folder, Modification, Tag, ActionLog  # Import your models
-from permissions.models import TeamMembership
+from permissions.models import TeamMembership, AccessCode
 from rest_framework.reverse import reverse
 from pprint import pprint
 User = get_user_model()
@@ -111,6 +111,11 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
     access_code_code = serializers.SerializerMethodField()
     # https://stackoverflow.com/questions/34989915/write-only-read-only-fields-in-django-rest-framework
     owner = serializers.SerializerMethodField(read_only=True)
+    access_code= serializers.HyperlinkedRelatedField(
+        queryset=AccessCode.objects.all(),
+        view_name='accesscode-detail',
+        lookup_field='masked_id',
+    )
     class Meta:
         model = File
         fields = ['url', 'id', 'file_data', 'name', 'owner', 'owner_username_at_creation', 'date_created','permissions', 
@@ -224,6 +229,11 @@ class FolderSerializer(serializers.HyperlinkedModelSerializer):
     all_subfolders = serializers.SerializerMethodField()
     all_files = serializers.SerializerMethodField()
     total_subfolders = serializers.SerializerMethodField()
+    access_code= serializers.HyperlinkedRelatedField(
+        queryset=AccessCode.objects.all(),
+        view_name='accesscode-detail',
+        lookup_field='masked_id',
+    )
     class Meta:
         model = Folder
         # subfolders added as a reverse relation

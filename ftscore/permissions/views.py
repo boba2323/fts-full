@@ -37,9 +37,9 @@ class TeamViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [CustomAuthentication]
     
-    def list(self, request, *args, **kwargs):
-        print(request.user)
-        return super().list(request, *args, **kwargs)
+    # def list(self, request, *args, **kwargs):
+    #     print(request.user)
+    #     return super().list(request, *args, **kwargs)
 
     # def get_permissions(self):
     #     if self.action in ['create', 'update', 'partial_update', 'destroy']:
@@ -62,6 +62,7 @@ class AccessCodeViewSet(viewsets.ModelViewSet):
     serializer_class = AccessCodeSerializer
     permission_classes = [AllowAny]
     authentication_classes = [CustomAuthentication]
+    lookup_field = 'masked_id'
 
     # def get_permissions(self):
     #     if self.action in ['create', 'update', 'partial_update', 'destroy']:

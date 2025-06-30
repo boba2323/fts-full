@@ -7,6 +7,7 @@
 
 # https://medium.com/@kennch/stateful-and-stateless-authentication-10aa3e3d4986
 
+# https://dev.to/a_atalla/django-rest-framework-custom-jwt-authentication-5n5
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.conf import settings
 

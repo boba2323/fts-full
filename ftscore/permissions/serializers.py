@@ -71,9 +71,12 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         view_name='team-detail',
     )
     access_codes= serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
+        queryset=AccessCode.objects.all(),
         view_name='accesscode-detail',
+        lookup_field='masked_id',
+        many=True,
+        # read_only=True,
+        # view_name='accesscode-detail',
     ) #reverse relationship to access codes in access code model
 
     # membership_users is a field in team model and not a reverse field in teamembership
@@ -93,11 +96,19 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     access_code_code = serializers.SerializerMethodField()
     workers=serializers.SerializerMethodField()
     leader_name = serializers.SerializerMethodField()
+    # access_codes=serializers.HyperlinkedRelatedField(
+    #     queryset=AccessCode.objects.all(),
+    #     view_name='accesscode-detail',
+    #     lookup_field='masked_id',
+    # )
     class Meta:
         model = Team
         fields = ('id', 'name', 'url', 'name', 'created_at', 'leader','leader_name', 'membership_users',
                    'workers',
                      'memberships', 'level', 'access_codes', "access_code_code" )
+        # extra_kwargs = {
+        #     'access_codes': {'view_name': 'accesscode-detail','lookup_field': 'masked_id'},
+        # }
         
     
     def get_leader_name(self, obj):
@@ -157,13 +168,15 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='accesscode-detail',
+        lookup_field= 'masked_id'
     )
     team_name=serializers.SerializerMethodField()
-    
     class Meta:
         model = AccessCode
-        fields = ( 'url', 'code', 'team', 'team_name', 'created_by', 'created_at', 'expires_at', 'is_active', 'optional_description')
-
+        fields = ( 'url', 'code', 'masked_id', 'team', 'team_name', 'created_by', 'created_at', 'expires_at', 'is_active', 'optional_description')
+        # extra_kwargs = {
+        #     'url': {'view_name': 'accesscode','lookup_field': 'masked_id'},
+        # }
     def get_team_name(self, obj):
         if obj.team:
             team=obj.team.name

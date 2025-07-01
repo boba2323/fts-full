@@ -4,6 +4,7 @@ import { FaTrash } from "react-icons/fa6";
 const AdminModelCard = ({
     teamname,
     membercount,
+    icon
 }) => {
   return (
     <div className="admincard bg-gradient-to-b from-gray-100 to-gray-50 flex flex-col w-40 h-52 rounded-2xl 
@@ -12,8 +13,8 @@ const AdminModelCard = ({
         transition-all duration-500 group
         cursor-pointer
         ">
-          <div className='flex justify-center items-center'>
-            <FaArrowUpFromBracket size="25"/>
+          <div className='flex justify-center items-center pt-5'>
+            {icon}
           </div>
           
       {/* Team Name */}

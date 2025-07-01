@@ -68,14 +68,14 @@ const AccessCodeList = ({supervisor}) => {  //supervisor is a boolean to toggle 
                                     {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.memberships }</td> */}
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{ac.expires_at }</td>
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{ac.is_active }</td>
-                                    {/* {supervisor?<td className='ps-5 text-xs font-medium font-sans text-gray-700'><Link to={`${ac.code}`} >Update</Link></td>
+                                    {supervisor?<td className='ps-5 text-xs font-medium font-sans text-gray-700'><Link to={`${ac.masked_id}`} >Assign</Link></td>
                                     :<></>
                                     }
-                                    {supervisor?<td className='text-xs p-2  font-medium font-sans text-gray-200'><Link to={`delete/${ac.code}`} >
+                                    {supervisor?<td className='text-xs p-2  font-medium font-sans text-gray-200'><Link to={`delete/${ac.masked_id}`} >
                                         <div className='flex justify-center items-center rounded bg-red-500 align-middle p-1'>Delete</div></Link>
                                     </td>
                                     :<></>
-                                    } */}
+                                    }
                                   </tr>
                               ))
                             

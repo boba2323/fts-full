@@ -29,6 +29,9 @@ import AdminTeamDelete from "../components/AdminSupervisor/AdminTeamDelete";
 import UserList from "../components/UsersList/UserList";
 import AdminUserDelete from '../components/AdminSupervisor/AdminUserDelete'
 import AdminAC from "../components/AdminSupervisor/AdminAC";
+import CreateAC from "../components/AdminSupervisor/CreateAccCode";
+
+import AdminAccCodeDelete from "../components/AdminSupervisor/AdminAccCodeDel";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -150,7 +153,19 @@ const Routes = () => {
               {
                 path:"admin/admin-accesscode",
                 element:<AdminAC/>
-              }
+              },
+              {
+                path:'admin/create-accesscode',
+                element:<CreateAC mode='create'/>
+              },
+              {
+                path:"admin/admin-accesscode/:id",
+                element:<CreateAC mode="update"/>,
+              },
+              {
+                path:'admin/admin-accesscode/delete/:id',
+                element:<AdminAccCodeDelete/>
+              },
               
             ]
         },

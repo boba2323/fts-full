@@ -71,11 +71,11 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         view_name='team-detail',
     )
     access_codes= serializers.HyperlinkedRelatedField(
-        queryset=AccessCode.objects.all(),
+        # queryset=AccessCode.objects.all(),
         view_name='accesscode-detail',
         lookup_field='masked_id',
         many=True,
-        # read_only=True,
+        read_only=True,
         # view_name='accesscode-detail',
     ) #reverse relationship to access codes in access code model
 

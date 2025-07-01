@@ -13,194 +13,131 @@ import Cookies from 'js-cookie';
 const CreateAC= ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
-    const {acCode} = useParams() 
-    const [finishloadingTeamUpdateData, setFinishLoadingTeamUpdateData] = useState(false)
-    const [inputData, setInputData ] = useState({
-            name:"",
-            leader:"",
-            level:'',
-            workers:[],
-            leaderOptions:[],
-            LEVELOPTIONS:[  {"level":"L1", "def": "Level 1 - Full Access"},
-                            {"level":"L2", "def":"Level 2 - Limited Access"},
-                            {"level":"L3", "def":'Level 3 - Read Only'}
-                        ]
+    const {id} = useParams() 
+    const [loadingTeamData, setLoadingTeamData] = useState(true)
+    const [acData, setACData ] = useState({
+            team:'',
+            optional_description:'',
+            teamOptions:[],
           })
 
-    const [loadingFields, setLoadingFields] = useState(true)
     const [errors, setErrors] = useState({
                                         global: [],
                                         fields: {},
                                         success:''
                                         });
     const [formIsSubmitted, setFormIsSubmitted] = useState(false)
-    const [addWorker, setAddWorker] = useState(false)
-    const [inputWorker, setInputWorker] = useState()
-
-
-    useEffect(() => {
-            console.log(" useeffect Updated workers list:", inputData.workers);
-            }, [inputData.workers]);
 
 
 
-    // ==================get team data==============================
+    // ==================get team data for update to initialise past data==============================
 
     useEffect(()=>{
         // ========================GET INDIVIDUAL TEAM and the data with it aong with the workers==============================
         const createInitalUpdateData = async()=>{
-            setFinishLoadingTeamUpdateData(false)
+            // setLoadingTeamData(true)
             console.log("in the createinit data")
             try {
                 console.log("in the try block")
-                const response = await axios.get(`http://127.0.0.1:8000/drf/teams/${teamId}/`, {
+                const teamUpdateResponse = await axios.get(`http://127.0.0.1:8000/drf/accesscode/${id}/`, {
                     headers: {
                     'Content-Type': 'application/json'
                     },
                     withCredentials: true,
                 })
-                const iniData=response.data
+                const teamUpdateData=teamUpdateResponse.data
                 const INITIALUPDATEDATA = {
-                            name:iniData['name'],
-                            leader:iniData['leader'],
-                            level:iniData['level'],
-                            workers:iniData['workers']
+                            team:teamUpdateData.team,
+                            optional_description:teamUpdateData.optional_description,
                             }
-                setInputData((prev) => ({
+                setACData((prev) => ({
                 ...prev,
                 ...INITIALUPDATEDATA
                 }));
                 console.log("teams api hit")
-                console.log(iniData['workers'])
-                console.log(inputData)
+                console.log(teamUpdateData)
                 
             } catch (error){
                 console.log("in the catch block")
                 console.log(error)
             } finally {
-                setFinishLoadingTeamUpdateData(true)  
+                // setLoadingTeamData(false)  
                 console.log("in the final block")       
             }}
         console.log("in use effect")
-        if (mode==="update" || teamId){
+        if (mode==="update" || id){
                 createInitalUpdateData()
             }
-    }, [mode, teamId ])
+    }, [mode, id ])
 
     const onChangeHandler = (e) => {
         const {name, value} = e.target;
-            setInputData(prev =>({
+            setACData(prev =>({
                 ...prev,
                 [name]: value
                 
             }))
     }
 
-    const leaderSelectHandler =(e)=>{
+    const teamSelectHandler =(e)=>{
         const {name, value} = e.target;
-        setInputData(prev =>({
+        setACData(prev =>({
             ...prev,
-            leader:value
+            team:value
         }))
     }
 
 
-    // ===================================onchange memberships=============================
-    const workerChangeHandler=(e)=>{
-        const {name, value} = e.target
-        setInputWorker(value)
-    }
-
-    const levelSelectHandler =(e)=>{
-        const {name, value} = e.target;
-        setInputData(prev =>({
-            ...prev,
-            level:value
-        }))
-    }
-// =======================================USER  API===================================
+// ========================get teams list from api==============================
     useEffect(()=>{
-    const fetchUserNonTeamApi =async()=>{
-        setLoadingFields(true)
-        try {
-            const response = await axios.get("http://127.0.0.1:8000/drf/users/", {
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-            })
-            setInputData((prev)=>({
-                ...prev,
-                leaderOptions: response.data
-            }))
-        } catch (error) {
-            console.error(error)
-            setInputData((prev)=>({
-                ...prev,
-                leaderOptions: []
-            }))
-        } finally {
-            setLoadingFields(false)
-        }
-    }
-    fetchUserNonTeamApi()
-    }, [inputData.workers])  //evertime we try to add a worker, workers array length changes triggering a re fetching of users that will populate the workerrs display?
+        const teamListSelect = async()=>{
+            setLoadingTeamData(true)
+            console.log("in the getteamlist data")
+            try {
+                console.log("in the getteamlist try block")
+                const response = await axios.get(`http://127.0.0.1:8000/drf/teams/`, {
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    withCredentials: true,
+                })
 
-    // =====================handle worker===========================
-    const handleAddWorker=()=>{
-        setAddWorker(true)
-    }
-// ==========================delete worker=============================
-    const removeWoker = async( url, workerId)=>{
-        try {
-            const response = await axios.delete(url, 
-                {
-                headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-                },
-                withCredentials: true, // Optional: only needed if cookies are set
-            });
-            setInputData((prev)=>{
-                const updatedWorkers = prev.workers.filter(worker=> worker.id !== workerId)  // it does not select the workers that we have removed 
-                console.log("old wokers vs ")
-                console.log(prev.workers)
-                console.log("updated not state workers after delete")
-                console.log(updatedWorkers)
-                return ({
+                const teamListSelectData=response.data
+                setACData((prev) => ({
                     ...prev,
-                workers:updatedWorkers
-            })
-            })
-            console.log("state after setting")
-            console.log(inputData.workers)
-            
-        } catch (error) {
-            console.error(error)
-        } finally {
-        }
-    }
-    
+                    teamOptions:teamListSelectData
+                }));
+                console.log("teams api hit")
+                console.log(teamListSelectData)
+                
+            } catch (error){
+                console.log("in the catch block")
+                console.log(error)
+                setACData((prev) => ({
+                    ...prev,
+                    teamOptions:[]
+                }));
+            } finally {
+                setLoadingTeamData(false)  
+                console.log("in the final block")       
+            }}
+        console.log("in use effect")
+
+        teamListSelect()}, []
+    )  //evertime we try to add a worker, workers array length changes triggering a re fetching of users that will populate the workerrs display?
+
+
     // ===================SUBMIT FUNCTIION=====================
     const handleSubmit= async (e)=>{
         e.preventDefault()
-        if (!inputData.name) {
-            setErrors({
-                 global: ["All fields are required"],
-                 fields: {},
-                 success: ""
-            });
-            return;
-        }
         try {
-            let response
-            let responseMembership
+            let accessPostResponse
             if (mode==="create"){
-                response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
+                console.log("AC create post")
+                accessPostResponse = await axios.post('http://127.0.0.1:8000/drf/accesscode/', 
                 {
-                    'name':inputData.name,
-                    'leader':inputData.leader,
-                    'level':inputData.level,
+                    'team':acData.team,
+                    'optional_description':acData.optional_description,
                 },
                 {
                 headers: {
@@ -209,13 +146,17 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
-             
+                setErrors({
+                    global: [],
+                    fields: {},
+                    success: "Accesscode created successfully!"
+                })             
             } else if (mode==="update"){
-                response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
+                console.log("AC update post")
+                accessPostResponse = await axios.put(`http://127.0.0.1:8000/drf/accesscode/${id}/`, 
                 {
-                    'name':inputData.name,
-                    'leader':inputData.leader,
-                    'level':inputData.level,
+                    'team':acData.team,
+                    'optional_description':acData.optional_description,
                 },
                 {
                 headers: {
@@ -224,67 +165,27 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
-            }
-            if (addWorker){
-                console.log(response.data.url, inputWorker)
-                responseMembership = await axios.post('http://127.0.0.1:8000/drf/teammembership/', 
-                {
-                    'user':inputWorker,
-                    'team':response.data.url,
-                    'role':'worker',
-                },
-                {
-                headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-                },
-                withCredentials: true, // Optional: only needed if cookies are set
-                });
-                
-                console.log( "response data",responseMembership.data)
-                const team_url = responseMembership.data.team
-                console.log("membership team url", team_url)
-                console.log("team url" ,team_url)
-                const teamData = await axios.get(team_url, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': Cookies.get('csrftoken')
-                    },
-                    withCredentials: true
-                });
-                console.log("teamData",  teamData)
-                const team = teamData.data
-                console.log('team', team)
-                console.log('team data workers', team.workers)
-                setInputData(prev=>(
-                    {...prev,
-                        workers:team.workers
-                    }
-                ))
-
-            }
-            
-            console.log("Team created successfully!:", response.data)
-            if (response.status === 200 || response.data === 201) {
+                setErrors({
+                    global: [],
+                    fields: {},
+                    success: "Accesscode updated successfully!"
+                })
+            }    
+            console.log("AC created successfully!:", accessPostResponse.data)
+            if (accessPostResponse.status === 200 || accessPostResponse.data === 201) {
             // success login 
                 }
-            setErrors({
-                 global: [],
-                 fields: {},
-                 success: "Team updated successfully!"
-            })
             setFormIsSubmitted(true)
 
             // reset the form
-            setInputData(prev => ({
+            setACData(prev => ({
             ...prev,
-            name: "",
-            leader: '',
-            level: '',
+            team: "",
+            optional_description: '',
         }));
         } catch (error) {
             console.error(error)
-            console.log("team crate error")
+            console.log("ac crate error")
             setFormIsSubmitted(false)
             // we get this from login boiler code
             if (error.response) {
@@ -302,7 +203,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 const errorDataJson = error.response.data  //get a json obj out of the data
                 const fieldErrors = {}      //field errors need fieldnames as keys
                 const globalErrors = []    //global errors dont need field names hence no keys
-                const fieldNames = ["name", "leader", "level"]
+                const fieldNames =  ["optional_description", "team"]
 
                 // we can push non field errors into a different object by chcking if the keys don not match fields
                 const errorKeyArr = Object.keys(errorDataJson)  //turn this into a array of keys of the error data object
@@ -362,88 +263,35 @@ const CreateAC= ({mode}) => {   //mode:create or update
                         </div>
                     )}
                     
-                    {displayFieldErrors("name")}
+                    {displayFieldErrors("optional_description")}
                     <InputLabel
-                        labelName={"Name"}
-                        name="name"
+                        labelName={"Description"}
+                        name="optional_description"
                         inputType="text"
-                        inputValue={inputData.name}
-                        placeholder="Name"
+                        inputValue={acData.optional_description}
+                        placeholder="Description"
                         onChange={onChangeHandler}
                     />
                     <Space2/>
                     {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
-                    {displayFieldErrors("leader")}
+                    {displayFieldErrors("team")}
                     <SelectInput
-                        name="selectedUser"  //make sure the name is unique and matches the state name
-                        value={inputData.leader}
-                        onChange={leaderSelectHandler}
-                        labelName="Select Leader"
-                        selectField="Choose a user"
-                        fieldOptions={inputData.leaderOptions}
-                        loading={loadingFields}
+                        name="team"  //make sure the name is unique and matches the state name
+                        value={acData.team}
+                        onChange={teamSelectHandler}
+                        labelName="Select Team"
+                        selectField="Choose a team"
+                        fieldOptions={acData.teamOptions}
+                        loading={loadingTeamData}
                         keyType="id"
-                        fieldDefiner="username"
+                        fieldDefiner="name"
                         serialiserTpe="url"
                     />
                     <Space2/>
-                    {displayFieldErrors("level")}
-                    <SelectInput
-                        name="selectedLevel"
-                        value={inputData.level}
-                        onChange={levelSelectHandler}
-                        labelName="Select Level"
-                        selectField="Choose level"
-                        fieldOptions={inputData.LEVELOPTIONS}
-                        loading={loadingFields}
-                        keyType="level"      //will have l1, l2, l3 keys
-                        fieldDefiner="def"  //
-                        serialiserTpe="level"  //this is key to value. the values should be strings "L1" .... we will have field["level"] = "L1"
-                    />
-                </div>
-                <div className="workers p-4 flex flex-col">
-                    <h1 className='text-gray-700 my-1 sm:text-base font-bold mb-2'>WORKERS</h1>
-                    {inputData?.workers?.length > 0
-                    ?inputData.workers.map((worker)=>(
-                        <div key={worker.url} className='userrow mt-2 flex flex-row border border-green-100 rounded-lg w-full justify-between align-middle items-center'>
-                            <div className='px-2 flex flex-row align-middle items-center text-gray-700 sm:text-sm font-semibold py-1'>{worker.user}</div>
-                            <button type='button' onClick={()=>{removeWoker(worker.team_membership, worker.id)}}
-                                className='px-2 flex flex-row align-middle items-center bg-red-50 rounded-lg py-1 text-gray-700 sm:text-sm font-semibold'
-                                >Remove Worker</button>
-                        </div>
-                    ))
-                    :<div>no workers</div>}
                 </div>
             </div>
-            {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}
             <div className="flex flex-col w-1/3 m-5">
-            {/* https://stackoverflow.com/questions/37462047/how-to-create-several-submit-buttons-in-a-react-js-form/41288712 */}
-                <AuthButton buttonText="Add worker" type='button' onClick={handleAddWorker}/>
-                {/* {inputData?.workers?.length > 0? <button type="button" className='mt-2 py-1 flex border-2 border-red-300 text-center align-middle justify-center rounded-md' 
-                onClick={removeWoker}>Remove Worker</button>
-                                   :<></> } */}
-                {addWorker? <button type="button" className='mt-2 py-1 flex border-2 bg-red-300 border-red-300 text-center align-middle justify-center rounded-md' 
-                onClick={()=>setAddWorker(false)}>Cancel</button>
-                          : <></>}
-                <AuthButton buttonText="Save Team"/>
-                {addWorker?<>
-                            <Space2/>
-                            {displayFieldErrors("user")}
-                            <SelectInput 
-                            name="selectedWorkers"
-                            value={inputWorker}  // the value is an url not an object 
-                            onChange={workerChangeHandler}
-                            labelName="Add a Worker"
-                            selectField="Choose a user as worker"
-                            fieldOptions={inputData.leaderOptions}
-                            loading={loadingFields}
-                            keyType="id"
-                            fieldDefiner="username"
-                            serialiserTpe="url"
-                            />
-                            </>
-                        
-                          :<></>}
+                <AuthButton buttonText="Save Acess Code"/>
             </div>
             <div>
             </div>

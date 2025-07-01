@@ -10,7 +10,7 @@ import { useAuth } from '../../authentication/authProvider';
 import { IconContext } from "react-icons";
 
 
-const Header2 = ({
+const Header3 = ({
 }) => {
   // get the user from the context authProvider
   const {userIn} = useAuth()
@@ -74,4 +74,4 @@ const Header2 = ({
   )
 }
 
-export default Header2
+export default Header3

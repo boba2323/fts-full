@@ -43,6 +43,9 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     
     # we need more logic for actionlog and modification models
 
+# has_permission method will be called on all (GET, POST, PUT, DELETE) HTTP request.
+# has_object_permission method will not be called on HTTP POST request, hence we need to restrict 
+# it from has_permission method.
 class TeamsAndRolesFiles(permissions.BasePermission):
     # https://stackoverflow.com/questions/43064417/whats-the-differences-between-has-object-permission-and-has-permission
     # has_permission is called on all HTTP requests whereas, 

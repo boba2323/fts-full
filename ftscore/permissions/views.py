@@ -26,6 +26,7 @@ from django.utils import timezone
 from datetime import timedelta
 # ----
 
+from permissions.special_permissions import GeneralWritePermissions
 # import custom permissions
 from fts_app.permissions import IsAuthorOrReadOnly, TeamsAndRolesFiles, TeamsAndRolesFolders
 
@@ -60,7 +61,7 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
 class AccessCodeViewSet(viewsets.ModelViewSet):
     queryset = AccessCode.objects.all()  # Adjust this to your actual queryset
     serializer_class = AccessCodeSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, GeneralWritePermissions]
     authentication_classes = [CustomAuthentication]
     lookup_field = 'masked_id'
 

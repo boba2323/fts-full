@@ -6,7 +6,7 @@ from django.contrib.auth.models import Permission
 import random
 
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 # =====================x=======================
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -107,11 +107,17 @@ class Team(models.Model):
         '''this will return the files that are accessible to the team based on its level.
         L1 teams will have access to all files, L2 teams will have access to only targetted files
         and L3 teams will have read only access to targetted files.'''
-        
+        from fts_app.models import Modification
         if logged_user.is_authenticated:
             # check for supervisor mode
             if logged_user.is_supervisor:
-                return File.objects.all()
+                return File.objects.select_related( 'owner', 'folder', 'access_code').prefetch_related(
+                    # https://docs.djangoproject.com/en/5.2/ref/models/querysets/
+                    Prefetch('tags'),
+                    Prefetch('modifications', 
+                            #  the queryset with be Modifications objects
+                             queryset=Modification.objects.select_related('file', 'modified_by').order_by('date_modified'))
+                )
             # if user is not a part of a team, return None object queryset
             user_team_membership = cls.get_user_team_membership(logged_user)
             if not user_team_membership: #if team is None, there is no teammembership attached to the user, return a empty queryset
@@ -135,7 +141,18 @@ class Team(models.Model):
                 access_code_instance = user_team.access_codes.first()
                 if access_code_instance: 
                     access_code = access_code_instance.code
-                    files_accessible = File.objects.filter(access_code=access_code)
+                    files_accessible = File.objects.select_related( 'owner',
+                                                                    'folder',
+                                                                    'access_code',
+                                                                    'access_code__team',
+                                                                    'access_code__created_by'
+                                                                    ).prefetch_related(
+                    # https://docs.djangoproject.com/en/5.2/ref/models/querysets/
+                    Prefetch('tags'),
+                    Prefetch('modifications', 
+                            #  the queryset with be Modifications objects
+                             queryset=Modification.objects.select_related('file', 'modified_by').order_by('date_modified'))
+                )
                     return files_accessible
             else:
                 return File.objects.none()

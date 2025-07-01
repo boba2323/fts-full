@@ -116,10 +116,11 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
         view_name='accesscode-detail',
         lookup_field='masked_id',
     )
+    modifications=serializers.SerializerMethodField()
     class Meta:
         model = File
         fields = ['url', 'id', 'file_data', 'name', 'owner', 'owner_username_at_creation', 'date_created','permissions', 
-                   'folder', 'tags', 'download_url', "access_code", "team", "access_code_code"] 
+                   'folder', 'tags', 'download_url', "access_code", "team", "access_code_code", "modifications"] 
         
     # def validate(self, data):
     #     '''if we are updating if file already exists, then the same file will be kept because the browser api field says no file chosen'''
@@ -166,6 +167,19 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
         # https://www.geeksforgeeks.org/get-the-absolute-url-with-domain-in-django/
         # we create the absolute url with with the relative url
         return request.build_absolute_uri(relative_download_url)
+    
+    def get_modifications(self, file):
+        request = self.context.get('request')
+        all_mod_files = file.modifications.all()
+        mod_list = [ {
+                'id':mod_file.id,
+                'original_file_name':mod_file.file_name_at_modification,
+                'modified_by':mod_file.modified_by.username,
+                'original_modifier':mod_file.modified_by_username_at_modification,
+                'date_modified': mod_file.date_modified,
+
+            } for mod_file in all_mod_files]
+        return mod_list
     
     def save(self, **kwargs):
         request = self.context.get('request')

@@ -33,7 +33,7 @@ const DashboardMain = () => {
 
   return (
     <div>
-      <div className="liststyle overflow-x-auto">
+      <div className="bg-neutral-50 liststyle overflow-x-auto">
         <table className=' w-full'>
           <thead>
             <tr className='border-b-2 border-gray-200 h-6'>

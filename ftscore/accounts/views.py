@@ -15,7 +15,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from accounts.authenticate import CustomAuthentication
-
+from django.db.models import Prefetch
 User = get_user_model()
 # # Create your views here.
 # # this view is just for creating users without exposing the user list and does not need amy perms
@@ -132,7 +132,18 @@ class CustomRefreshTokenView(TokenRefreshView):
 
 
 class LoggedUserView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+    from permissions.models import Team, TeamMembership, AccessCode
+    queryset = User.objects.prefetch_related(
+        Prefetch('led_teams',
+                 queryset=Team.objects.select_related('leader').prefetch_related('membership_users')),
+        Prefetch('teams',
+                 queryset=Team.objects.select_related('leader').prefetch_related('membership_users')
+                 ),
+        Prefetch('memberships',
+                 queryset=TeamMembership.objects.select_related('user', 'team')),
+        Prefetch('created_access_codes',
+                 queryset=AccessCode.objects.select_related('created_by', 'team'))
+    )
     serializer_class = UserSerializer
     authentication_classes = [CustomAuthentication]
 

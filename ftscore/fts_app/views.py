@@ -35,6 +35,8 @@ from .service_layer import UserServices
 
 from accounts.authenticate import CustomAuthentication
 
+from django.db.models import Prefetch
+
 User = get_user_model()
 class IndexView(generic.TemplateView):
     template_name = "fts_app/index.html"
@@ -54,7 +56,18 @@ class Home(APIView):
 
 
 class UsersViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.prefetch_related(
+        Prefetch('led_teams',
+                 queryset=Team.objects.select_related('leader').prefetch_related('membership_users')),
+        Prefetch('teams',
+                 queryset=Team.objects.select_related('leader').prefetch_related('membership_users')
+                 ),
+        Prefetch('memberships',
+                 queryset=TeamMembership.objects.select_related('user', 'team')),
+        Prefetch('created_access_codes',
+                 queryset=AccessCode.objects.select_related('created_by', 'team'))
+    )
+
     serializer_class = UserSerializer
     permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
     authentication_classes = [CustomAuthentication]

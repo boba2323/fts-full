@@ -6,7 +6,7 @@ from pprint import pprint
 # your models
 from .models import File, Folder, Modification, Tag, ActionLog
 from accounts.authenticate import CustomAuthentication
-
+from django.db.models import Q, Prefetch
 
 # Create your views here.
 from rest_framework import permissions, viewsets
@@ -34,7 +34,13 @@ User = get_user_model()
 
 class TeamViewSet(viewsets.ModelViewSet):
     serializer_class= TeamSerializer
-    queryset = Team.objects.all()
+    queryset = Team.objects.select_related('leader').prefetch_related(
+        Prefetch('membership_users',
+                 queryset=User.objects.prefetch_related('teams', 'memberships','created_access_codes')
+                 ),
+        Prefetch('memberships',
+                 queryset=TeamMembership.objects.select_related('user', 'team'))
+    )
     permission_classes = [IsAuthenticated]
     authentication_classes = [CustomAuthentication]
     
@@ -48,7 +54,7 @@ class TeamViewSet(viewsets.ModelViewSet):
     #     return super().get_permissions()
 
 class TeamMembershipViewSet(viewsets.ModelViewSet):
-    queryset = TeamMembership.objects.all()  # Adjust this to your actual queryset
+    queryset = TeamMembership.objects.select_related('user', 'team')  # Adjust this to your actual queryset
     serializer_class = TeamMembershipSerializer
     permission_classes = [AllowAny]
     authentication_classes = [CustomAuthentication]

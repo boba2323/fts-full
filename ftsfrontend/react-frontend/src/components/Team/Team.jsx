@@ -57,7 +57,9 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
               </tr>)
             : (teamData.map((team) => (
                                   <tr key={team.id} className='border-b-2 border-gray-50 h-8'>
-                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={team.url}>{team.name }</a></td>
+                                    <Link to={`${team.id}`} >
+                                      <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.name }</td>
+                                    </Link>
                                     {/* <td className='ps-5'>{format(new Date(file.date_created), 'dd MMM yyyy')}</td> */}
                                     <td className='ps-5
                                     text-xs font-light font-sans text-gray-700'
@@ -74,7 +76,7 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
                                     {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.memberships }</td> */}
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.level }</td>
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={team.download_url}>Download</a></td>
-                                    {supervisor?<td className='ps-5 text-xs font-medium font-sans text-gray-700'><Link to={`${team.id}`} >Update</Link></td>
+                                    {supervisor?<td className='ps-5 text-xs font-medium font-sans text-gray-700'><Link to={`update/${team.id}`} >Update</Link></td>
                                     :<></>
                                     }
                                     {supervisor?<td className='text-xs p-2  font-medium font-sans text-gray-200'><Link to={`delete/${team.id}`} >

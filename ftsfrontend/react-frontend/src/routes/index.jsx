@@ -33,6 +33,9 @@ import CreateAC from "../components/AdminSupervisor/CreateAccCode";
 
 import AdminAccCodeDelete from "../components/AdminSupervisor/AdminAccCodeDel";
 
+import AdminModification from "../components/AdminSupervisor/AdminModification";
+import TeamView from "../components/Team/TeamView";
+
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
 
@@ -131,11 +134,15 @@ const Routes = () => {
                 element: <h1><AdminTeam/></h1>,
               },
               {
+                path: "admin/admin-team/:teamId",
+                element: <h1><TeamView/></h1>,
+              },
+              {
                 path: "admin/create-team",
                 element: <h1><CreateTeam mode="create"/></h1>
               },
               {
-                path: "admin/admin-team/:teamId",
+                path: "admin/admin-team/update/:teamId",
                 element: <><CreateTeam mode="update"/></>
               },
               {
@@ -165,6 +172,10 @@ const Routes = () => {
               {
                 path:'admin/admin-accesscode/delete/:id',
                 element:<AdminAccCodeDelete/>
+              },
+              {
+                path:'admin/admin-modification',
+                element:<AdminModification/>
               },
               
             ]

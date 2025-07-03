@@ -6,6 +6,10 @@ from rest_framework.reverse import reverse
 from fts_app.serializers import UserSerializer
 from pprint import pprint
 from rest_framework.validators import UniqueTogetherValidator,UniqueValidator
+
+from django.db.models import Prefetch
+from permissions.service_layer import TeamService
+
 User = get_user_model()
 
 class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
@@ -101,15 +105,25 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     #     view_name='accesscode-detail',
     #     lookup_field='masked_id',
     # )
+    files_owned = serializers.SerializerMethodField()
     class Meta:
         model = Team
         fields = ('id', 'name', 'url', 'name', 'created_at', 'leader','leader_name', 'membership_users',
                    'workers',
-                     'memberships', 'level', 'access_codes', "access_code_code" )
+                     'memberships', 'level', 'access_codes', "access_code_code", "files_owned" )
         # extra_kwargs = {
         #     'access_codes': {'view_name': 'accesscode-detail','lookup_field': 'masked_id'},
         # }
         
+    def get_files_owned(self, team):
+        file_query = TeamService.get_accessible_files_for_the_team_only(team)
+        return [
+            {
+                "id":file.id,
+                "name":file.name,
+                "date created":file.date_created,
+            } for file in file_query
+        ]
     
     def get_leader_name(self, obj):
         if obj.leader:
@@ -143,13 +157,15 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         # get model name
         team_model = self.Meta.model
         leader = attrs.get('leader') #basically just a user
+        team_leader_query = Team.objects.filter(leader=leader).select_related("leader")
+        team_membership_leader_query = TeamMembership.objects.filter(user=leader, role="worker").select_related('user')
         
         if self.instance:
             # checksif the user is a leader exists in another team
-            does_user_exist_as_leader_in_another_team = Team.objects.filter(leader=leader).exclude(pk=self.instance.pk).exists()
+            does_user_exist_as_leader_in_another_team = team_leader_query.exclude(pk=self.instance.pk).exists()
             if does_user_exist_as_leader_in_another_team:
                 raise serializers.ValidationError("update-This user is a leader in another team already.")
-            does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exclude(team=self.instance).exists()
+            does_user_exist_as_worker_in_another_team = team_membership_leader_query.exclude(team=self.instance).exists()
             if does_user_exist_as_worker_in_another_team:
                 raise serializers.ValidationError("update-This user is a worker in another team already.")
             is_user_a_worker_in_the_team_already = TeamMembership.objects.filter(team= self.instance, user=leader, role="worker").exists()
@@ -157,10 +173,10 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
                 raise serializers.ValidationError("update-This user is a worker in this team already.")   
             return attrs
 
-        does_user_exist_as_leader_in_another_team = Team.objects.filter(leader=leader).exists()
+        does_user_exist_as_leader_in_another_team = team_leader_query.exists()
         if does_user_exist_as_leader_in_another_team:
             raise serializers.ValidationError("This user is a leader in another team already.")
-        does_user_exist_as_worker_in_another_team = TeamMembership.objects.filter(user=leader, role="worker").exists()
+        does_user_exist_as_worker_in_another_team = team_membership_leader_query.exists()
         if does_user_exist_as_worker_in_another_team:
             raise serializers.ValidationError("This user is a worker in another team already.")
         return attrs

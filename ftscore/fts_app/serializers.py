@@ -5,13 +5,26 @@ from .models import File, Folder, Modification, Tag, ActionLog  # Import your mo
 from permissions.models import TeamMembership, AccessCode
 from rest_framework.reverse import reverse
 from pprint import pprint
+
+from django.db.models import Prefetch
 User = get_user_model()
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     # to show the reverse fields relat4ed to user, we need to explicitly create fields for it. we are doing it
     # here for owned_files. the field must exist in the model
-    owned_files= serializers.PrimaryKeyRelatedField(many=True ,queryset=File.objects.all()) 
+    owned_files= serializers.PrimaryKeyRelatedField(many=True ,queryset=File.objects.select_related( 'owner',
+                                                                    'folder',
+                                                                    'access_code',
+                                                                    'access_code__team',
+                                                                    'access_code__created_by'
+                                                                    ).prefetch_related(
+                    # https://docs.djangoproject.com/en/5.2/ref/models/querysets/
+                    Prefetch('tags'),
+                    Prefetch('modifications', 
+                            #  the queryset with be Modifications objects
+                             queryset=Modification.objects.select_related('file', 'modified_by').order_by('date_modified'))
+                )) 
     url = serializers.HyperlinkedIdentityField(view_name='myuser-detail')  # Expects a URL pattern named 'myuser-detail'
     created_access_codes=serializers.HyperlinkedRelatedField(
         many=True, 

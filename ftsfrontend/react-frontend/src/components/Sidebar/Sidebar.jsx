@@ -22,7 +22,7 @@ const Sidebar = ({
   }
   return (
     
-    <div className="flex flex-col h-screen bg-gray-50 text-gray-600 p-4">
+    <div className="flex flex-col h-screen bg-gray-100 text-gray-600 p-4">
       
       <button onClick={testClick} >usertest</button>
       {userIn.In}

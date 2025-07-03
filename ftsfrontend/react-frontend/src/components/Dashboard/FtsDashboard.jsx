@@ -21,7 +21,7 @@ const DashBoard = () =>{
             <Header />
             <Header2 />
 
-            <div className="grid grid-cols-12 h-screen">
+            <div className="bg-neutral-50 grid grid-cols-12 h-screen">
                 <div className="col-span-1">
                     <Sidebar  onClickHandler={changeDashComponent} />
                 </div>

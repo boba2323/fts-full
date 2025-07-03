@@ -77,7 +77,9 @@ const AdminPanel = () => {
 
           <div className="row-bottom flex flex-row justify-center items-center justify-content-between mt-2 ">
             <nav className='flex flex-row space-x-10'>
-              <AdminModelCard teamname={"Modification"}   membercount={"5"} icon={<FaCashRegister size="30"/>}/>
+              <Link to={'admin-modification'}>
+                <AdminModelCard teamname={"Modification"}   membercount={"5"} icon={<FaCashRegister size="30"/>}/>
+              </Link>
               <AdminModelCard teamname={"ActionLog" } membercount={"5"} icon={<FaArrowUpFromBracket size="30"/>}/>
               <Link to={`admin-accesscode`}>
                 <AdminModelCard teamname={"Access Codes" } membercount={"5"} icon={<FaHammer size="30"/>}/>

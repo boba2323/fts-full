@@ -15,8 +15,9 @@ import Signup from "../pages/Signup"; // Importing Signup component
 
 import Loading from "../components/Loading/Loading";
 
+import FileList from "../components/File/FileList";
 import FileUpload from "../components/FileUpload/FileUpload";
-import DashBoard from "../components/Dashboard/FtsDashboard";
+import FtsDashBoard from "../components/Dashboard/FtsDashboard";
 import DashboardMain from "../components/DashboardMain/DashboardMain";
 import Team from "../components/Team/Team";
 import AdminPanel from "../components/AdminSupervisor/AdminPanel";
@@ -80,7 +81,7 @@ const Routes = () => {
     // https://reactrouter.com/6.28.0/start/tutorial#nesting-routes
     {
       path: "/",
-      element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+      element: <ProtectedRoute />, // Wrap the component in ProtectedRoute basically returns an OUTLET if authorised or rediects if not
       children: [
         {
           path: "/",
@@ -96,14 +97,14 @@ const Routes = () => {
         },
         {
           path: "/fts",
-          element: <DashBoard />,
+          element: <FtsDashBoard />,
           // https://reactrouter.com/6.28.0/start/tutorial#nesting-routes
           // the places where we want the child component to be i.e the component we will replace with int he child url route
           // will be represented by <Outlet/>
           children: [
             {
                 path: "",
-                element: <h1>Welcome to FTS</h1>
+                element: <h1><DashboardMain/></h1>
               },
               {
                 path: "upload-file",
@@ -115,7 +116,7 @@ const Routes = () => {
               },
               {
                 path: "files",
-                element: <div><DashboardMain/></div>,
+                element: <div><FileList/></div>,
               },
               {
                 path: "teams",

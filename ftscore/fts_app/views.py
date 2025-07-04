@@ -35,7 +35,9 @@ from .service_layer import UserServices
 
 from accounts.authenticate import CustomAuthentication
 
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
+
+from rest_framework.exceptions import NotFound
 
 User = get_user_model()
 class IndexView(generic.TemplateView):
@@ -238,10 +240,34 @@ class FolderViewSet(viewsets.ModelViewSet):
 
 
 class ModificationViewSet(viewsets.ModelViewSet):
-    queryset = Modification.objects.all()
+    
     serializer_class = ModificationSerializer
     permission_classes = [TeamsAndRolesFiles]
     authentication_classes = [CustomAuthentication]
+
+    def get_queryset(self):
+        queryset = Modification.objects.select_related('file', 'modified_by')
+        teamId = self.request.query_params.get('teamId')
+        order_by_file = self.request.query_params.get('order_by_file')
+        arrange_by_file = self.request.query_params.get('arrange_by_file')
+        order_by_level = self.request.query_params.get('order_by_level')
+        
+        if teamId is not None:
+            try:
+                team = Team.objects.get(id=teamId)
+            except Exception as e:
+                # https://www.django-rest-framework.org/api-guide/exceptions/#notfound
+                raise NotFound(detail="Team Id is not available", code=None)
+            # https://stackoverflow.com/questions/4507893/django-filter-many-to-many-with-contains/4508083
+            return queryset.filter(modified_by__memberships__team=team)
+        elif order_by_file is not None:
+            mod_query = queryset.order_by('file')
+            return mod_query
+        # if we annotate the new field must be specified in serialisers
+        # https://stackoverflow.com/questions/31920853/aggregate-and-other-annotated-fields-in-django-rest-framework-serializers
+        return queryset
+
+
 
 class ActionLogViewSet(viewsets.ModelViewSet):
     queryset = ActionLog.objects.all()

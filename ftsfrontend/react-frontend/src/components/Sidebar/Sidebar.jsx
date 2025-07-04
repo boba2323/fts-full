@@ -33,12 +33,12 @@ const Sidebar = ({
       }
       <nav>
         {/* https://reactrouter.com/6.28.0/start/tutorial#nesting-routes */}
-        <Link to={`files`} >
+        <Link to={``} >
           <div className="mb-3 block ps-1 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer">Dashboard</div>
         </Link>
-        
-        <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Files</div>
-
+        <Link to={`files`} >
+          <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Files</div>
+        </Link>
         <Link to={`teams`}  >
           <div className="block my-3 ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Teams</div>
         </Link>

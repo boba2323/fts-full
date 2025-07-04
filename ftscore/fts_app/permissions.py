@@ -154,11 +154,12 @@ class TeamsAndRolesFolders(permissions.BasePermission):
 
 class DownloadPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        user_membership = request.user.memberships.first()
-        if not user_membership:
+        user_membership = request.user.memberships
+        if not user_membership.exists():
             return False
-        user_team_level = user_membership.team.level
+        user_team_level = user_membership.first().team.level
         if user_team_level == "L3":
-                return False
+            return False
+        return True
         
 

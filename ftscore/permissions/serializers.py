@@ -121,7 +121,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
             {
                 "id":file.id,
                 "name":file.name,
-                "date created":file.date_created,
+                "date_created":file.date_created,
             } for file in file_query
         ]
     

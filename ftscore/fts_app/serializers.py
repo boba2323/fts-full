@@ -370,9 +370,23 @@ class FolderSerializer(serializers.HyperlinkedModelSerializer):
 class ModificationSerializer(serializers.HyperlinkedModelSerializer):
     # url = serializers.HyperlinkedIdentityField(view_name='modification-detail', read_only=True)
     # i guess we dont really need to explicitly build the url for modification detail
+    team = serializers.SerializerMethodField()
     class Meta:
         model = Modification
-        fields = ['id', 'url', 'file', 'file_name_at_modification', 'modified_by', 'modified_by_username_at_modification', 'date_modified', 'permissions_at_modification', 'method']
+        fields = ['id', 'url', 'file', 'file_name_at_modification', 'modified_by', 
+                  'team',
+                  'modified_by_username_at_modification', 'date_modified', 'permissions_at_modification', 'method']
+        
+    def get_team(self, modification):
+        modifier = modification.modified_by
+        modifier_team_qs = modifier.memberships.select_related('user', 'team')
+        if modifier_team_qs.exists():
+            team_membership =modifier_team_qs.first()
+            team = team_membership.team
+            return {"id":team.id,
+                    "name":team.name,
+                    "level": team.level}
+        return None
        
 
 class ActionLogSerializer(serializers.HyperlinkedModelSerializer):

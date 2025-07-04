@@ -7,7 +7,7 @@ import DashboardMain from "../DashboardMain/DashboardMain"
 import FileUpload from "../FileUpload/FileUpload"
 import { Outlet } from "react-router-dom"
 
-const DashBoard = () =>{
+const FtsDashBoard = () =>{
     const [isUpload, setIsUpload] = useState(false);
 
     const changeDashComponent = ()=>{
@@ -38,4 +38,4 @@ const DashBoard = () =>{
     )
 }
 
-export default DashBoard
+export default FtsDashBoard

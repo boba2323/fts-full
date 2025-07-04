@@ -139,6 +139,7 @@ class Modification(models.Model):
     date_modified = models.DateTimeField(auto_now_add=True)
     permissions_at_modification = models.CharField(max_length=255, blank=True, null=True, default='read')
     method = models.CharField(max_length=255, blank=True, null=True, default='downloaded')
+    # team_of_modifier = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         file_name = self.file.name if self.file else self.file_name_at_modification or "Deleted File"

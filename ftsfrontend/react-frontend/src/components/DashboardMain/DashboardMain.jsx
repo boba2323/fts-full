@@ -32,44 +32,16 @@ const DashboardMain = () => {
   }, [])
 
   return (
-    <div>
-      <div className="bg-neutral-50 liststyle overflow-x-auto">
-        <table className=' w-full'>
-          <thead>
-            <tr className='border-b-2 border-gray-200 h-6'>
-                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Name</th>
-                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Date Created</th>
-                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Access Code</th>
-                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Team</th>
-                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Download</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading
-              ? (<tr>
-                  <td colSpan={4} className="ps-5 py-3 text-sm text-gray-500">
-                    Loading...
-                  </td>
-                </tr>)
-              : (fileData.map((file) => (
-                                    <tr key={file.id} className='border-b-2 border-gray-50 h-8'>
-                                      <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={file.url}>{file.name }</a></td>
-                                      {/* <td className='ps-5'>{format(new Date(file.date_created), 'dd MMM yyyy')}</td> */}
-                                      <td className='ps-5
-                                      text-xs font-light font-sans text-gray-700'
-                                      >{moment(format(new Date(file.date_created), 'yyyy-MM-dd')).fromNow(true)} ago</td>
-                                      <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{file.access_code_code }</td>
-                                      <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{file.team }</td>
-                                      <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={file.download_url}>Download</a></td>
-                                      
-                                    </tr>
-                                ))
-                              
-            )
-            }
-          </tbody>  
-        </table>
-      </div>
+    <div className='p-3'>
+      <h1>welcome to fts</h1>
+      <h3>hello, FTS helps you organise teams and control what parts of your databse they can access</h3>
+      
+      lets get you started.
+      you can create a team, invite existing users to join provided they are not part of any other Team
+      once you made the team, you can make an access code and assign it to your team
+      then you can upload files and sign it with your code!
+      now you control them completely. as leader, dont forget you can invite workers to your team who can work with you 
+      on the files you own!
     </div>
   )
 }

@@ -8,7 +8,8 @@ export default function Modal({
     setOpen,
     handleDelete,
     target,
-    routeToGoBackTo
+    routeToGoBackTo,
+    message
     }) 
 {
     let navigate = useNavigate()
@@ -48,8 +49,7 @@ export default function Modal({
                     </DialogTitle>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Are you sure you want to delete the {target}?
-                        This action cannot be undone.
+                        {message}
                       </p>
                     </div>
                   </div>

@@ -52,7 +52,8 @@ const DeleteSelfMembership = () => {
         setOpen={setOpen} 
         handleDelete={handleDeleteMembershipSubmit} 
         target='membership'
-        routeToGoBackTo={"/fts/dashboard"} />
+        routeToGoBackTo={"/fts/dashboard"}
+        message="Are you sure you want to leave your team? The team will be entirely deleted when the leader leaves" />
     </div>
     </div>
   )

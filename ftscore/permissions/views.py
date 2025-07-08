@@ -29,7 +29,7 @@ from datetime import timedelta
 import logging
 
 
-from permissions.special_permissions import GeneralWritePermissions
+from permissions.special_permissions import GeneralWritePermissions, TeamMembershipPermissions
 # import custom permissions
 from fts_app.permissions import IsAuthorOrReadOnly, TeamsAndRolesFiles, TeamsAndRolesFolders
 
@@ -77,7 +77,7 @@ class TeamViewSet(viewsets.ModelViewSet):
 class TeamMembershipViewSet(viewsets.ModelViewSet):
     queryset = TeamMembership.objects.select_related('user', 'team')  # Adjust this to your actual queryset
     serializer_class = TeamMembershipSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [TeamMembershipPermissions]
     authentication_classes = [CustomAuthentication]
 
 
@@ -99,6 +99,9 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
         print("membership destroy")
         membership_instance = self.get_object()
         user = request.user
+        # check if user actually belongs to that membership
+        if not user.get_team_membership():
+            raise ValidationError()
         self.perform_destroy(membership_instance)
         if user.is_leftover_teammodel_leader():
             team = user.is_leftover_teammodel_leader()

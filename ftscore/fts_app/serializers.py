@@ -40,7 +40,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     access_code = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'email',"all_teams", "all_roles", 'password', 'belongs_to_team', "team_access_level", 'owned_files', 'created_access_codes',
+        fields = ['url', 'id', 'username', 'email',
+                  "all_teams", "all_roles", 
+                  'password', 'belongs_to_team', 
+                  "team_access_level", 'owned_files', 'created_access_codes',
+                  
                   "access_code",'role']  # Include 'url' field
         extra_kwargs = {'password': {'write_only': True}}
 

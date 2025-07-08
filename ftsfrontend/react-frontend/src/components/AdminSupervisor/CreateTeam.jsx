@@ -122,7 +122,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             level:value
         }))
     }
-// =======================================USER  API===================================
+// =======================================USER  API for workers and leader?===================================
     useEffect(()=>{
     const fetchUserNonTeamApi =async()=>{
         setLoadingFields(true)
@@ -133,10 +133,18 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true,
             })
-            setInputData((prev)=>({
+            if (userIn.is_temp) {
+                const newUserQS = response.data.filter(user=>user.is_temp)
+                setInputData((prev)=>({
+                ...prev,
+                leaderOptions: newUserQS
+                }))
+            } else {
+                setInputData((prev)=>({
                 ...prev,
                 leaderOptions: response.data
-            }))
+                }))
+            }
         } catch (error) {
             console.error(error)
             setInputData((prev)=>({

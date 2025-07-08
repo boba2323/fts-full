@@ -8,11 +8,14 @@ import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
 import Team from '../Team/Team';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../../authentication/authProvider';
 
 import Cookies from 'js-cookie';
 const CreateTeam = ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
+
+    const {userIn, setUserIn, loading, hitMeandFetch} = useAuth()
     const {teamId} = useParams() 
     const [finishloadingTeamUpdateData, setFinishLoadingTeamUpdateData] = useState(false)
     const [inputData, setInputData ] = useState({
@@ -118,7 +121,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             level:value
         }))
     }
-// =======================================USER  API===================================
+// =======================================USER  API for leader and workers===================================
     useEffect(()=>{
     const fetchUserNonTeamApi =async()=>{
         setLoadingFields(true)
@@ -129,10 +132,19 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true,
             })
-            setInputData((prev)=>({
+            if (userIn.is_temp) {
+                const newUserQS = response.data.filter(user=>user.is_temp)
+                setInputData((prev)=>({
+                ...prev,
+                leaderOptions: newUserQS
+                }))
+            } else {
+                setInputData((prev)=>({
                 ...prev,
                 leaderOptions: response.data
-            }))
+                }))
+            }
+            
         } catch (error) {
             console.error(error)
             setInputData((prev)=>({

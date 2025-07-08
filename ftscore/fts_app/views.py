@@ -39,6 +39,8 @@ from django.db.models import Prefetch, Count
 
 from rest_framework.exceptions import NotFound
 
+from accounts.serialiser import UserSerializer as AccountUserSerialiser
+
 User = get_user_model()
 class IndexView(generic.TemplateView):
     template_name = "fts_app/index.html"
@@ -70,7 +72,7 @@ class UsersViewSet(viewsets.ModelViewSet):
                  queryset=AccessCode.objects.select_related('created_by', 'team'))
     )
 
-    serializer_class = UserSerializer
+    serializer_class = AccountUserSerialiser
     permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
     authentication_classes = [CustomAuthentication]
 

@@ -153,7 +153,7 @@ class Modification(models.Model):
     
 
     def save(self, *args, **kwargs):
-        print('save inside the modification model')
+        # print('save inside the modification model')
         if self.file:
             self.file_name_at_modification = self.file.name
         if self.modified_by:

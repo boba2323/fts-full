@@ -28,7 +28,7 @@ const DeleteSelfMembership = () => {
           //     }
           // console.log("Membership deleted successfully!:", response.data);
 
-          await hitMeandFetch()
+          hitMeandFetch()
           // const fetchMeAgain = await axios.get('http://127.0.0.1:8000/accounts/me/', {
           //     headers: {
           //       'Content-Type': 'application/json'
@@ -40,7 +40,9 @@ const DeleteSelfMembership = () => {
           console.log("delete membership", userIn)
         } catch (error) {
             console.error("delete membership failed", error)
+            hitMeandFetch()
         } finally {
+          hitMeandFetch()
         }
     }
   return (

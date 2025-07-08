@@ -97,6 +97,13 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         print("membership destroy")
+        membership_instance = self.get_object()
+        user = request.user
+        self.perform_destroy(membership_instance)
+        if user.is_leftover_teammodel_leader():
+            team = user.is_leftover_teammodel_leader()
+            print("the user is a leader of a teammodel")
+            team.delete()
         return super().destroy(request, *args, **kwargs)
     
   # https://www.cdrf.co/3.3/rest_framework.viewsets/ModelViewSet.html#perform_destroy

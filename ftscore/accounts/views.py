@@ -165,7 +165,7 @@ class LogoutView(generics.GenericAPIView):
     serializer_class=UserSerializer
 
     def post(self, request):
-        print("logout view")
+        # print("logout view")
         # deleting the token from cookies
         response = Response({"success": ("Successfully logged out.")},
                     status=status.HTTP_200_OK)

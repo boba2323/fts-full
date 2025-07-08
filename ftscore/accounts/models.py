@@ -133,6 +133,13 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
         if team_membership:
             return team_membership.role == "leader"
         return False
+    
+    def is_leftover_teammodel_leader(self):
+        team_led = self.led_teams.all()
+        if team_led.exists():
+            team = team_led.first()
+            return team
+        return None
 
     def get_access_code_instance(self):
         team_membership = self.get_team_membership()

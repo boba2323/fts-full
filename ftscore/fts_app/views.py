@@ -74,6 +74,14 @@ class UsersViewSet(viewsets.ModelViewSet):
     permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
     authentication_classes = [CustomAuthentication]
 
+    def list(self, request, *args, **kwargs):
+        print("=== LIST METHOD CALLED IN USERS===")
+        return super().list(request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        print("============dESTROY METHOD CALLED IN USER=================")
+        return super().destroy(request, *args, **kwargs)
+
 
 class UserNonTeamViewSet(viewsets.ModelViewSet):
     queryset = UserServices.get_available_non_team_users()

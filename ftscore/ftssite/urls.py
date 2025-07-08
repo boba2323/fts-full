@@ -29,6 +29,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 
+from permissions.testview import TestDestroyView
+
 
 router = routers.DefaultRouter()
 router.register(r'users', fts_app_views.UsersViewSet, basename='myuser')
@@ -51,7 +53,8 @@ urlpatterns = [
     
     # drf views
     path('drf/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('test-destroy/', TestDestroyView.as_view(), name='test-destroy'),
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:

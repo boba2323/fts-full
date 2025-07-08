@@ -39,6 +39,7 @@ import TeamView from "../components/Team/TeamView";
 
 import Workspace from "../components/Workspace/Workspace";
 import DeleteSelfMembership from "../components/Team/DeleteSelfMembership";
+import QuickDeleteTest from "../components/TestComp/Test";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -65,6 +66,10 @@ const Routes = () => {
 
   // Define public routes accessible to all users
   const routesForPublic = [
+    {
+      path: "/test",
+      element: <QuickDeleteTest/>,
+    },
     {
       path: "/",
       element: <div>Home Page</div>,

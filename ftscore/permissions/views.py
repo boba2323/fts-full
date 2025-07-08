@@ -80,6 +80,11 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     authentication_classes = [CustomAuthentication]
 
+
+    def list(self, request, *args, **kwargs):
+        print("=== LIST METHOD CALLED IN MEMBERSHIP===")
+        return super().list(request, *args, **kwargs)
+
     def dispatch(self, request, *args, **kwargs):
         logger.info(f"DISPATCH - Method: {request.method}, Path: {request.path}, Args: {args}, Kwargs: {kwargs}")
         print(f"DISPATCH - Method: {request.method}, Path: {request.path}, Args: {args}, Kwargs: {kwargs}")

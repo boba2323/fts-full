@@ -37,6 +37,9 @@ import AdminAccCodeDelete from "../components/AdminSupervisor/AdminAccCodeDel";
 import AdminModification from "../components/AdminSupervisor/AdminModification";
 import TeamView from "../components/Team/TeamView";
 
+import Workspace from "../components/Workspace/Workspace";
+import DeleteSelfMembership from "../components/Team/DeleteSelfMembership";
+
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
 
@@ -121,6 +124,31 @@ const Routes = () => {
               {
                 path: "teams",
                 element: <div><Team/></div>,
+              },
+              
+              {
+                path: "workspace",
+                element: <div><Workspace/></div>,
+              },
+              {
+                path: "workspace/team/:teamId",
+                element: <div><TeamView/></div>,
+              },
+              {
+                path: "workspace/team/delete/:teamId",
+                element: <div><DeleteSelfMembership/></div>,
+              },
+              {
+                path: "workspace/files",
+                element: <div><FileList/></div>,
+              },
+              {
+                path: "workspace/members",
+                element: <div><Workspace/></div>,
+              },
+              {
+                path: "workspace/modifications",
+                element: <div><Workspace/></div>,
               },
               {// https://dev.to/tywenk/how-to-use-nested-routes-in-react-router-6-4jhd
                   // https://reactrouter.com/start/data/routing

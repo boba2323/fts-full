@@ -16,10 +16,10 @@ class RegisterUserPermission(permissions.BasePermission):
             return request.method == 'POST'
         if user.supervisor: #full access
             return True
-        if  user.is_team_level_L1():
+        if  user.is_team_level_L1:
             return True
         if request.method == 'POST':
-            if user.is_team_level_L1() and user.is_team_leader():
+            if user.is_team_level_L1 and user.is_team_leader():
                 return True
             return False
         # For other methods, check if the user is authenticated
@@ -31,9 +31,9 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         user = request.user
     # Read-only permissions are allowed for any request
-        if user.is_authenticated and user.supervisor: #full access
+        if user.supervisor or user.is_superuser: #full access
             return True
-        if  user.is_team_level_L1():
+        if  user.is_team_level_L1:
             return True
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -56,14 +56,14 @@ class TeamsAndRolesFiles(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-        if request.user.supervisor: #full access
+        if request.user.supervisor or request.user.is_superuser: #full access
             return True
         return self._check_permissions(request)
             
        
             
     def has_object_permission(self, request, view, obj):
-        if request.user.supervisor: #full access
+        if request.user.supervisor or request.user.is_superuser: #full access
             return True
         return self._check_permissions(request)
         
@@ -106,14 +106,14 @@ class TeamsAndRolesFolders(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-        if request.user.supervisor: #full access
+        if request.user.supervisor or request.user.is_superuser: #full access
             return True
         return self._check_permissions(request)
             
        
             
     def has_object_permission(self, request, view, obj):
-        if request.user.supervisor: #full access
+        if request.user.supervisor or request.user.is_superuser: #full access
             return True
         return self._check_permissions(request)
         

@@ -42,6 +42,17 @@ const DashboardMain = () => {
       then you can upload files and sign it with your code!
       now you control them completely. as leader, dont forget you can invite workers to your team who can work with you 
       on the files you own!
+
+      lets get started
+      <li>
+        create a team
+      </li>
+      <li>
+        join a team
+      </li>
+      <li>
+        be a guest
+      </li>
     </div>
   )
 }

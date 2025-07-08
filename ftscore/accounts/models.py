@@ -5,6 +5,9 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.apps import apps
 
+from accounts.services import UserServices
+# from accounts.services import UserServices
+
 class MyuserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
         """
@@ -99,15 +102,30 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
     def get_team_membership(self):
         # cool way of getting a model without the silly circular import issue
         TeamMembership = apps.get_model('permissions', 'TeamMembership')
-        if self.memberships.exists():
+        user_membership = self.memberships.select_related("team", "user")
+        if user_membership.all().exists():
             team_membership_of_user = self.memberships.first()
             return team_membership_of_user
         return None
     
+    @property
     def is_team_level_L1(self):
         team_membership = self.get_team_membership()
         if team_membership:
             return team_membership.team.level == "L1"
+        return False
+    @property
+    def is_team_level_L2(self):
+        team_membership = self.get_team_membership()
+        if team_membership:
+            return team_membership.team.level == "L2"
+        return False
+    
+    @property
+    def is_team_level_L3(self):
+        team_membership = self.get_team_membership()
+        if team_membership:
+            return team_membership.team.level == "L3"
         return False
     
     def is_team_leader(self):
@@ -123,8 +141,23 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
                 team_access_code_instance = team_membership.team.access_codes.first()
                 return team_access_code_instance.code
             return None
-            
         return None
+
+    def is_a_team_member(self):
+        return UserServices.is_a_team_member(self)
+
+    def is_a_L2_team_member(self):
+        return UserServices.is_a_L2_team_member(self)
+    
+    def is_a_temp(self):
+        '''a non team non god resident'''
+        return UserServices.is_a_temp(self)
+    
+    def is_a_god(self):
+        return UserServices.is_a_god(self)
+    
+    def is_not_god_only_L2_L3(self):
+        return UserServices.is_not_god_only_L2_L3(self)
 
 
 class Profile(models.Model):

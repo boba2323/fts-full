@@ -8,15 +8,11 @@ import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
 import Team from '../Team/Team';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../../authentication/authProvider';
 
 import Cookies from 'js-cookie';
 const CreateTeam = ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
-
-    const {userIn, hitMeandFetch} = useAuth()
-
     const {teamId} = useParams() 
     const [finishloadingTeamUpdateData, setFinishLoadingTeamUpdateData] = useState(false)
     const [inputData, setInputData ] = useState({
@@ -190,7 +186,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
         e.preventDefault()
         if (!inputData.name) {
             setErrors({
-                 global: ["Team Name is required"],
+                 global: ["All fields are required"],
                  fields: {},
                  success: ""
             });
@@ -199,17 +195,12 @@ const CreateTeam = ({mode}) => {   //mode:create or update
         try {
             let response
             let responseMembership
-            console.log()
             if (mode==="create"){
                 response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
                 {
                     'name':inputData.name,
-                    'leader':userIn.is_temp?userIn.url
-                    :userIn.is_not_god_only_L2_L3?userIn.url
-                    :inputData.leader,
-                    'level':userIn.is_temp?"L2"
-                    :userIn.is_not_god_only_L2_L3? "L2"
-                    : inputData.level,
+                    'leader':inputData.leader,
+                    'level':inputData.level,
                 },
                 {
                 headers: {
@@ -217,9 +208,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 'X-CSRFToken': Cookies.get('csrftoken')
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
-                
             });
-            hitMeandFetch()
              
             } else if (mode==="update"){
                 response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
@@ -235,7 +224,6 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
-            hitMeandFetch()
             }
             if (addWorker){
                 console.log(response.data.url, inputWorker)
@@ -275,7 +263,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 ))
 
             }
-            hitMeandFetch()
+            
             console.log("Team created successfully!:", response.data)
             if (response.status === 200 || response.data === 201) {
             // success login 
@@ -386,43 +374,32 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                     <Space2/>
                     {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
                     {displayFieldErrors("leader")}
-
-                    {/* if user is a not in team, hes not SU or SV hes not in L1, he wont see leader input*/}
-                    {
-                    userIn?.is_temp?<></>   
-                          :userIn.is_not_god_only_L2_L3?<></>
-                          :<SelectInput
-                            name="selectedUser"  //make sure the name is unique and matches the state name
-                            value={inputData.leader}
-                            onChange={leaderSelectHandler}
-                            labelName="Select Leader"
-                            selectField="Choose a user"
-                            fieldOptions={inputData.leaderOptions}
-                            loading={loadingFields}
-                            keyType="id"
-                            fieldDefiner="username"
-                            serialiserTpe="url"
-                        />
-                    }
-                    {
-                    userIn?.is_temp?<></>
-                        :userIn.is_not_god_only_L2_L3?<></>
-                        :<SelectInput
-                            name="selectedLevel"
-                            value={inputData.level}
-                            onChange={levelSelectHandler}
-                            labelName="Select Level"
-                            selectField="Choose level"
-                            fieldOptions={inputData.LEVELOPTIONS}
-                            loading={loadingFields}
-                            keyType="level"      //will have l1, l2, l3 keys
-                            fieldDefiner="def"  //
-                            serialiserTpe="level"  //this is key to value. the values should be strings "L1" .... we will have field["level"] = "L1"
-                        />
-                    }
+                    <SelectInput
+                        name="selectedUser"  //make sure the name is unique and matches the state name
+                        value={inputData.leader}
+                        onChange={leaderSelectHandler}
+                        labelName="Select Leader"
+                        selectField="Choose a user"
+                        fieldOptions={inputData.leaderOptions}
+                        loading={loadingFields}
+                        keyType="id"
+                        fieldDefiner="username"
+                        serialiserTpe="url"
+                    />
                     <Space2/>
                     {displayFieldErrors("level")}
-                    
+                    <SelectInput
+                        name="selectedLevel"
+                        value={inputData.level}
+                        onChange={levelSelectHandler}
+                        labelName="Select Level"
+                        selectField="Choose level"
+                        fieldOptions={inputData.LEVELOPTIONS}
+                        loading={loadingFields}
+                        keyType="level"      //will have l1, l2, l3 keys
+                        fieldDefiner="def"  //
+                        serialiserTpe="level"  //this is key to value. the values should be strings "L1" .... we will have field["level"] = "L1"
+                    />
                 </div>
                 <div className="workers p-4 flex flex-col">
                     <h1 className='text-gray-700 my-1 sm:text-base font-bold mb-2'>WORKERS</h1>

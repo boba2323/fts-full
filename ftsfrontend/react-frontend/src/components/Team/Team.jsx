@@ -45,7 +45,7 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
                 <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Access Code</th>
                 <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Leader</th>
                 <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Workers</th>
-                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Role</th>
+                {/* <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Role</th> */}
             </tr>
           </thead>
           <tbody>
@@ -57,7 +57,7 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
               </tr>)
             : (teamData.map((team) => (
                                   <tr key={team.id} className='border-b-2 border-gray-50 h-8'>
-                                    <Link to={`${team.id}`} >
+                                    <Link to={`/fts/admin/admin-team/${team.id}`} >
                                       <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.name }</td>
                                     </Link>
                                     {/* <td className='ps-5'>{format(new Date(file.date_created), 'dd MMM yyyy')}</td> */}
@@ -65,17 +65,21 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
                                     text-xs font-light font-sans text-gray-700'
                                     >{moment(format(new Date(team.created_at), 'yyyy-MM-dd')).fromNow(true)} ago</td>
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.access_code_code }</td>
-                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'>leader {team.leader_name }</td>
-                                    {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.membership_users }</td> */}
-                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'>
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.leader_name }</td>
+
+                                    {supervisor?<td className='ps-5 text-xs font-medium font-sans text-gray-700'>
                                       {team.workers.map((worker)=>{
                                           return (<p key={worker.id} >{worker.user}</p>
                                           )
                                       }) }
                                     </td>
+                                      :<></>
+
+                                    }
+                                    {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.membership_users }</td> */}
+                                    
                                     {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.memberships }</td> */}
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.level }</td>
-                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={team.download_url}>Download</a></td>
                                     {supervisor?<td className='ps-5 text-xs font-medium font-sans text-gray-700'><Link to={`update/${team.id}`} >Update</Link></td>
                                     :<></>
                                     }

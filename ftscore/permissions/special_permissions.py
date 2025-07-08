@@ -8,9 +8,9 @@ class GeneralWritePermissions(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
         if request.method in ['POST', 'PUT', 'DELETE']:
-            if user.supervisor or user.superuser:
+            if user.supervisor or user.is_superuser:
                 return True
-            elif user.is_team_level_L1():
+            elif user.is_team_level_L1:
                 return True
             return False
         return True

@@ -152,6 +152,8 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         } for query in worker_query]
 
     def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
         # now we validate all fucking serialisers since the api wont access them from model backend
         # https://stackoverflow.com/questions/53704002/find-the-model-name-from-a-django-rest-framework-serializer
         # get model name
@@ -160,6 +162,9 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         team_leader_query = Team.objects.filter(leader=leader).select_related("leader")
         team_membership_leader_query = TeamMembership.objects.filter(user=leader, role="worker").select_related('user')
         
+ 
+        
+
         if self.instance:
             # checksif the user is a leader exists in another team
             does_user_exist_as_leader_in_another_team = team_leader_query.exclude(pk=self.instance.pk).exists()
@@ -172,6 +177,11 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
             if is_user_a_worker_in_the_team_already:
                 raise serializers.ValidationError("update-This user is a worker in this team already.")   
             return attrs
+        
+        # phase 2 user signs up and makes team which will always be team L2 and leader as user
+        if not user.is_supervisor and not user.is_superuser and not user.is_team_level_L1:
+            attrs['leader'] = user
+            attrs['level'] = "L2"
 
         does_user_exist_as_leader_in_another_team = team_leader_query.exists()
         if does_user_exist_as_leader_in_another_team:
@@ -180,6 +190,14 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         if does_user_exist_as_worker_in_another_team:
             raise serializers.ValidationError("This user is a worker in another team already.")
         return attrs
+    
+    def save(self):
+        request = self.context.get('request')
+        user = request.user
+        if user.is_not_god_only_L2_L3():
+            raise serializers.ValidationError("L2 member, you cannot make more teams")
+        return super().save(**self.validated_data)
+
 
 class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(

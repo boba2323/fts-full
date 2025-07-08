@@ -26,9 +26,16 @@ from django.utils import timezone
 from datetime import timedelta
 # ----
 
+import logging
+
+
 from permissions.special_permissions import GeneralWritePermissions
 # import custom permissions
 from fts_app.permissions import IsAuthorOrReadOnly, TeamsAndRolesFiles, TeamsAndRolesFolders
+
+from rest_framework.exceptions import NotFound
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -41,8 +48,22 @@ class TeamViewSet(viewsets.ModelViewSet):
         Prefetch('memberships',
                  queryset=TeamMembership.objects.select_related('user', 'team'))
     )
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [CustomAuthentication]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    # authentication_classes = [CustomAuthentication]
+
+    def dispatch(self, request, *args, **kwargs):
+        logger.info(f"DISPATCH - Method: {request.method}, Path: {request.path}, Args: {args}, Kwargs: {kwargs}")
+        print(f"DISPATCH - Method: {request.method}, Path: {request.path}, Args: {args}, Kwargs: {kwargs}")
+        return super().dispatch(request, *args, **kwargs)
+    
+    def list(self, request, *args, **kwargs):
+        print("=== LIST METHOD CALLED ===")
+        return super().list(request, *args, **kwargs)
+    
+    def perform_destroy(self, instance):
+        print("fuck destroy in team")
+        return super().perform_destroy(instance)
     
     # def list(self, request, *args, **kwargs):
     #     print(request.user)
@@ -59,10 +80,24 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     authentication_classes = [CustomAuthentication]
 
+    def dispatch(self, request, *args, **kwargs):
+        logger.info(f"DISPATCH - Method: {request.method}, Path: {request.path}, Args: {args}, Kwargs: {kwargs}")
+        print(f"DISPATCH - Method: {request.method}, Path: {request.path}, Args: {args}, Kwargs: {kwargs}")
+        return super().dispatch(request, *args, **kwargs)
+
     # def get_permissions(self):
     #     if self.action in ['create', 'update', 'partial_update', 'destroy']:
     #         return [IsAuthenticated()]
     #     return super().get_permissions()
+
+    def destroy(self, request, *args, **kwargs):
+        print("membership destroy")
+        return super().destroy(request, *args, **kwargs)
+    
+  # https://www.cdrf.co/3.3/rest_framework.viewsets/ModelViewSet.html#perform_destroy
+    def perform_destroy(self, instance):
+        print("membership perform destroy")
+        instance.delete()
 
 class AccessCodeViewSet(viewsets.ModelViewSet):
     queryset = AccessCode.objects.all()  # Adjust this to your actual queryset
@@ -70,6 +105,28 @@ class AccessCodeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, GeneralWritePermissions]
     authentication_classes = [CustomAuthentication]
     lookup_field = 'masked_id'
+
+    def get_queryset(self):
+        queryset = AccessCode.objects.select_related('created_by', 'team')
+        teamId = self.request.query_params.get('teamId')
+        order_by_date = self.request.query_params.get('order_by_fate')
+        arrange_by_file = self.request.query_params.get('arrange_by_file')
+        order_by_level = self.request.query_params.get('order_by_level')
+        
+        if teamId is not None:
+            try:
+                team = Team.objects.get(id=teamId)
+            except Exception as e:
+                # https://www.django-rest-framework.org/api-guide/exceptions/#notfound
+                raise NotFound(detail="Team Id is not available", code=None)
+            # https://stackoverflow.com/questions/4507893/django-filter-many-to-many-with-contains/4508083
+            return queryset.filter(team=team)
+        elif order_by_date is not None:
+            mod_query = queryset.order_by('created_at')
+            return mod_query
+        # if we annotate the new field must be specified in serialisers
+        # https://stackoverflow.com/questions/31920853/aggregate-and-other-annotated-fields-in-django-rest-framework-serializers
+        return queryset
 
     # def get_permissions(self):
     #     if self.action in ['create', 'update', 'partial_update', 'destroy']:

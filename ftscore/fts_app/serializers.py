@@ -295,6 +295,7 @@ class FolderSerializer(serializers.HyperlinkedModelSerializer):
     def build_subfolder_tree(self, folder):
         # getting the request body in the serialiser. its not the same as getting the request body in biews
         request = self.context.get('request')
+        accessible_files =self._return_all_accessible_files(folder)
         # list comprehensiion
         return [
             {
@@ -302,7 +303,7 @@ class FolderSerializer(serializers.HyperlinkedModelSerializer):
                 'name': subfolder.name,
                 # THIS is how we get to further deeply nested subfolders by a recurring function 
                 'all_subfolders': self.build_subfolder_tree(subfolder),
-                'files':[ reverse('file-detail', args=[file.id], request=request) for file in self._return_all_accessible_files(folder)]
+                'files':[ reverse('file-detail', args=[file.id], request=request) for file in accessible_files] if accessible_files else []
             }
             for subfolder in folder.subfolders.all()
         ]

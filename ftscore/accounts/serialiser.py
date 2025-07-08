@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 from permissions.serializers import TeamSerializer
 
+from accounts.services import UserServices
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     # to show the reverse fields relat4ed to user, we need to explicitly create fields for it. we are doing it
@@ -24,17 +26,34 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     is_supervisor  = serializers.SerializerMethodField()
     is_Team_L1  = serializers.SerializerMethodField()
     is_leader = serializers.SerializerMethodField()
+    is_temp = serializers.SerializerMethodField()
+    is_god = serializers.SerializerMethodField()
+    is_not_god_only_L2_L3 = serializers.SerializerMethodField()
+    membership_id = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'email', 'password', "team", 'belongs_to_team', "team_access_level", 'created_access_codes'
-                  ,'role',
+                  ,
+                  "memberships",
+                  'membership_id',
+                  'role',
                   "is_superuser",
                   "is_staff",
                   "is_supervisor",
                   "is_Team_L1",
+                  "is_temp",
                   "is_leader",
+                  'is_not_god_only_L2_L3',
+                  "is_god",
                   ]  # Include 'url' field
         # extra_kwargs = {'password': {'write_only': True}}
+
+    def get_membership_id(self, user):
+        membership = user.memberships
+        if membership.all().exists():
+            membership_instance = membership.first()
+            return membership_instance.id
+    
 
     # to set hashed password in serialiser. its better than setting it in view or models
   # https://docs.djangoproject.com/en/5.2/ref/contrib/auth/#django.contrib.auth.models.User.set_password
@@ -48,9 +67,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return obj.supervisor
     
     def get_is_Team_L1(self, obj):
-        return obj.is_team_level_L1()
+        return obj.is_team_level_L1
     def get_is_leader(self, obj):
         return obj.is_team_leader()
+    
+    def get_is_temp(self, obj):
+        return obj.is_a_temp()
+    
+    def get_is_god(self, obj):
+        return obj.is_a_god()
 
 
     def get_team(self, obj):
@@ -84,3 +109,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         if user_membership:
             return user_membership.role
         return None
+    
+    def get_is_not_god_only_L2_L3(self, user):
+        return user.is_not_god_only_L2_L3()

@@ -18,7 +18,7 @@ export default function Modal({
             setOpen(false)
             navigate(routeToGoBackTo)
         } catch (error) {
-            console.error(error)
+            console.error( "Modal error", error)
         }
     
     }

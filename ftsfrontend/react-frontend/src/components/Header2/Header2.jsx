@@ -32,8 +32,8 @@ const Header2 = ({
           File Upload
         </button>
         </Link>
-        {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
-        ?<Link to={`admin/create-team`} >
+        
+        <Link to={`admin/create-team`} >
           <button 
           className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-center items-center"
           > <IconContext.Provider value={{ color: "green", className: "global-class-name" }}>
@@ -43,9 +43,9 @@ const Header2 = ({
           Team Create
         </button>
         </Link>
-        :<></>}
-        {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
-        ?<Link to={`admin/create-accesscode`} >
+        
+        
+        <Link to={`admin/create-accesscode`} >
           <button 
           className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-center items-center"
           > <IconContext.Provider value={{ color: "green", className: "global-class-name" }}>
@@ -55,7 +55,7 @@ const Header2 = ({
           Access Code Create
         </button>
         </Link>
-        :<></>}
+        
 
         
       </div>

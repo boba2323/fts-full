@@ -36,6 +36,9 @@ const Sidebar = ({
         <Link to={``} >
           <div className="mb-3 block ps-1 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer">Dashboard</div>
         </Link>
+        <Link to={`workspace`} >
+          <div className="mb-3 block ps-1 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer">Workspace</div>
+        </Link>
         <Link to={`files`} >
           <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Files</div>
         </Link>

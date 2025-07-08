@@ -124,14 +124,14 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
         :<div className='bg-gray-50 p-4 border border-white'>
           <div className="section-a flex flex-row ">
             <div className='team-section flex flex-col w-full'>
-              <h1 className='font-bold flex flex-row justify-start text-3xl'>{teamViewData.name}</h1>
+              <h1 className='font-bold flex flex-row justify-start text-3xl text-gray-800'>{teamViewData.name}</h1>
               <div className="team-members-section">
                 <h2 className="mt-2 text-gray-700 text-2xl tracking-widest font-semibold mb-2">Team Members</h2>
               </div>
 
               <div className="flex flex-row member-card border-gray-50 py-5 pe-5">
                 <div className="leader-card w-40 h-52 bg-slate-50 border-s-4 border-t-4 border-white shadow-lg rounded-lg p-4 my-3 me-3">
-                  <div className="name flex flex-wrap">
+                  <div className="name flex flex-col flex-wrap">
                     <h3 className='text-sm text-gray-700 tracking-wide font-semibold flex flex-wrap overflow-hidden'>{teamViewData.leader_name}</h3>
                     <h6 className='text-xs text-gray-500 tracking-wide font-thin'>Team Leader</h6>
                   </div>
@@ -157,7 +157,14 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                 </p>
               </div>
               <div className="level-value p-2 flex justify-center items-center">
-                <h1 className='font-semibold text-6xl text-zinc-600'>{teamViewData.level}</h1>
+                <h1 className='font-semibold text-6xl text-gray-800'>{teamViewData.level}</h1>
+              </div>
+              <div className="leave-button flex items-center justify-center text-xs
+               text-gray-700 tracking-wide font-semibold cursor-pointer">
+                <Link to={`/fts/workspace/team/delete/${teamId}`} >
+                  Leave Team
+                </Link>
+                
               </div>
             </div>
           </div>

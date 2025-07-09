@@ -33,7 +33,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   const [listView, setListView] = useState(true)
   
   const {userIn, setUserIn, hitMeandFetch } = useAuth()
-
+  let addFiles = null
   let leaveTeam = null
   if (userIn.team?.id?.toString() === teamId.toString()){
     console.log("yes its the user in team")
@@ -54,6 +54,16 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               </div> 
   } else {
     leaveTeam =<></>
+  }
+
+  if (userIn.team?.id?.toString() === teamId.toString()){
+    addFiles= <Link to={`/fts/workspace/team/${teamId}/files-upload`}>
+                  <div className=' flex flex-row text-gray-700 text-sm items-center hover:border
+                    border-green-100 cursor-pointer font-semibold p-1 rounded my-2'>
+                      Upload Files
+                  </div>
+              </Link> 
+
   }
 
   useEffect(()=>{
@@ -183,14 +193,13 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               <div className="level-value p-2 flex justify-center items-center">
                 <h1 className='font-semibold text-6xl text-gray-800'>{teamViewData.level}</h1>
               </div>
-
               {leaveTeam}
-
             </div>
           </div>
           <div className="section-b flex flex-col">
-            <div className="section-header">
+            <div className="section-header flex flex-row justify-between">
               <h1 className="mt-2 text-gray-700 text-2xl tracking-widest font-semibold mb-2">Team Files</h1>
+              {addFiles}
             </div>
             <div className="file-parent-card ps-3 mb-3">
                 {

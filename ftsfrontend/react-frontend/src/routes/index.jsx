@@ -151,6 +151,10 @@ const Routes = () => {
                 path: "workspace/files",
                 element: <div><FileList/></div>,
               },
+                            {
+                path: "workspace/team/:teamId/files-upload",
+                element: <div><FileUpload/></div>,
+              },
               {
                 path: "workspace/members",
                 element: <div><Workspace/></div>,

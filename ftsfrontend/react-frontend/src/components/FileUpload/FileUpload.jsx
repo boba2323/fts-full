@@ -197,16 +197,16 @@ const FileUpload = () => {
                 },
                 withCredentials: true, // Optional: only needed if cookies are set
             });
-            console.log("Successfully sent form:", response.data)
+            console.log("Successfully uploaded file", response.data)
             if (response.status === 200 || response.data === 201) {
             // success login 
-                console.log("Successfully sent form", response.data);
+  
                 }
             setErrors(prev=>({
                 ...prev,
-                success:"Successfully sent form"
+                success:"Successfully uploaded file"
             }))
-            console.log("Successfully sent form:", response.data);
+  
             setFormIsSubmitted(true)
 
             // reset the form
@@ -288,6 +288,11 @@ const FileUpload = () => {
     <form onSubmit={handleSubmit} className='flex flex-row'>
         <div className="w-2/3">
             <div className="fileUpload p-4">
+            {errors?.success && (
+                <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
+                {errors.success}
+                </div>
+            )}
                 {displayFieldErrors('name')}
                 <InputLabel
                     labelName={"Name"}

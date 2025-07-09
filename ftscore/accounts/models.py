@@ -144,7 +144,7 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
     def get_access_code_instance(self):
         team_membership = self.get_team_membership()
         if team_membership:
-            if team_membership.team.access_codes.exists():
+            if team_membership.team.access_codes.all().exists():
                 team_access_code_instance = team_membership.team.access_codes.first()
                 return team_access_code_instance.code
             return None

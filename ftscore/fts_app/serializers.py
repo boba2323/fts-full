@@ -328,11 +328,10 @@ class FolderSerializer(serializers.HyperlinkedModelSerializer):
         if user_team.level == "L1":
             return obj_folder.files.all()
         
-        user_access_code_instance = user.get_access_code_instance()
-        if not user_access_code_instance:
+        user_access_code = user.get_access_code_instance()
+        if not user_access_code:
             return None
-        user_code = user_access_code_instance.code
-        accessible_files = File.objects.filter(folder=obj_folder, access_code=user_code)
+        accessible_files = File.objects.filter(folder=obj_folder, access_code=user_access_code)
         return accessible_files
     
     def build_file_tree(self, folder):

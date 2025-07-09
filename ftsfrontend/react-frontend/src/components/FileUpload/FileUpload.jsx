@@ -35,7 +35,11 @@ const FileUpload = () => {
           })
     const [loadingFields, setLoadingFields] = useState(true)
     const [postLoading, setPostLoading] = useState(true)
-    const [errorMessage, setErrorMessage] = useState()
+    const [errors, setErrors] = useState({
+                                        global: [],
+                                        fields: {},
+                                        success:''
+                                        });
     const [formIsSubmitted, setFormIsSubmitted] = useState(false)
 
     // to target files we do this, but we set it to the same state we use
@@ -111,7 +115,7 @@ const FileUpload = () => {
     useEffect(()=>{
     const fetchAccessCodeAPI =async()=>{
         setLoadingFields(true)
-        if (userIn.is_not_god_only_L2_L3_leader){
+        if (userIn.is_not_god_only_L2_L3 || userIn.is_temp){
             try {
             const response = await axios.get(`http://127.0.0.1:8000/drf/accesscode/?teamId=${teamId}`, {
                 headers: {
@@ -196,9 +200,12 @@ const FileUpload = () => {
             console.log("Successfully sent form:", response.data)
             if (response.status === 200 || response.data === 201) {
             // success login 
-                console.log("Successfully sent form:", response.data);
+                console.log("Successfully sent form", response.data);
                 }
-            setErrorMessage("File Successully uploaded")
+            setErrors(prev=>({
+                ...prev,
+                success:"Successfully sent form"
+            }))
             console.log("Successfully sent form:", response.data);
             setFormIsSubmitted(true)
 
@@ -228,20 +235,33 @@ const FileUpload = () => {
                         }
                     }
                 const errorDataJson = error.response.data
-                const errorJson = {}
                 // we can push non field errors into a different object by chcking if the keys don not match fields
                 const errorKeyArr = Object.keys(errorDataJson)
+                console.log(errorKeyArr)
+
+                const errorJson = {}
+                const globalErrors = []    //global errors dont need field names hence no keys
+                const fieldNames = ["name", "folder", "access_code"]  
+
                 errorKeyArr.forEach((key)=>{
-                    errorJson[key] = (getErrorMessage(errorDataJson[key]))
+                    if (fieldNames.includes(key)){
+                        errorJson[key] = getErrorMessage(errorDataJson[key])      //get a json obj of field names only as keys
+                    } else {
+                        globalErrors.push(getErrorMessage(errorDataJson[key]))      //array of global errors
+                    }
                 })
-                setErrorMessage(errorJson)
+                setErrors({      
+                    global:globalErrors,
+                    fields:errorJson,
+                    success:''
+                })
                 console.log("error data object",errorData)
                 console.log( "error json",errorJson)
                 }
 
         } finally {
         setPostLoading(false)
-        console.error(errorMessage)
+        console.error(errors)
         }
         }
 
@@ -253,17 +273,22 @@ const FileUpload = () => {
             return "text-blue-500 border-blue-500 bg-blue-50"
         }
     }
+
+    const displayFieldErrors=(fieldName)=>{   //basically render the field errors depemding on which field we set remember errors.fields is a json obj
+            if (errors.fields[fieldName]) {
+                return (
+                <div className={`mt-3 border rounded flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
+                    {errors.fields[fieldName]}
+                </div>)
+            }
+    }
     
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-row'>
         <div className="w-2/3">
             <div className="fileUpload p-4">
-                {errorMessage && (
-                    <div className={`mb-3 border rounded-lg flex justify-center items-center ${getFormMessageColor()}`}>
-                      {errorMessage}
-                    </div>
-                  )}
+                {displayFieldErrors('name')}
                 <InputLabel
                     labelName={"Name"}
                     name="name"
@@ -274,6 +299,7 @@ const FileUpload = () => {
                 />
                 <Space2/>
                 {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
+                {displayFieldErrors('folder')}
                 <SelectInput
                     name="selectedFolder"  //make sure the name is unique and matches the state name
                     value={inputData.selectedFolder}
@@ -287,6 +313,7 @@ const FileUpload = () => {
                     serialiserTpe="url"
                 />
                 <Space2/>
+                {displayFieldErrors('access_code')}
                 <SelectInput
                     name="selectedCode"
                     value={inputData.selectedCode}
@@ -313,6 +340,7 @@ const FileUpload = () => {
         {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}
         <div className="flex flex-col w-1/3 m-5">
             <div className=" h-56 flex flex-col border-dotted border-2 border-green-400 rounded-xl  justify-center items-center"> 
+                
                 <div className='flex flex-col justify-center items-center'>
                     <input
                         name="file_data"

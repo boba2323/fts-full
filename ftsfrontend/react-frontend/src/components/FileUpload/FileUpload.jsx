@@ -7,9 +7,13 @@ import Space2 from '../SpaceBetweenFields/Space2';
 import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
 import Cookies from 'js-cookie';
+import { useParams } from 'react-router-dom';
+
+import { useAuth } from '../../authentication/authProvider';
 // https://www.geeksforgeeks.org/reactjs/file-uploading-in-react-js/
 const FileUpload = () => {
-
+    const {teamId} = useParams()
+    const {userIn, setUserIn, hitMeandFetch} = useAuth()
     const INITIAL_STATE = {
         file_data:null,
         name:"",
@@ -107,7 +111,34 @@ const FileUpload = () => {
     useEffect(()=>{
     const fetchAccessCodeAPI =async()=>{
         setLoadingFields(true)
-        try {
+        if (userIn.is_not_god_only_L2_L3_leader){
+            try {
+            const response = await axios.get(`http://127.0.0.1:8000/drf/accesscode/?teamId=${teamId}`, {
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+            })
+            setInputData((prev)=>({
+                ...prev,
+                accessCodeOptions: response.data
+            }))
+
+            if (response.status===200){
+                console.log("accesscode api hit")
+            }
+        } catch (error) {
+
+            console.error(error)
+            setInputData((prev)=>({
+                ...prev,
+                accessCodeOptions: []
+            }))
+        } finally {
+            setLoadingFields(false)
+        }
+        } else {
+                        try {
             const response = await axios.get("http://127.0.0.1:8000/drf/accesscode/", {
                 headers: {
                 'Content-Type': 'application/json'
@@ -132,6 +163,8 @@ const FileUpload = () => {
         } finally {
             setLoadingFields(false)
         }
+        }
+        
     }
     fetchAccessCodeAPI()
     }, [])

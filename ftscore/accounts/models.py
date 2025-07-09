@@ -165,6 +165,12 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
     
     def is_not_god_only_L2_L3(self):
         return UserServices.is_not_god_only_L2_L3(self)
+    
+    def is_not_god_only_L2_L3_leader(self):
+        return UserServices.is_not_god_only_L2_L3_leader(self)
+    
+    def is_not_god_only_L2_L3_worker(self):
+        return UserServices.is_not_god_only_L2_L3_worker(self)
 
 
 class Profile(models.Model):

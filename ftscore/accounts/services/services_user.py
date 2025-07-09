@@ -52,6 +52,32 @@ class UserServices:
         '''ts T L1 or a supervisor or a superuser'''
         if user.is_superuser or user.supervisor or user.is_team_level_L1:
             return True
-        return False        
+        return False       
+
+    @staticmethod
+    def is_not_god_only_L2_L3_leader(user):
+        '''he is not supervisor or superuser or TL1 but only L2 and L3/mutually exclusive with is_a_temp'''
+        user_membership = user.memberships.all()
+        if not user.is_superuser and not user.supervisor and user_membership.exists():
+            if user.is_team_level_L2 or user.is_team_level_L3:
+                user_team = user_membership.first()
+                if user_team.role == "leader":
+                    return True
+                return False
+            return False
+        return False 
+    
+    @staticmethod
+    def is_not_god_only_L2_L3_worker(user):
+        '''he is not supervisor or superuser or TL1 but only L2 and L3/mutually exclusive with is_a_temp'''
+        user_membership = user.memberships.all()
+        if not user.is_superuser and not user.supervisor and user_membership.exists():
+            if user.is_team_level_L2 or user.is_team_level_L3:
+                user_team = user_membership.first()
+                if user_team.role == "worker":
+                    return True
+                return False
+            return False
+        return False 
 
 

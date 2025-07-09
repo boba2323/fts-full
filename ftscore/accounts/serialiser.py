@@ -32,6 +32,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     membership_id = serializers.SerializerMethodField()
     role = serializers.SerializerMethodField()
     access_code = serializers.SerializerMethodField()
+    is_not_god_only_L2_L3_leader = serializers.SerializerMethodField()
+    is_not_god_only_L2_L3_worker =serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'email', 'password', "team", 'belongs_to_team', "team_access_level",
@@ -47,6 +49,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                   "is_leader",
                   'is_not_god_only_L2_L3',
                   "is_god",
+                  "is_not_god_only_L2_L3_leader",
+                  "is_not_god_only_L2_L3_worker",
                   ]  # Include 'url' field
         # extra_kwargs = {'password': {'write_only': True}}
 
@@ -121,3 +125,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         if user_membership:
             return user_membership.role
         return None
+    
+    def get_is_not_god_only_L2_L3_leader(self, user):
+        return user.is_not_god_only_L2_L3_leader()
+
+    def get_is_not_god_only_L2_L3_worker(self, user):
+        return user.is_not_god_only_L2_L3_worker()

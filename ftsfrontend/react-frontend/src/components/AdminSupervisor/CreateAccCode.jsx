@@ -94,12 +94,44 @@ const CreateAC= ({mode}) => {   //mode:create or update
     }
 
 
-// ========================get teams list from api==============================
+// ========================get teams list from api but only self team for l2==============================
     useEffect(()=>{
         const teamListSelect = async()=>{
             setLoadingTeamData(true)
             console.log("in the getteamlist data")
-            try {
+            if (userIn.is_not_god_only_L2_L3_leader){
+                const teamId = userIn.team.id
+                try {
+                console.log("in the getteamlist try block")
+                const response = await axios.get(`http://127.0.0.1:8000/drf/teams/${teamId}`, {
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    withCredentials: true,
+                })
+
+                const teamListSelectData=response.data
+                setACData((prev) => ({
+                    ...prev,
+                    teamOptions:[teamListSelectData] //needs to be  array
+                }));
+                console.log("teams api hit")
+                console.log(teamListSelectData)
+                
+            } catch (error){
+                console.log("in the catch block")
+                console.log(error)
+                setACData((prev) => ({
+                    ...prev,
+                    teamOptions:[]
+                }));
+            } finally {
+                setLoadingTeamData(false)  
+                console.log("in the final block")       
+            }
+
+            }else {
+                try {
                 console.log("in the getteamlist try block")
                 const response = await axios.get(`http://127.0.0.1:8000/drf/teams/`, {
                     headers: {
@@ -127,6 +159,8 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 setLoadingTeamData(false)  
                 console.log("in the final block")       
             }}
+            }
+            
         console.log("in use effect")
 
         teamListSelect()}, []

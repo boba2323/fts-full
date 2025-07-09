@@ -151,6 +151,10 @@ const Routes = () => {
                 path: "workspace/files",
                 element: <div><FileList/></div>,
               },
+                            {
+                path: "workspace/accesscode/create",
+                element: <CreateAC mode='create'/>,
+              },
               {
                 path: "workspace/team/:teamId/files-upload",
                 element: <div><FileUpload/></div>,

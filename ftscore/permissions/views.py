@@ -29,7 +29,7 @@ from datetime import timedelta
 import logging
 
 
-from permissions.special_permissions import GeneralWritePermissions, TeamMembershipPermissions
+from permissions.special_permissions import GeneralWritePermissions, TeamMembershipPermissions, AccessCodePermission
 # import custom permissions
 from fts_app.permissions import IsAuthorOrReadOnly, TeamsAndRolesFiles, TeamsAndRolesFolders
 
@@ -117,7 +117,7 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
 class AccessCodeViewSet(viewsets.ModelViewSet):
     queryset = AccessCode.objects.all()  # Adjust this to your actual queryset
     serializer_class = AccessCodeSerializer
-    permission_classes = [IsAuthenticated, GeneralWritePermissions]
+    permission_classes = [IsAuthenticated, AccessCodePermission]
     authentication_classes = [CustomAuthentication]
     lookup_field = 'masked_id'
 

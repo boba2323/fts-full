@@ -16,6 +16,25 @@ class GeneralWritePermissions(permissions.BasePermission):
         return True
     
 
+class AccessCodePermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        if request.method in ['POST']:
+            if user.supervisor or user.is_superuser:
+                return True
+            elif user.is_team_level_L1 or user.is_not_god_only_L2_L3_leader():
+                return True
+            return False
+        
+        if request.method in ['PUT', 'DELETE']:
+            if user.supervisor or user.is_superuser:
+                return True
+            elif user.is_team_level_L1:
+                return True
+            return False
+        return True
+    
+
 class TeamMembershipPermissions(permissions.BasePermission):
     # def has_permission(self, request, view):
     #     user =request.user

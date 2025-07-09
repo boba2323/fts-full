@@ -35,7 +35,7 @@ const Workspace = () => {
 
   return (
     <div>
-      This is your workspace. Here you can view your 
+      This is your workspace. Here you can view your tasks
       <li>
         {loading?<Loading/>:
           userAttribute.teamId?<Link to={`team/${userAttribute.teamId}`}>
@@ -44,6 +44,17 @@ const Workspace = () => {
           :<div>You are not part of any team or leader of a team yet</div>
         }
       </li>
+      <div>
+        {userIn.is_not_god_only_L2_L3_leader
+        ? <div className='flex flex-col'>Create a access code for your team. You cannot upload files until an accesscode and have attached it to your team.
+            <Link to={`accesscode/create`}>
+              <div className='border border-blue-50 inline-block'>Create Access Code</div>
+            </Link>
+          </div>
+        :<></>
+        }
+        
+      </div>
     </div>
   )
 }

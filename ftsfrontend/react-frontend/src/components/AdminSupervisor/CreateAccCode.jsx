@@ -7,12 +7,18 @@ import Space2 from '../SpaceBetweenFields/Space2';
 import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
 import Team from '../Team/Team';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
+import { useAuth } from '../../authentication/authProvider';
 const CreateAC= ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
+    const {userIn} = useAuth()
+    if (userIn.is_temp || userIn.is_not_god_only_L2_L3_worker){
+        return <Navigate to="/fts" />
+    }
+
     const {id} = useParams() 
     const [loadingTeamData, setLoadingTeamData] = useState(true)
     const [acData, setACData ] = useState({

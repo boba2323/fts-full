@@ -14,6 +14,7 @@ import moment from 'moment'
 import { format } from 'date-fns';
 
 import { Tooltip, Button } from "@material-tailwind/react";
+import { useAuth } from '../../authentication/authProvider.jsx';
 
 const TeamView = () => {  //supervisor is a boolean to toggle between team update
   const [teamViewData, setTeamViewData] =useState()
@@ -30,7 +31,30 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   const [searchParamsTeamId, setSearchParamsTeamId] = useSearchParams()
 
   const [listView, setListView] = useState(true)
+  
+  const {userIn, setUserIn, hitMeandFetch } = useAuth()
 
+  let leaveTeam = null
+  if (userIn.team?.id?.toString() === teamId.toString()){
+    console.log("yes its the user in team")
+    leaveTeam = <div>
+                  <div className="leave-button flex items-center justify-center text-xs
+                    text-gray-700 tracking-wide font-semibold cursor-pointer mb-3">
+                    <Link to={`/fts/workspace/team/delete/${teamId}`} >
+                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100'>Leave Team</p>
+                      
+                    </Link>
+                  </div>
+                  <div className="addworker-button flex items-center justify-center text-xs
+                  text-gray-700 tracking-wide font-semibold ">
+                    <Link to={`/fts/workspace/team/update/${teamId}`} >
+                      <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100 mt-6'>Add workers</p>
+                    </Link>
+                  </div>
+              </div> 
+  } else {
+    leaveTeam =<></>
+  }
 
   useEffect(()=>{
     const filterModData =()=>{
@@ -159,13 +183,9 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               <div className="level-value p-2 flex justify-center items-center">
                 <h1 className='font-semibold text-6xl text-gray-800'>{teamViewData.level}</h1>
               </div>
-              <div className="leave-button flex items-center justify-center text-xs
-               text-gray-700 tracking-wide font-semibold cursor-pointer">
-                <Link to={`/fts/workspace/team/delete/${teamId}`} >
-                  Leave Team
-                </Link>
-                
-              </div>
+
+              {leaveTeam}
+
             </div>
           </div>
           <div className="section-b flex flex-col">

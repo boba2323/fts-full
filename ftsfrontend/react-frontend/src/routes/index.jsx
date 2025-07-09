@@ -140,6 +140,10 @@ const Routes = () => {
                 element: <div><TeamView/></div>,
               },
               {
+                path: "workspace/team/update/:teamId",
+                element: <><CreateTeam mode="update"/></>
+              },
+              {
                 path: "workspace/team/delete/:teamId",
                 element: <div><DeleteSelfMembership/></div>,
               },

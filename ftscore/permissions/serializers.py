@@ -195,7 +195,8 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         request = self.context.get('request')
         user = request.user
         if user.is_not_god_only_L2_L3():
-            raise serializers.ValidationError("L2 member, you cannot make more teams")
+            if not self.instance.pk:
+                raise serializers.ValidationError("L2 member, you cannot make more teams")
         return super().save(**self.validated_data)
 
 

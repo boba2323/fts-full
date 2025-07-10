@@ -41,14 +41,16 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                   <div className="leave-button flex items-center justify-center text-xs
                     text-gray-700 tracking-wide font-semibold cursor-pointer mb-3">
                     <Link to={`/fts/workspace/team/delete/${teamId}`} >
-                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100'>Leave Team</p>
+                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100'>
+                      Leave Team</p>
                       
                     </Link>
                   </div>
                   <div className="addworker-button flex items-center justify-center text-xs
                   text-gray-700 tracking-wide font-semibold ">
                     <Link to={`/fts/workspace/team/update/${teamId}`} >
-                      <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100 mt-6'>Add workers</p>
+                      <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100 mt-6'>
+                        Edit Team</p>
                     </Link>
                   </div>
               </div> 
@@ -197,13 +199,14 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
             </div>
           </div>
           <div className="section-b flex flex-col">
+
             <div className="section-header flex flex-row justify-between">
               <h1 className="mt-2 text-gray-700 text-2xl tracking-widest font-semibold mb-2">Team Files</h1>
               {addFiles}
             </div>
             <div className="file-parent-card ps-3 mb-3">
-                {
-                  loading?<Loading/>
+            {userIn.team?.id?.toString() === teamId.toString()
+            ?loading?<Loading/>
                   :teamViewData.files_owned.map(file=>
                     // const iso_string = file.date_created
                     // const date = new Date(iso_string).toLocaleDateString()
@@ -218,7 +221,8 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                       </p>
                     </div>
                   ))
-                }
+            :<></>}              
+                
             </div>
           </div>
           <div className="section-c flex flex-col">
@@ -235,8 +239,8 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               </div>
 
             </div>
-            {
-              listView?<table className="modification ps-3 mb-5 my-3 ms-3 ">
+              {userIn.team?.id?.toString() === teamId.toString()
+              ?listView?<table className="modification ps-3 mb-5 my-3 ms-3 ">
                         <thead>
                           <tr className='border-b-2 border-gray-200 h-6'>
                               <th className='text-left ps-4 text-xs font-medium font-sans text-gray-700'>File Name</th>
@@ -281,8 +285,8 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                         }
                         </div>
                       </div> 
-            }
-            
+              :<></>
+              }           
           </div>
             
         </div>

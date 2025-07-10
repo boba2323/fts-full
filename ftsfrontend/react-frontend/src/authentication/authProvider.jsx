@@ -1,7 +1,7 @@
 // https://dev.to/sanjayttg/jwt-authentication-in-react-with-react-router-1d03
 import axios from "axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
+import Cookies from 'js-cookie';
 const AuthContext = createContext();
 
 // we export here to fix this error
@@ -27,7 +27,8 @@ export const AuthProvider = ({ children }) => {
       try{
         const response = await axios.get('http://127.0.0.1:8000/accounts/me/', {
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              // 'X-CSRFToken': Cookies.get('csrftoken')
               },
             withCredentials: true, // Optional: only needed if cookies are set
             
@@ -41,6 +42,8 @@ export const AuthProvider = ({ children }) => {
           }
         setUserIn(response.data)
        } catch (error) {
+        console.log("auth error")
+        console.error(error)
         setUserIn(null)
        } finally {
         setLoading(false)  //loading is over now wecan call the pages

@@ -24,6 +24,7 @@ from django.http import FileResponse
 # custom throttling
 from django.utils import timezone
 from datetime import timedelta
+from rest_framework.exceptions import ValidationError
 # ----
 
 import logging
@@ -99,14 +100,22 @@ class TeamMembershipViewSet(viewsets.ModelViewSet):
         print("membership destroy")
         membership_instance = self.get_object()
         user = request.user
-        # check if user actually belongs to that membership
-        if not user.get_team_membership():
-            raise ValidationError()
-        self.perform_destroy(membership_instance)
-        if user.is_leftover_teammodel_leader():
-            team = user.is_leftover_teammodel_leader()
-            print("the user is a leader of a teammodel")
-            team.delete()
+        user_teammembership = user.get_team_membership()
+
+        # check if user actually belongs to that membership-that will be managed in permission
+        # case 1-  user is a leader who is leaving team, thus delete the whole team
+        if user_teammembership:
+            user_team = user_teammembership.team
+            does_workers_exist = user_team.get_workers_of_the_team().exists()
+            team_user_leader = user.is_leftover_teammodel_leader() #if the user is a leader, then he also exists in the team leader field
+            # aprt from the membership
+            if team_user_leader and membership_instance.role == "leader":
+                print("the user is a leader of a teammodel")
+                self.perform_destroy(membership_instance)  
+                team_user_leader.delete()
+                return Response
+        print("destroy membership2")
+        # case 2- leader is removing a worker from the team, thus deleting a teammembership that isnt a leader
         return super().destroy(request, *args, **kwargs)
     
   # https://www.cdrf.co/3.3/rest_framework.viewsets/ModelViewSet.html#perform_destroy

@@ -6,13 +6,12 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
 from .serialiser import UserSerializer
-from fts_app.serializers import MyTokenObtainPairSerializer
+from accounts.serialiser import MyTokenObtainPairSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
 
 # views for obtaining the jwt and store it in HTTPOnly cookie
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from accounts.authenticate import CustomAuthentication
 from django.db.models import Prefetch
@@ -37,7 +36,7 @@ class RegisterView(CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
+# this is the login view
 class CustomTokenObtainPairView(TokenObtainPairView):
     # https://stackoverflow.com/questions/66197928/django-rest-how-do-i-return-simplejwt-access-and-refresh-tokens-as-httponly-coo
 # https://medium.com/@cassymyo/how-to-get-token-user-information-using-simple-jwt-django-rest-framework-and-react-js-part-1-af528bab854a
@@ -69,17 +68,22 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         #     "message":"You are loggin in"
         # }, status=status.HTTP_200_OK)
         # https://www.geeksforgeeks.org/python/django-cookie/
+        # https://cookie-script.com/documentation/samesite-cookie-attribute-explained
         response.set_cookie(key='access',
                             value=access_token,
                             httponly=True,
                             secure=False,
-                            samesite='Lax') #false for development)
+                            samesite='None',
+                            # max_age=3600
+                            ) #false for development)
         response.set_cookie(key='refresh',
                             value=refresh_token,
                             httponly=True,
                             secure=False,
-                            samesite='Lax')
-        # print("cookies", response.cookies)
+                            samesite='None',
+                            # max_age=3600
+                            )
+        print("cookies", response.cookies)
         return response
 
 
@@ -115,7 +119,7 @@ class CustomRefreshTokenView(TokenRefreshView):
             value=access_token,
             httponly=True,
             secure=False,  # True in production
-            samesite='Lax',
+            samesite='None',
             max_age=3600
         )
         # refresh tokens last longer, when they expire we will need the user to log again
@@ -124,7 +128,7 @@ class CustomRefreshTokenView(TokenRefreshView):
             value=refresh_token,
             httponly=True,
             secure=False,  # True in production
-            samesite='Lax',
+            samesite='None',
             max_age=3600
 
         )

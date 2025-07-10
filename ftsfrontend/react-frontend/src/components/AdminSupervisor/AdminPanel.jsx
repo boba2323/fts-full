@@ -68,7 +68,9 @@ const AdminPanel = () => {
               <Link to={`admin-team`}>
                 <AdminModelCard teamname={"Teams" } membercount={"View all the teams"} icon={<FaChessKnight size="30"/>}/>
               </Link>
-              <AdminModelCard teamname={"Files" }  membercount={"5"} icon={<FaFileContract size="30"/>}/>
+              <Link to={`admin-files`}>
+                <AdminModelCard teamname={"Files" }  membercount={"5"} icon={<FaFileContract size="30"/>}/>
+              </Link>
               <Link to={`admin-user`}>
                 <AdminModelCard teamname={"Users" }  membercount={"5"} icon={<FaSnowman size="30"/>}/>
               </Link>

@@ -288,6 +288,11 @@ const FileUpload = () => {
     <form onSubmit={handleSubmit} className='flex flex-row'>
         <div className="w-2/3">
             <div className="fileUpload p-4">
+            {errors?.global.length > 0 && (
+                <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
+                {errors.global}
+                </div>
+            )}          
             {errors?.success && (
                 <div className={`mb-3 border rounded-lg flex justify-center items-center ps-1 ${getFormMessageColor()}`}>
                 {errors.success}

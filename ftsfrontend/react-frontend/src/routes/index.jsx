@@ -41,6 +41,10 @@ import Workspace from "../components/Workspace/Workspace";
 import DeleteSelfMembership from "../components/Team/DeleteSelfMembership";
 import QuickDeleteTest from "../components/TestComp/Test";
 
+import AdminFileList from "../components/AdminSupervisor/AdminFileList";
+import AdminFileDelete from "../components/AdminSupervisor/AdminFileDelete";
+
+
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
 
@@ -218,6 +222,14 @@ const Routes = () => {
               {
                 path:'admin/admin-accesscode/delete/:id',
                 element:<AdminAccCodeDelete/>
+              },
+              {
+                path: "admin/admin-files",
+                element: <><AdminFileList/></>
+              },
+              {
+                path: "admin/admin-files/delete/:fileId",
+                element: <><AdminFileDelete/></>
               },
               {
                 path:'admin/admin-modification',

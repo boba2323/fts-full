@@ -81,7 +81,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     # custom token serialiser in serliase.py
     # https://medium.com/@cassymyo/how-to-get-token-user-information-using-simple-jwt-django-rest-framework-and-react-js-part-1-af528bab854a
-    "TOKEN_OBTAIN_SERIALIZER": "fts_app.serializers.MyTokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "accounts.serialiser.MyTokenObtainPairSerializer",
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=240),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,

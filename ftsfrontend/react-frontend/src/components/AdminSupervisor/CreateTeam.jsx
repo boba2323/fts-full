@@ -10,6 +10,8 @@ import Team from '../Team/Team';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../authentication/authProvider';
 
+import errorRenderHandle from '../UtilsErrorRendering/ErrorRenderHandle';
+
 import Cookies from 'js-cookie';
 const CreateTeam = ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
@@ -163,7 +165,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
         setAddWorker(true)
     }
 // ==========================delete worker=============================
-    const removeWoker = async( url, workerId)=>{
+    const removeWoker = async( url, workerId)=>{  //url is a teammembership hyperlink in the team.worker object
         try {
             const response = await axios.delete(url, 
                 {
@@ -227,8 +229,19 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 withCredentials: true, // Optional: only needed if cookies are set
                 
             });
+            setErrors({
+                 global: [],
+                 fields: {},
+                 success: "Team created successfully!"
+            })
             hitMeandFetch()
-             
+            setInputData(prev => ({
+                ...prev,
+                name: "",
+                leader: '',
+                level: '',
+                }));           
+                    
             } else if (mode==="update"){
                 response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
                 {
@@ -245,65 +258,69 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             });
             hitMeandFetch()
             }
-            if (addWorker){
-                console.log(response.data.url, inputWorker)
-                responseMembership = await axios.post('http://127.0.0.1:8000/drf/teammembership/', 
-                {
-                    'user':inputWorker,
-                    'team':response.data.url,
-                    'role':'worker',
-                },
-                {
-                headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-                },
-                withCredentials: true, // Optional: only needed if cookies are set
-                });
-                
-                console.log( "response data",responseMembership.data)
-                const team_url = responseMembership.data.team
-                console.log("membership team url", team_url)
-                console.log("team url" ,team_url)
-                const teamData = await axios.get(team_url, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': Cookies.get('csrftoken')
-                    },
-                    withCredentials: true
-                });
-                console.log("teamData",  teamData)
-                const team = teamData.data
-                console.log('team', team)
-                console.log('team data workers', team.workers)
-                setInputData(prev=>(
-                    {...prev,
-                        workers:team.workers
-                    }
-                ))
 
+            if (addWorker){
+                try {
+                    responseMembership = await axios.post('http://127.0.0.1:8000/drf/teammembership/', 
+                    {
+                        'user':inputWorker,
+                        'team':response.data.url,
+                        'role':'worker',
+                    },
+                    {
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': Cookies.get('csrftoken')
+                    },
+                    withCredentials: true, // Optional: only needed if cookies are set
+                    });
+                    
+                    // console.log( "response data",responseMembership.data)
+                    const team_url = responseMembership.data.team
+                    const teamData = await axios.get(team_url, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': Cookies.get('csrftoken')
+                        },
+                        withCredentials: true
+                    });
+                    const team = teamData.data
+                    // console.log('team data workers', team.workers)
+                    setInputData(prev=>(
+                        {...prev,
+                            workers:team.workers
+                        }
+                    ))
+                    setErrors({
+                        global: [],
+                        fields: {},
+                        success: "Team updated successfully!"
+                        })
+                } catch (error) {
+                    console.log("add worker error")
+                    errorRenderHandle(error,["name", "leader", "level"], setErrors)
+                } finally {
+
+                }
+            
             }
             hitMeandFetch()
             console.log("Team created successfully!:", response.data)
-            if (response.status === 200 || response.data === 201) {
-            // success login 
-                }
-            setErrors({
-                 global: [],
-                 fields: {},
-                 success: "Team updated successfully!"
-            })
+            // if (response.status === 200 || response.data === 201) {
+            // // success login 
+            //     }
+
             setFormIsSubmitted(true)
 
-            // reset the form
-            setInputData(prev => ({
-            ...prev,
-            name: "",
-            leader: '',
-            level: '',
-        }));
+        //     // reset the form
+        //     setInputData(prev => ({
+        //     ...prev,
+        //     name: "",
+        //     leader: '',
+        //     level: '',
+        // }));
         } catch (error) {
-            console.error(error)
+            // console.error(error)
             console.log("team crate error")
             setFormIsSubmitted(false)
             // we get this from login boiler code
@@ -365,7 +382,6 @@ const CreateTeam = ({mode}) => {   //mode:create or update
         }
     }
     
-
   return (
     <div>
         <form onSubmit={handleSubmit} className='flex flex-row'>

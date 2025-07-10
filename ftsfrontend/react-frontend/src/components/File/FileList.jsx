@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { format } from 'date-fns';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
-const FileList = () => {
+const FileList = ({supervisor}) => {
   const [fileData, setData] = useState([])
   const [loading, setLoading] = useState(true);
 
@@ -61,6 +62,13 @@ const FileList = () => {
                                       <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{file.access_code_code }</td>
                                       <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{file.team }</td>
                                       <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={file.download_url}>Download</a></td>
+                                      {supervisor
+                                        ?<td className='text-xs p-2  font-medium font-sans text-gray-200'><Link to={`delete/${file.id}`} >
+                                            <div className='flex justify-center items-center rounded bg-red-500 align-middle p-1'>Delete</div></Link>
+                                        </td>
+                                        :<></>
+                                      }
+                                      
                                       
                                     </tr>
                                 ))

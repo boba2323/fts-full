@@ -53,7 +53,9 @@ const Login = () => {
         console.log("Successfully logged in:", response.data);
 
         // we set userIn with function instead of just the state setter. this sets the userIn so the protected routes work
-        await hitMeandFetch();
+        
+        // await hitMeandFetch();
+
         setMessage("Login successfull");
         // we seeit can navigate to unprotected routes but not to protected routes
         // for protected routes we have to set userIn in state so the protectedroutes component can access it when we 

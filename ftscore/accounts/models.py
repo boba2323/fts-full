@@ -135,6 +135,8 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
         return False
     
     def is_leftover_teammodel_leader(self):
+        '''he is a user that is exists in the leader field of team as well as in the membership independently. 
+        thus if we are deleting/editing him in the membership we must do it again in team. returns the team'''
         team_led = self.led_teams.all()
         if team_led.exists():
             team = team_led.first()

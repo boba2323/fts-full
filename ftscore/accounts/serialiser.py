@@ -52,7 +52,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                   "is_not_god_only_L2_L3_leader",
                   "is_not_god_only_L2_L3_worker",
                   ]  # Include 'url' field
-        # extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}}
 
     def get_membership_id(self, user):
         membership = user.memberships
@@ -131,3 +131,46 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_is_not_god_only_L2_L3_worker(self, user):
         return user.is_not_god_only_L2_L3_worker()
+
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+# the settings module exists inside drf in venv
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import AbstractBaseUser, update_last_login
+#  File "/home/boba2323/fts-django/.venv/lib/python3.12/site-packages/rest_framework_simplejwt/serializers.py", line 75, in validate
+#     refresh = self.get_token(self.user)
+from typing import Any, Optional, TypeVar
+
+# copy from fts_app
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    '''this custom class saves the token access to the request session. thus creating a stateful token? the 
+        TokenObtainPairSerializer is a base class that we use to build to custom tokenserialiser class
+        it has default methods VALIDATE whose source code we found in a traceback that led us to the original source
+        in venv. we manipulate the method to extract the request object, get our token and store it in the 
+        request object. see that we store the acess not the refresh token. most of the code in the method
+        is default code we only add the part that gets the token and stores it in the request session.
+        i suppose we use session since it is design to expire after sometime? we can GET BACK TO IT later
+
+        then we retrieve the token from the session in the middleware
+    '''
+    
+# "/home/boba2323/fts-django/.venv/lib/python3.12/site-packages/rest_framework_simplejwt/serializers.py",
+# we obtain this code from the module above
+    def validate(self, attrs: dict[str, Any]) -> dict[str, str]:
+        data = super().validate(attrs)
+        request=self.context['request']
+        refresh = self.get_token(self.user)
+
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+
+        request.session['token']=data['access']
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, self.user)
+        return data
+    
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['name'] = "test_name"
+        return token

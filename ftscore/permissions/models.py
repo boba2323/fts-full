@@ -89,7 +89,7 @@ class Team(models.Model):
         '''returns queryset of TM instances with worker role'''
         # https://docs.djangoproject.com/en/5.2/ref/models/querysets/#select-related
         # select_related is for optimization
-        worker_query = self.memberships.filter(role='worker').select_related('user').all()
+        worker_query = self.memberships.filter(role='worker').select_related('user')
         return worker_query
     
 

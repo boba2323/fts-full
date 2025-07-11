@@ -244,8 +244,14 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         level: '',
                         }));   
                 } catch (error){
+                    console.log("create error")
+                    console.log(error.response.data)
                     setFormIsSubmitted(false)
-                    errorRenderHandle(error,["name", "leader", "level"], setErrors)
+                    errorRenderHandle({
+                        errorResponse: error,
+                        fields: ["name", "leader", "level", "user"],
+                        setErrors: setErrors
+                        })
                 } 
                           
             } else if (mode==="update"){
@@ -271,8 +277,14 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         })
                     hitMeandFetch()
                 } catch (error) {
+                    console.log("update error")
+                    console.log(error.response.data)
                     setFormIsSubmitted(false)
-                    errorRenderHandle(error,["name", "leader", "level"], setErrors)
+                    errorRenderHandle({
+                        errorResponse: error,
+                        fields: ["name", "leader", "level", "user"],
+                        setErrors: setErrors
+                        })
                 }
             }
 
@@ -312,18 +324,24 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                     setErrors({
                         global: [],
                         fields: {},
-                        success: "Team updated successfully!"
+                        success: "Worker added successfully!"
                         })
                 } catch (error) {
                     setFormIsSubmitted(false)
                     console.log("add worker error")
-                    errorRenderHandle(error,["name", "leader", "level"], setErrors)
+                    console.log(error.response.data)
+                    errorRenderHandle(
+                        {
+                        errorResponse: error,
+                        fields: ["user"],
+                        setErrors: setErrors
+                        }
+                    )
                 } 
             
             }
             hitMeandFetch()
             console.log("Team created successfully!:", response.data)
-            setFormIsSubmitted(true)
         } catch (error) {
             // console.error(error)
             console.log("team crate error")

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 // EPS
 const errorRenderHandle = ({errorResponse, fields, setErrors}) => {
     if (errorResponse.response) {
+        console.log("in erreor handler")
         const fieldErrors = {}      //field errors need fieldnames as keys
         const globalErrors = []    //global errors dont need field names hence no keys
         const fieldNames = fields
@@ -11,7 +12,7 @@ const errorRenderHandle = ({errorResponse, fields, setErrors}) => {
         // a whole bunch of error handling, this could be in a different component
         // we can push non field errors into a different object by chcking if the keys don not match fields
         const errorKeyArr = Object.keys(errorDataJson)  //turn this into a array of keys of the error data object
-
+        console.log(errorKeyArr)
         const getErrorMessage = (field) => {
                 if (Array.isArray(field)) 
                     return field.join(', ');
@@ -21,7 +22,7 @@ const errorRenderHandle = ({errorResponse, fields, setErrors}) => {
                     return ''
                 }
             }
-        
+        // we loop for all the keys aka the field names that we retrieved from the error json
         errorKeyArr.forEach((key)=>{
             if (fieldNames.includes(key)){
                 fieldErrors[key] = getErrorMessage(errorDataJson[key])      //get a json obj of field names only as keys

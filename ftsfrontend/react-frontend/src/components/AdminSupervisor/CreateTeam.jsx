@@ -135,7 +135,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true,
             })
-            if (userIn.is_temp) {
+            if (userIn.is_temp || userIn.is_not_god_only_L2_L3) {
                 const newUserQS = response.data.filter(user=>user.is_temp)
                 setInputData((prev)=>({
                 ...prev,

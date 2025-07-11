@@ -2,7 +2,9 @@ We might have been better off not using JWT and instead sticking to a session ba
 
 # This is a file management app. We may also call it Crumpet
 
-## Heavily focussed on Team creation and managemet. 
+## Heavily focussed on Team creation and management.
+Crumpet uses intricate permrissions system to keep files in silos that are only avaialable to entities that have been
+granted permissions to access them and perform operations on them. 
 
 A flowchart of the models is necessary to understand whats going on. 
 

@@ -40,7 +40,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
     leaveTeam = <div>
                   <div className="leave-button flex items-center justify-center text-xs
                     text-gray-700 tracking-wide font-semibold cursor-pointer mb-3">
-                    <Link to={`/fts/workspace/team/delete/${teamId}`} >
+                    <Link to={`/fts/workspace/teammembership/delete/${teamId}`} >
                     <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100'>
                       Leave Team</p>
                       

@@ -8,6 +8,17 @@ import { useAuth } from '../../authentication/authProvider'
 const DeleteSelfMembership = () => {
     const {userIn,  setUserIn, loading, hitMeandFetch} = useAuth()
     const [open, setOpen] = useState(true)
+
+    let deleteMessage = ''
+    if (userIn.role === "worker") {
+      deleteMessage = "You are leaving this team. Confirm you want to leave"
+    } else if (userIn.role === "leader") {
+      deleteMessage = "Are you sure you want to leave your team? The team will be entirely deleted when the leader leaves"
+    } else{
+      deleteMessage= "You have no role, how on earth are you even here..."
+    }
+
+
     console.log("membership url" ,userIn.memberships[0])  
     const handleDeleteMembershipSubmit = async () => {
         try {
@@ -39,7 +50,7 @@ const DeleteSelfMembership = () => {
         handleDelete={handleDeleteMembershipSubmit} 
         target='membership'
         routeToGoBackTo={"/fts/dashboard"}
-        message="Are you sure you want to leave your team? The team will be entirely deleted when the leader leaves" />
+        message={deleteMessage} />
     </div>
     </div>
   )

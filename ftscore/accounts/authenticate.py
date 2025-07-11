@@ -34,8 +34,8 @@ def enforce_csrf(request):
         return None
 
     check = CSRFCheck(dummy_get_response)
-    print("whats happenign inside enforce csrf")
-    print("Request method:", request.method)
+    # print("whats happenign inside enforce csrf")
+    # print("Request method:", request.method)
     # populates request.META['CSRF_COOKIE'], which is used in process_view()
     check.process_request(request)
     reason = check.process_view(request, None, (), {})
@@ -52,35 +52,35 @@ class CustomAuthentication(JWTAuthentication):
     def authenticate(self, request): #Authenticate the request and return a two-tuple of (user, token).
         # print('authenticate')
         header = self.get_header(request)  #Extracts the header containing the JSON web token from the given request
-        print("in auth")
+        # print("in auth")
         raw_token = request.COOKIES.get('access') 
-        print(raw_token)
+        # print(raw_token)
         if header is None:
-            print("No Authorization header found")
+            # print("No Authorization header found")
             raw_token = request.COOKIES.get('access') 
-            print( "no heder rawa token from cookies",raw_token)
+            # print( "no heder rawa token from cookies",raw_token)
         else:
             raw_token = self.get_raw_token(header) #get_raw_token(header: bytes)→ bytes | None
                                                     # Extracts an unvalidated JSON web token from the given “Authorization” header value.
-            print("raw token", raw_token)
+            # print("raw token", raw_token)
         if raw_token is None:
-            print("No token found in header or cookie")
+            # print("No token found in header or cookie")
             return None
 
         try:
             validated_token = self.get_validated_token(raw_token)
         except TokenError as e:
-            print("Token validation failed:", str(e))
+            # print("Token validation failed:", str(e))
             return None
-        print("Request method:", request.method)
+        # print("Request method:", request.method)
         if request.method not in ("GET", "HEAD", "OPTIONS"):
-            print("make csrf skip get")
+            # print("make csrf skip get")
 
             # why on earth are we calling csrf. thats because its not session based auth and in only session based
             # auth the csrf is called authmatically the rest we have to do it for ouerselves
             enforce_csrf(request)
         expected_user = self.get_user(validated_token)
-        print("expected user" ,expected_user)
+        # print("expected user" ,expected_user)
         return expected_user, validated_token #Attempts to find and return a user using the given validated token.
     
 # plug it to settings

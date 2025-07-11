@@ -30,7 +30,7 @@ from rest_framework.exceptions import ValidationError
 import logging
 
 
-from permissions.special_permissions import GeneralWritePermissions, TeamMembershipPermissions, AccessCodePermission
+from permissions.special_permissions import GeneralWritePermissions, TeamMembershipPermissions, AccessCodePermission, TeamPermissions
 # import custom permissions
 from fts_app.permissions import IsAuthorOrReadOnly, TeamsAndRolesFiles, TeamsAndRolesFolders
 
@@ -50,8 +50,8 @@ class TeamViewSet(viewsets.ModelViewSet):
                  queryset=TeamMembership.objects.select_related('user', 'team'))
     )
     # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
-    # authentication_classes = [CustomAuthentication]
+    permission_classes = [TeamPermissions]
+    authentication_classes = [CustomAuthentication]
 
     def dispatch(self, request, *args, **kwargs):
         logger.info(f"DISPATCH - Method: {request.method}, Path: {request.path}, Args: {args}, Kwargs: {kwargs}")

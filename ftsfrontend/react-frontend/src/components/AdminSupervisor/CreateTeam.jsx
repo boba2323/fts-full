@@ -190,7 +190,13 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             console.log(inputData.workers)
             
         } catch (error) {
+            console.log(error.response.data)
             console.error(error)
+            errorRenderHandle({
+                        errorResponse: error,
+                        fields: ["name", "leader", "level", "user"],
+                        setErrors: setErrors
+                        })
         } finally {
         }
     }

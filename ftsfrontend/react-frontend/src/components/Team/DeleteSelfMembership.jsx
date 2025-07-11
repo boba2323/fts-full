@@ -22,21 +22,7 @@ const DeleteSelfMembership = () => {
           });
           
           console.log("Membership deleted successfully!:", response.data)
-          // if (response.status === 200 || response.status === 204) {
-          // // success login 
-          //     console.log("Membership deleted successfully!!:", response.data);
-          //     }
-          // console.log("Membership deleted successfully!:", response.data);
-
           hitMeandFetch()
-          // const fetchMeAgain = await axios.get('http://127.0.0.1:8000/accounts/me/', {
-          //     headers: {
-          //       'Content-Type': 'application/json'
-          //       },
-          //     withCredentials: true, // Optional: only needed if cookies are set
-              
-          //     })
-          // setUserIn(fetchMeAgain.data) 
           console.log("delete membership", userIn)
         } catch (error) {
             console.error("delete membership failed", error)

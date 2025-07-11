@@ -44,7 +44,10 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
                 <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Date Created</th>
                 <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Access Code</th>
                 <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Leader</th>
-                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Workers</th>
+                {supervisor?<th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Workers</th>
+                :<></>
+                }
+                <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Level</th>
                 {/* <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Role</th> */}
             </tr>
           </thead>

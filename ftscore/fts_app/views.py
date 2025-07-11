@@ -113,9 +113,7 @@ class FileViewSet(viewsets.ModelViewSet):
         # REMEMBER THE TOKEN WAS SAVED INTO THE SESSION INSIDE THE CUSTOM MyTokenObtainPairSerializer
         # print('\n\n=============TOKEN OBTAINED INSIDE A VIEW, THE FILEVIEW================\n')
         # print(request.session.get('token'))
-        headers = {
-            "Authorization": request.session['token']
-        }
+
         # print('\n\n=============HEADERS================\n')
         # pprint(request.headers)
         # pprint(request.headers['Sec-Fetch-Dest'])

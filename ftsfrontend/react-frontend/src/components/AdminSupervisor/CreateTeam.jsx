@@ -211,52 +211,69 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             let responseMembership
             console.log()
             if (mode==="create"){
-                response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
-                {
-                    'name':inputData.name,
-                    'leader':userIn.is_temp?userIn.url
-                    :userIn.is_not_god_only_L2_L3?userIn.url
-                    :inputData.leader,
-                    'level':userIn.is_temp?"L2"
-                    :userIn.is_not_god_only_L2_L3? "L2"
-                    : inputData.level,
-                },
-                {
-                headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-                },
-                withCredentials: true, // Optional: only needed if cookies are set
-                
-            });
-            setErrors({
-                 global: [],
-                 fields: {},
-                 success: "Team created successfully!"
-            })
-            hitMeandFetch()
-            setInputData(prev => ({
-                ...prev,
-                name: "",
-                leader: '',
-                level: '',
-                }));           
-                    
+                try {
+                    response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
+                        {
+                            'name':inputData.name,
+                            'leader':userIn.is_temp?userIn.url
+                            :userIn.is_not_god_only_L2_L3?userIn.url
+                            :inputData.leader,
+                            'level':userIn.is_temp?"L2"
+                            :userIn.is_not_god_only_L2_L3? "L2"
+                            : inputData.level,
+                        },
+                        {
+                        headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': Cookies.get('csrftoken')
+                        },
+                        withCredentials: true, // Optional: only needed if cookies are set
+                        
+                    });
+                    setFormIsSubmitted(true)
+                    setErrors({
+                        global: [],
+                        fields: {},
+                        success: "Team created successfully!"
+                    })
+                    hitMeandFetch()
+                    setInputData(prev => ({
+                        ...prev,
+                        name: "",
+                        leader: '',
+                        level: '',
+                        }));   
+                } catch (error){
+                    setFormIsSubmitted(false)
+                    errorRenderHandle(error,["name", "leader", "level"], setErrors)
+                } 
+                          
             } else if (mode==="update"){
-                response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
-                {
-                    'name':inputData.name,
-                    'leader':inputData.leader,
-                    'level':inputData.level,
-                },
-                {
-                headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-                },
-                withCredentials: true, // Optional: only needed if cookies are set
-            });
-            hitMeandFetch()
+                try {
+                    response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
+                        {
+                            'name':inputData.name,
+                            'leader':inputData.leader,
+                            'level':inputData.level,
+                        },
+                        {
+                        headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': Cookies.get('csrftoken')
+                        },
+                        withCredentials: true, // Optional: only needed if cookies are set
+                    });
+                    setFormIsSubmitted(true)
+                    setErrors({
+                        global: [],
+                        fields: {},
+                        success: "Team updated successfully!"
+                        })
+                    hitMeandFetch()
+                } catch (error) {
+                    setFormIsSubmitted(false)
+                    errorRenderHandle(error,["name", "leader", "level"], setErrors)
+                }
             }
 
             if (addWorker){
@@ -284,6 +301,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         },
                         withCredentials: true
                     });
+                    setFormIsSubmitted(true)
                     const team = teamData.data
                     // console.log('team data workers', team.workers)
                     setInputData(prev=>(
@@ -297,28 +315,15 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         success: "Team updated successfully!"
                         })
                 } catch (error) {
+                    setFormIsSubmitted(false)
                     console.log("add worker error")
                     errorRenderHandle(error,["name", "leader", "level"], setErrors)
-                } finally {
-
-                }
+                } 
             
             }
             hitMeandFetch()
             console.log("Team created successfully!:", response.data)
-            // if (response.status === 200 || response.data === 201) {
-            // // success login 
-            //     }
-
             setFormIsSubmitted(true)
-
-        //     // reset the form
-        //     setInputData(prev => ({
-        //     ...prev,
-        //     name: "",
-        //     leader: '',
-        //     level: '',
-        // }));
         } catch (error) {
             // console.error(error)
             console.log("team crate error")

@@ -172,17 +172,19 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                     <h6 className='text-xs text-gray-500 tracking-wide font-thin'>Team Leader</h6>
                   </div>
                 </div>
-                {
+                <div className='flex flex-wrap'>
+                  {
                   loading?<Loading/>
                          :teamViewData.workers.map(worker=>(
-                          <div className="worker-card w-28 h-32 bg-slate-50 border-s-4 border-t-4 border-white shadow-lg rounded-lg pt-4 p-2 my-3 me-3">
+                          <div className="worker-card w-28 h-32 max-w-28 min-w-28 bg-slate-50 border-s-4 border-t-4 border-white shadow-lg rounded-lg pt-4 p-2 my-3 me-3">
                             <div className="name">
-                              <h3 className='text-sm text-gray-700 tracking-wide font-light'>{worker.user}</h3>
+                              <h3 className='text-sm text-gray-700 tracking-wide font-light overflow-hidden whitespace-nowrap text-ellipsis'>{worker.user}</h3>
                               <h6 className='text-xs text-gray-500 tracking-wide font-thin'>Worker</h6>
                             </div>
                           </div>
                         ))
-                }
+                  }
+                </div>
               </div>
             </div>
             <div className="team-level-section flex flex-col bg-stone-50 w-64 h-72 border border-gray-50 rounded-md p-3">

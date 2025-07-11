@@ -72,15 +72,15 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response.set_cookie(key='access',
                             value=access_token,
                             httponly=True,
-                            secure=False,
-                            samesite='None',
+                            secure=False, #True in production however we set to True in dev too here because with lax samesite and false secure, the browser blocks cross site requests
+                            samesite='lax',
                             # max_age=3600
                             ) #false for development)
         response.set_cookie(key='refresh',
                             value=refresh_token,
                             httponly=True,
                             secure=False,
-                            samesite='None',
+                            samesite='lax',
                             # max_age=3600
                             )
         print("cookies", response.cookies)
@@ -118,8 +118,8 @@ class CustomRefreshTokenView(TokenRefreshView):
             key='access',
             value=access_token,
             httponly=True,
-            secure=False,  # True in production
-            samesite='None',
+            secure=True,  # True in production however we set to True here because with lax samesite and false secure, the browser blocks cross site requests
+            samesite='lax',
             max_age=3600
         )
         # refresh tokens last longer, when they expire we will need the user to log again
@@ -127,8 +127,8 @@ class CustomRefreshTokenView(TokenRefreshView):
             key='refresh',
             value=refresh_token,
             httponly=True,
-            secure=False,  # True in production
-            samesite='None',
+            secure=True,  # True in production
+            samesite='lax',
             max_age=3600
 
         )
@@ -177,7 +177,7 @@ class LogoutView(generics.GenericAPIView):
         response.delete_cookie('refresh')
 
         # deleting the session token from request?
-        if "token" in self.request.session.keys():
-            del self.request.session["token"]
+        # if "token" in self.request.session.keys():
+        #     del self.request.session["token"]
         return response
         

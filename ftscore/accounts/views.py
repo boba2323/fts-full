@@ -72,15 +72,15 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response.set_cookie(key='access',
                             value=access_token,
                             httponly=True,
-                            secure=False, #True in production however we set to True in dev too here because with lax samesite and false secure, the browser blocks cross site requests
-                            samesite='lax',
+                            secure=True, #True in production however we set to True in dev too here because with lax samesite and false secure, the browser blocks cross site requests
+                            samesite='none',
                             # max_age=3600
                             ) #false for development)
         response.set_cookie(key='refresh',
                             value=refresh_token,
                             httponly=True,
-                            secure=False,
-                            samesite='lax',
+                            secure=True,
+                            samesite='none',
                             # max_age=3600
                             )
         print("cookies", response.cookies)
@@ -119,7 +119,7 @@ class CustomRefreshTokenView(TokenRefreshView):
             value=access_token,
             httponly=True,
             secure=True,  # True in production however we set to True here because with lax samesite and false secure, the browser blocks cross site requests
-            samesite='lax',
+            samesite='none',
             max_age=3600
         )
         # refresh tokens last longer, when they expire we will need the user to log again
@@ -128,7 +128,7 @@ class CustomRefreshTokenView(TokenRefreshView):
             value=refresh_token,
             httponly=True,
             secure=True,  # True in production
-            samesite='lax',
+            samesite='none',
             max_age=3600
 
         )

@@ -81,6 +81,7 @@ class Team(models.Model):
         related_name='teams'
     )
     level=models.CharField(choices=LEVEL_CHOICES, max_length=2, default='L2')
+    working_files = models.ForeignKey(File, on_delete=models.CASCADE, related_name="team", null=True)
 
     def __str__(self):
         return self.name
@@ -240,6 +241,7 @@ class TeamMembership(models.Model):
     # the role is merely a tag for the users, all users that are saved via the through model are saved as workers regardles
     # of what role we assign them
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    
 
     class Meta:
         # usage of unique_together

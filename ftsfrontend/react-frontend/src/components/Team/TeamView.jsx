@@ -198,10 +198,12 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                 <h1 className='font-semibold text-6xl text-gray-800'>{teamViewData.level}</h1>
               </div>
               {leaveTeam}
+              {teamViewData.access_code_code}
             </div>
+            
           </div>
-          <div className="section-b flex flex-col">
 
+          <div className="section-b flex flex-col">
             <div className="section-header flex flex-row justify-between">
               <h1 className="mt-2 text-gray-700 text-2xl tracking-widest font-semibold mb-2">Team Files</h1>
               {addFiles}

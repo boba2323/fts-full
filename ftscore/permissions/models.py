@@ -473,7 +473,7 @@ class AccessCode(models.Model):
     # teams will have accesscodes. we have decided that 1 team will have 1 access code at a time. no sharing!! 
     # if null=true, then we were unable to set contrainsts for it
     # setting NULL WILL CAUSE ERROR IN THE CONSTRAINT
-    team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='access_codes')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='access_codes')
     masked_id = models.PositiveIntegerField(unique=True, null=True, blank=True)
 
     class Meta:

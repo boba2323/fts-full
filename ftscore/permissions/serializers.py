@@ -9,7 +9,7 @@ from rest_framework.validators import UniqueTogetherValidator,UniqueValidator
 
 from django.db.models import Prefetch
 from permissions.service_layer import TeamService
-
+from datetime import datetime, timedelta
 User = get_user_model()
 
 class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
@@ -239,3 +239,13 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
     #     # team = validated_data['team']
     #     # if team.pk == self.pk:
     #     return instance
+    def validate(self, attrs):
+        request = self.context.get('request')
+        created_at =  attrs.get('expires_at')
+        expires_at = attrs.get('expires_at')
+        user = request.user
+        if user.is_team_level_L2 and user.is_team_leader():
+            print(created_at)
+            expires_at = datetime.now() + timedelta(minutes=2)
+            attrs['expires_at'] = expires_at
+        return attrs

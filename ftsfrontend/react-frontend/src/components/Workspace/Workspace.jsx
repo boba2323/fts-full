@@ -46,7 +46,9 @@ const Workspace = () => {
       </li>
       <div>
         {userIn.is_not_god_only_L2_L3_leader
-        ? <div className='flex flex-col'>Create a access code for your team. You cannot upload files until an accesscode and have attached it to your team.
+        ? <div className='flex flex-col'> You cannot upload files until an accesscode and have attached it to your team.
+        should we allow the user to create a code? but thatv defeats the purpose. instead he can ask for a code that can be Created
+        by his superior or he can create his own code, then upload his own files etc.
             <Link to={`accesscode/create`}>
               <div className='border border-blue-50 inline-block'>Create Access Code</div>
             </Link>

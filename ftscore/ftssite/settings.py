@@ -53,6 +53,8 @@ INSTALLED_APPS = [
 
     # for cors api calls
     'corsheaders',
+
+    'django_celery_beat'
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -226,6 +228,17 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'debug_toolbar.panels.profiling.ProfilingPanel',
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Use the appropriate Redis server URL
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
 
 # CROSS ORIGIN RESOURCE SHARING (CORS) for connecting to frontend
 CORS_ALLOW_CREDENTIALS = True

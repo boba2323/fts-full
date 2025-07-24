@@ -1,7 +1,18 @@
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ftssite.settings')  # need it if we are to import django modules
+django.setup()
+
+
 from .celery import app
 from celery import Celery
 from celery.schedules import crontab
 # https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html
+
+from permissions.models import AccessCode
+from datetime import datetime
+import pytz
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
@@ -23,7 +34,7 @@ def setup_periodic_tasks(sender: Celery, **kwargs):
     )
 
     # this would execute after 10 seconds hoepfully
-    sender.add_periodic_task(10.0, saysomething.s(), name='add every 10 say something')
+    sender.add_periodic_task(10.0, deactivate_keys.s(), name='deleteaccessexpired')
 
 @app.task
 def add(x, y):
@@ -37,3 +48,15 @@ def saysomething():
 @app.task
 def test(arg):
     print(arg)
+
+a = pytz.timezone("Asia/Kolkata") #else we get a naive vs aware issue
+@app.task
+def deactivate_keys():
+    now = datetime.now(a)
+    print("checking accesscodes.....")
+    # https://www.sankalpjonna.com/learn-django/running-a-bulk-update-with-django
+    expired_keys = AccessCode.objects.filter(expires_at__lte=now, is_active=True).select_related('team', 'created_by').update(is_active=False)
+    print(expired_keys)
+    if expired_keys:
+        print("access key deleted")
+

@@ -246,6 +246,6 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
         user = request.user
         if user.is_team_level_L2 and user.is_team_leader():
             print(created_at)
-            expires_at = datetime.now() + timedelta(minutes=2)
+            expires_at = datetime.now() + timedelta(seconds=5)
             attrs['expires_at'] = expires_at
         return attrs

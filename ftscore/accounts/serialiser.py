@@ -13,7 +13,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     created_access_codes=serializers.HyperlinkedRelatedField(
         many=True, 
         view_name='accesscode-detail', 
-        read_only=True
+        read_only=True,
+        lookup_field='masked_id'
     )  # Reverse relation to AccessCode model
 
     team = serializers.SerializerMethodField()

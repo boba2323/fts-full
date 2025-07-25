@@ -28,7 +28,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='myuser-detail')  # Expects a URL pattern named 'myuser-detail'
     created_access_codes=serializers.HyperlinkedRelatedField(
         many=True, 
-        view_name='accesscode-detail', 
+        view_name='accesscode-detail',
+        lookup_field='masked_id', 
         read_only=True
     )  # Reverse relation to AccessCode model
 

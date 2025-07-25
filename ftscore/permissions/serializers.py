@@ -106,14 +106,20 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     #     lookup_field='masked_id',
     # )
     files_owned = serializers.SerializerMethodField()
+    ac_presentor = serializers.SerializerMethodField()
     class Meta:
         model = Team
         fields = ('id', 'name', 'url', 'name', 'created_at', 'leader','leader_name', 'membership_users',
-                   'workers',
+                   'workers', "ac_presentor",
                      'memberships', 'level', 'access_codes', "access_code_code", "files_owned" )
         # extra_kwargs = {
         #     'access_codes': {'view_name': 'accesscode-detail','lookup_field': 'masked_id'},
         # }
+
+    def get_ac_presentor(self, team):
+        ac_code= team.access_codes
+        if ac_code.exists():
+            return f"{str(ac_code.first().code)[:3]}... belongs to team {team}"
         
     def get_files_owned(self, team):
         file_query = TeamService.get_accessible_files_for_the_team_only(team)
@@ -206,9 +212,10 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field= 'masked_id'
     )
     team_name=serializers.SerializerMethodField()
+    ac_presenter = serializers.SerializerMethodField()
     class Meta:
         model = AccessCode
-        fields = ( 'url', 'code', 'masked_id', 'team', 'team_name', 'created_by', 'created_at', 'expires_at', 'is_active', 'optional_description')
+        fields = ( 'url', 'code', 'ac_presenter', 'masked_id', 'team', 'team_name', 'created_by', 'created_at', 'expires_at', 'is_active', 'optional_description')
         # extra_kwargs = {
         #     'url': {'view_name': 'accesscode','lookup_field': 'masked_id'},
         # }
@@ -217,6 +224,14 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
             team=obj.team.name
             return team
         return "No team assigned"
+    
+    def get_ac_presenter(self, obj):
+        if obj.team:
+            team=obj.team.name
+            return f"Access code: {str(obj.code)[:4]}... belonging to team {team}"
+
+
+
     # https://www.django-rest-framework.org/api-guide/serializers/#field-level-validation
     # we are adding a validation in the field rather than in the object
 

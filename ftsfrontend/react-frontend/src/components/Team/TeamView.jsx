@@ -11,7 +11,7 @@ import { FaGrip, FaList } from "react-icons/fa6";
 import { useSearchParams } from 'react-router-dom';
 
 import moment from 'moment'
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 import { Tooltip, Button } from "@material-tailwind/react";
 import { useAuth } from '../../authentication/authProvider.jsx';
@@ -20,7 +20,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   const [teamViewData, setTeamViewData] =useState()
   const [extraViewModificationQSData, setExtraViewModificationQSData] = useState([])
   const [filteredModData, setFilteredModData] = useState([])
-
+  const [accessCodeViewData, setAccessCodeViewData] =useState()
 
   const [loading, setLoading] = useState(true)
   const [loadingMod, setLoadingMod] = useState(true)
@@ -152,6 +152,45 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
       fetchTeamViewData()
     }, [])
 
+
+    // fetch accesscode
+  useEffect (()=>{
+    const fetchAccessViewData = async ()=>{
+    // console.log("csrftoken = ", Cookies.get('csrftoken'))
+      setLoading(true)
+      if (!teamViewData){
+        return
+      }
+      try {
+        console.log("codes")
+        console.log("codes",teamViewData.access_codes[0])
+          const responseAccess = await axios.get(teamViewData.access_codes,
+            {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': Cookies.get('csrftoken')
+            },
+            withCredentials: true, // Optional: only needed if cookies are set
+            }
+          )
+          setAccessCodeViewData(responseAccess.data)
+// https://ultimatecourses.com/blog/query-strings-search-params-react-router
+
+      } catch (error) {
+        console.error("Error fetching data:", error)
+        setAccessCodeViewData()
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchAccessViewData()
+  }, [teamViewData])
+
+  // https://stackoverflow.com/questions/69265989/format-date-with-date-fns
+  // https://date-fns.org/v2.24.0/docs/format
+  const date_created =accessCodeViewData?.created_at?format(parseISO(accessCodeViewData.created_at), 'dd.MMM.yyyy h:mm aaa'):''
+  const test = 'ok'
+
   return (
     <div>
       {
@@ -198,7 +237,20 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                 <h1 className='font-semibold text-6xl text-gray-800'>{teamViewData.level}</h1>
               </div>
               {leaveTeam}
-              {teamViewData.access_code_code}
+              <div className="addworker-button flex flex-col items-start justify-center text-xs
+              text-gray-700 tracking-wide font-light ">
+                {userIn.team?.id?.toString() === teamId.toString()
+                ?<>
+                  <p className=' flex flex-row items-start justify-start p-1 rounded  mt-6 '>
+                      AccessCode</p>
+                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100'>
+                      {teamViewData.ac_presentor}</p>
+                    <p className=' flex flex-row items-start justify-start p-1 rounded  mt-1 '>
+                      Created: {date_created}</p>
+                    </>
+                :<></>}
+              </div>
+              
             </div>
             
           </div>

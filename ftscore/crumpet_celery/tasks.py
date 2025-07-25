@@ -55,8 +55,11 @@ def deactivate_keys():
     now = datetime.now(a)
     print("checking accesscodes.....")
     # https://www.sankalpjonna.com/learn-django/running-a-bulk-update-with-django
-    expired_keys = AccessCode.objects.filter(expires_at__lte=now, is_active=True).select_related('team', 'created_by').update(is_active=False)
-    print(expired_keys)
-    if expired_keys:
-        print("access key deleted")
+    # expired_keys = AccessCode.objects.filter(expires_at__lte=now, is_active=True).select_related('team', 'created_by').update(is_active=False)
+    # print(expired_keys)
+    # if expired_keys:
+    #     print("access key deleted")
 
+    expired_keys = AccessCode.objects.filter(expires_at__lte=now).select_related('team', 'created_by')
+    print(expired_keys)
+    expired_keys.delete()

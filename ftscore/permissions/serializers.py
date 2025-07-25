@@ -260,7 +260,7 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
         created_at =  attrs.get('expires_at')
         expires_at = attrs.get('expires_at')
         user = request.user    
-        if not user.get_team_membership():
+        if not user.get_team_membership() and not user.is_a_god():
             raise serializers.ValidationError("You are not in a team")   
         if user.is_team_level_L2 and user.is_team_leader():
             attrs['created_by'] = user

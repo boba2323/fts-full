@@ -255,12 +255,17 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
     #     # if team.pk == self.pk:
     #     return instance
     def validate(self, attrs):
+        
         request = self.context.get('request')
         created_at =  attrs.get('expires_at')
         expires_at = attrs.get('expires_at')
-        user = request.user
+        user = request.user    
+        if not user.get_team_membership():
+            raise serializers.ValidationError("You are not in a team")   
         if user.is_team_level_L2 and user.is_team_leader():
+            attrs['created_by'] = user
             print(created_at)
             expires_at = datetime.now() + timedelta(seconds=5)
             attrs['expires_at'] = expires_at
+            attrs['team'] = user.get_team_membership().team
         return attrs

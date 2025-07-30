@@ -22,10 +22,10 @@ const FtsDashBoard = () =>{
             <Header2 />
 
             <div className="bg-neutral-50 grid grid-cols-12 h-screen">
-                <div className="col-span-1">
+                <div className="col-span-2">
                     <Sidebar  onClickHandler={changeDashComponent} />
                 </div>
-                <div className="col-span-9 overflow-auto bg-white">
+                <div className="col-span-8 overflow-auto bg-white">
                     {/* depending on which route we go, the child component will appear here */}
                     
                     <Outlet/>

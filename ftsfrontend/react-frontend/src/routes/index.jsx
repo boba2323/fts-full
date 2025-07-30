@@ -134,7 +134,10 @@ const Routes = () => {
                 path: "teams",
                 element: <div><Team/></div>,
               },
-              
+              {
+                path: "teams/:teamId",
+                element: <div><TeamView/></div>,
+              },
               {
                 path: "workspace",
                 element: <div><Workspace/></div>,

@@ -8,12 +8,15 @@ import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
-
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../authentication/authProvider';
 // https://www.geeksforgeeks.org/reactjs/file-uploading-in-react-js/
 const FileUpload = () => {
+    const {userIn} = useAuth()
+    if (userIn.is_temp || userIn.is_not_god_only_L2_L3_worker){
+        return <Navigate to="/fts" />
+    }
     const {teamId} = useParams()
-    const {userIn, setUserIn, hitMeandFetch} = useAuth()
     const INITIAL_STATE = {
         file_data:null,
         name:"",

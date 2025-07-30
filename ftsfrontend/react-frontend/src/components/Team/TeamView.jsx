@@ -196,7 +196,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
       {
         loading
         ?<Loading/>
-        :<div className='bg-gray-50 p-4 border border-white'>
+        :<div className='bg-[#fcfcfc] p-4 border border-white'>
           <div className="section-a flex flex-row ">
             <div className='team-section flex flex-col w-full'>
               <h1 className='font-bold flex flex-row justify-start text-3xl text-gray-800'>{teamViewData.name}</h1>

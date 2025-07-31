@@ -1,14 +1,32 @@
 import { Link, useLocation  } from "react-router-dom";
 import { AiOutlineRight } from "react-icons/ai";
+import { useEffect, useState } from "react";
 // https://www.freecodecamp.org/news/react-navigation-build-a-breadcrumb-component/
 
 
 export default function Breadcrumb() {
     const location = useLocation()
     console.log(location.pathname)
-    const urlName = location.pathname.slice(1)
+    
+    const knownPaths = ['/fts', '/fts/workspace/team/:id', '/fts/workspace/teammembership/delete/:id',
+      '/fts/workspace/team/update/:id', '/fts/workspace/team/:id/files-upload', '/fts/workspace','/fts/teams','/fts/teams/:id'
+    ]
+
+    const urlName = location.pathname.slice(1) //remove the first /
+    console.log('urlname',urlName)
     const urlList = urlName.split('/').slice(1)
-    console.log(urlList)
+    const urlListWithPlaceholderId = urlList.map(pathSegments=>{
+      return (
+      /^\d+$/.test(pathSegments)
+      ?':id'
+      : pathSegments)
+    })
+
+
+    console.log("urlist",urlList)
+    console.log("path array with placeholder id", urlListWithPlaceholderId)
+    const outPath = '/fts/' + urlList.slice(0).join('/')
+    console.log('real out path', outPath)
 
   return (
     <div className="bg-white ">
@@ -23,15 +41,24 @@ export default function Breadcrumb() {
         ?<>
           {urlList.map((path, index)=>{
             const captialisedPath = path.charAt(0).toUpperCase() + path.slice(1)
-            const fullPath = '/fts/' + urlList.slice(0, index+1).join('/')
-            console.log('new path', fullPath)
+            const progressivePathRealId = '/fts/' + urlList.slice(0, index+1).join('/')
+            const progressivePathPlaceholder = '/fts/' + urlListWithPlaceholderId.slice(0, index+1).join('/')
+            console.log('progressive paths with real id', progressivePathRealId)
+            console.log('progressive paths with :id', progressivePathPlaceholder)
+
             return (
               <div className="flex flex-row" key={index}>
-                <Link
-                  to={fullPath}
+                {knownPaths.includes(progressivePathPlaceholder)
+                ?<Link
+                  to={progressivePathRealId}
                   className=" cursor-pointer hover:underline">
                   {captialisedPath}
                 </Link>
+                :<div>
+                  {captialisedPath}
+                </div>
+                }
+                
                 {index<urlList.length-1
                 ?<AiOutlineRight />
                 :<></>}
@@ -41,25 +68,9 @@ export default function Breadcrumb() {
         </>
         :<Link
             to={`/fts/dashboard`}
-            className=" cursor-pointer hover:bg-[#E8DAEF] rounded-md transition-all duration-300">
+            className=" cursor-pointer hover:underline">
             Dashboard
           </Link>}
-        
-
-        {/* {
-          location.pathname.includes("/workspace") &&(
-            <>
-              <AiOutlineRight />
-              <Link
-                to={`/fts/workspace`}
-                className=" cursor-pointer hover:bg-[#E8DAEF] rounded-md transition-all duration-300">
-                Workspace
-              </Link>
-            </>
-          )
-        } */}
-
-        
       </ul>
     </div>
   );

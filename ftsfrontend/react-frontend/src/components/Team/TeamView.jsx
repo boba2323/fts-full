@@ -36,7 +36,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   let addFiles = null
   let leaveTeam = null
   if (userIn.team?.id?.toString() === teamId.toString()){
-    console.log("yes its the user in team")
+    // console.log("yes its the user in team")
     leaveTeam = <div>
                   <div className="leave-button flex items-center justify-center text-xs
                     text-gray-700 tracking-wide font-semibold cursor-pointer mb-3">
@@ -127,7 +127,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
 
   useEffect (()=>{
     const fetchTeamViewData = async ()=>{
-      console.log("csrftoken = ", Cookies.get('csrftoken'))
+      // console.log("csrftoken = ", Cookies.get('csrftoken'))
         setLoading(true)
         try {
             const responseTeam = await axios.get(`http://127.0.0.1:8000/drf/teams/${teamId}/`,
@@ -162,8 +162,8 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
         return
       }
       try {
-        console.log("codes")
-        console.log("codes",teamViewData.access_codes[0])
+        // console.log("codes")
+        // console.log("codes",teamViewData.access_codes[0])
           const responseAccess = await axios.get(teamViewData.access_codes,
             {
             headers: {

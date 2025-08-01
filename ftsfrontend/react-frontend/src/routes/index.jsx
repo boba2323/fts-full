@@ -71,10 +71,6 @@ const Routes = () => {
   // Define public routes accessible to all users
   const routesForPublic = [
     {
-      path: "/test",
-      element: <QuickDeleteTest/>,
-    },
-    {
       path: "/",
       element: <div>Home Page</div>,
     },
@@ -95,10 +91,6 @@ const Routes = () => {
       path: "/",
       element: <ProtectedRoute />, // Wrap the component in ProtectedRoute basically returns an OUTLET if authorised or rediects if not
       children: [
-        {
-          path: "/",
-          element: <div>User Home Page</div>,
-        },
         {
           path: "/profile",
           element: <div>User Profile</div>,

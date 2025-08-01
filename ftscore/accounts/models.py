@@ -142,6 +142,15 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
             team = team_led.first()
             return team
         return None
+    
+    def get_access_code_obj(self):
+        team_membership = self.get_team_membership()
+        if team_membership:
+            if team_membership.team.access_codes.all().exists():
+                team_access_code_instance = team_membership.team.access_codes.first()
+                return team_access_code_instance
+            return None
+        return None
 
     def get_access_code_instance(self):
         team_membership = self.get_team_membership()
@@ -152,7 +161,7 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
             return None
         return None
 
-    def is_a_team_member(self):
+    def is_a_team_member(self) -> bool:
         return UserServices.is_a_team_member(self)
 
     def is_a_L2_team_member(self):

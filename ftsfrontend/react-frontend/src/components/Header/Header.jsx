@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const Header = () => {
     const {userIn} =useAuth()
   return (
-    <div className='w-full flex flex-row bg-white '>
+    <nav className='w-full flex flex-row bg-white '>
         <div className="flag-2 flex ps-4 flex-row justify-start items-center w-10/12">
             <Link to={``} >
             <div className="flag py-2 ">
@@ -38,7 +38,7 @@ const Header = () => {
             }
             </div>
         </div>
-    </div>
+    </nav>
   )
 }
 

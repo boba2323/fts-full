@@ -41,7 +41,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                   <div className="leave-button flex items-center justify-center text-xs
                     text-gray-700 tracking-wide font-semibold cursor-pointer mb-3">
                     <Link to={`/fts/workspace/teammembership/delete/${teamId}`} >
-                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100'>
+                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:text-deep-purple-600'>
                       Leave Team</p>
                       
                     </Link>
@@ -49,7 +49,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                   <div className="addworker-button flex items-center justify-center text-xs
                   text-gray-700 tracking-wide font-semibold ">
                     <Link to={`/fts/workspace/team/update/${teamId}`} >
-                      <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100 mt-6'>
+                      <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:text-purple-400 mt-6'>
                         Edit Team</p>
                     </Link>
                   </div>
@@ -60,8 +60,8 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
 
   if (userIn.team?.id?.toString() === teamId.toString()){
     addFiles= <Link to={`/fts/workspace/team/${teamId}/files-upload`}>
-                  <div className=' flex flex-row text-gray-700 text-sm items-center hover:border
-                    border-green-100 cursor-pointer font-semibold p-1 rounded my-2'>
+                  <div className=' flex flex-row text-gray-700 text-sm 
+                  items-center hover:text-deep-purple-600 cursor-pointer font-semibold p-1 rounded my-2'>
                       Upload Files
                   </div>
               </Link> 
@@ -196,7 +196,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
       {
         loading
         ?<Loading/>
-        :<div className='bg-[#fcfcfc] p-4 border border-white'>
+        :<div className='bg-white p-4 border border-white'>
           <div className="section-a flex flex-row ">
             <div className='team-section flex flex-col w-full'>
               <h1 className='font-bold flex flex-row justify-start text-3xl text-gray-800'>{teamViewData.name}</h1>
@@ -207,7 +207,8 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               <div className="flex flex-row member-card border-gray-50 py-5 pe-5">
                 <div className="leader-card w-40 h-52 bg-slate-50 border-s-4 border-t-4 border-white shadow-lg rounded-lg p-4 my-3 me-3">
                   <div className="name flex flex-col flex-wrap">
-                    <h3 className='text-sm text-gray-700 tracking-wide font-semibold flex flex-wrap overflow-hidden'>{teamViewData.leader_name}</h3>
+                    <h3 className='text-sm text-gray-700 tracking-wide font-semibold flex flex-wrap overflow-hidden'>
+                      {teamViewData.leader_name}</h3>
                     <h6 className='text-xs text-gray-500 tracking-wide font-thin'>Team Leader</h6>
                   </div>
                 </div>
@@ -226,7 +227,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                 </div>
               </div>
             </div>
-            <div className="team-level-section flex flex-col bg-stone-50 w-64 h-72 border border-gray-50 rounded-md p-3">
+            <div className="team-level-section flex flex-col bg-stone-50 w-64 h-full border border-[#f5f5f5] rounded-md p-3">
               <div className="flex flex-row">
                 <p className="team-level text-sm text-gray-700 tracking-wide font-semibold ">
                 Team Level
@@ -241,12 +242,14 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               text-gray-700 tracking-wide font-light ">
                 {userIn.team?.id?.toString() === teamId.toString()
                 ?<>
-                  <p className=' flex flex-row items-start justify-start p-1 rounded  mt-6 '>
-                      AccessCode</p>
-                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:border hover:border-light-green-100'>
+                  <p className=' flex flex-row items-start justify-start px-1 rounded  mt-6 font-bold'>
+                      AccessCode:</p>
+                    <p className=' flex items-center justify-center p-1 
+                    text-gray-800
+                    rounded cursor-pointer hover:text-deep-purple-600'>
                       {teamViewData.ac_presentor}</p>
-                    <p className=' flex flex-row items-start justify-start p-1 rounded  mt-1 '>
-                      Created: {date_created}</p>
+                    <p className=' flex flex-col items-start justify-center p-1 rounded  mt-1 '>
+                      <span className='font-bold pb-1'>Created:</span> {date_created}</p>
                     </>
                 :<></>}
               </div>
@@ -285,10 +288,10 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
             <div className="section-header flex flex-row justify-between">
               <h1 className="mt-2 text-gray-700 text-2xl tracking-widest font-semibold mb-2">Modifications Commited By this Team</h1>
               <div className='flex flex-row items-center mx-4 cursor-pointer gap-7'>
-                <Tooltip className='border border-blue-gray-50 bg-green-600 shadow-xl' content="Sort by File" placement="top-end">
+                <Tooltip className='border border-gray-400 bg-white shadow-sm text-gray-700' content="Sort by File" placement="top-end">
                   <FaGrip onClick={()=>{setListView(false)}}/> 
                 </Tooltip>
-                <Tooltip className='border border-blue-gray-50 bg-green-600 shadow-xl' content="List View" placement="top-end">
+                <Tooltip className='border border-gray-400 bg-white shadow-sm text-gray-700' content="List View" placement="top-end">
                   <FaList onClick={()=>{setListView(true)}}/> 
                 </Tooltip>
                  {/* TOOLTIP */}

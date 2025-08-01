@@ -50,7 +50,7 @@ const Rightbar = () => {
   
 
   return (
-    <div className="flex flex-col h-screen bg-white text-gray-600 pb-4 border-l border-gray-200">
+    <div className="flex flex-col h-screen bg-white text-gray-600 pb-4 ps-3 border-l border-gray-200">
       <div className='mb-4'>
         <h2 className='font-bold text-sm mb-3 ps-2 mt-6'>User credentials</h2>
         <nav className="space-y-2">

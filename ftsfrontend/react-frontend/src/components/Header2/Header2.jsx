@@ -65,12 +65,7 @@ const Header2 = ({
         :<></>
         }
         
-        
-
-        
-      </div>
-      
-      
+      </div>      
       {/* {isUpload
       ?<></>
       :<button 

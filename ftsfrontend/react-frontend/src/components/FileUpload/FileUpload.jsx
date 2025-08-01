@@ -327,7 +327,9 @@ const FileUpload = () => {
                 />
                 <Space2/>
                 {displayFieldErrors('access_code')}
-                <SelectInput
+                {userIn.is_not_god_only_L2_L3_leader
+                ?<></>
+                :<SelectInput
                     name="selectedCode"
                     value={inputData.selectedCode}
                     onChange={accessCodeSelectHandler}
@@ -338,21 +340,14 @@ const FileUpload = () => {
                     keyType="code"
                     fieldDefiner="code"
                     serialiserTpe="url"
-                />
+                />}
+                
                 <Space2/>
-                {/* <InputLabel
-                    labelName={"Tags"}
-                    name="tags"
-                    inputType="text"
-                    value={inputData.tags}
-                    placeholder="Tags"
-                    onChange={onChangeHandler}
-                /> */}
             </div>
         </div>
         {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}
         <div className="flex flex-col w-1/3 m-5">
-            <div className=" h-56 flex flex-col border-dotted border-2 border-green-400 rounded-xl  justify-center items-center"> 
+            <div className=" h-56 flex flex-col border-dotted border-2 border-gray-600 rounded-xl  justify-center items-center"> 
                 
                 <div className='flex flex-col justify-center items-center'>
                     <input
@@ -366,21 +361,28 @@ const FileUpload = () => {
                     />
                     <label htmlFor="file-upload" className=" cursor-pointer flex flex-col justify-center items-center">
                         <FaArrowUpFromBracket size={24}/>
-                        <p className='text-emerald-600 text-sm mt-3 font-semibold'>Upload File</p>
+                        <p className='text-emerald-600 text-sm mt-3 font-semibold hover:text-purple-400'>
+                            Upload File</p>
                     </label>
                     {/* https://www.geeksforgeeks.org/reactjs/file-uploading-in-react-js/ */}
                     {inputData.file_data
                     ?<div className="flex flex-row">
-                        <p className='text-green-900 text-xs mt-1 font-semibold'>
+                        <p className='text-gray-800 text-xs mt-1 font-semibold'>
                             {inputData.file_data.name}
                         </p><button onClick={deleteFile} className='px-2'><FaTrash className="text-red-500"/></button>
                     </div>
-                    :<p className='text-green-400 text-xs mt-1 font-normal'>No file selected</p>
+                    :<p className='text-gray-600 text-xs mt-1 font-normal'>No file selected</p>
                     }
                     
                 </div>
             </div>
-            <AuthButton buttonText="Upload File"/>
+            <div className='flex w-full flex-row justify-center items-center '>
+                <button className='border border-gray-400 rounded-lg mt-4 py-3 w-32 text-gray-800 text-sm
+                hover:text-purple-400 hover:border-purple-400'>
+                    Upload File</button>
+            </div>
+            
+            {/* <AuthButton buttonText="Upload File"/> */}
         </div>
         
     </form>

@@ -181,45 +181,91 @@ const FileUpload = () => {
     const handleSubmit= async (e)=>{
         e.preventDefault()
         if (!inputData.name) {
-            setErrorMessage("All fields are required.");
+            setErrors({global:'Provide a name for the file!',
+                        fields:'',
+                        success:''})
             return;
         }
         setPostLoading(true)
         try {
-            const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
-                {
-                    "file_data": inputData.file_data,
-                    "name": inputData.name,
-                    "folder": inputData.selectedFolder,
-                    "access_code": inputData.selectedCode
-                },
-                {
-                headers: {
-                'Content-Type': 'multipart/form-data',
-                'X-CSRFToken': Cookies.get('csrftoken')
-                },
-                withCredentials: true, // Optional: only needed if cookies are set
-            });
-            console.log("Successfully uploaded file", response.data)
-            if (response.status === 200 || response.data === 201) {
-            // success login 
-  
-                }
-            setErrors(prev=>({
-                ...prev,
-                success:"Successfully uploaded file"
-            }))
-  
-            setFormIsSubmitted(true)
+                if (userIn.is_not_god_only_L2_L3) {
+                    console.log(userIn?.user_team_access_code_url?.[0])
+                    const userCode = userIn?.user_team_access_code_url?.[0]
+                    if (!userCode){
+                        setErrors( {global:'User does not have an access code',
+                                    fields:'',
+                                    success:''})
+                                        return;
+                                    }
+                    const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
+                    {
+                        "file_data": inputData.file_data,
+                        "name": inputData.name,
+                        "folder": inputData.selectedFolder,
+                        "access_code": userCode
+                    },
+                    {
+                    headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRFToken': Cookies.get('csrftoken')
+                    },
+                    withCredentials: true, // Optional: only needed if cookies are set
+                });
+                console.log("Successfully uploaded file", response.data)
+                if (response.status === 200 || response.status === 201) {
+                // success login 
+    
+                    }
+                setErrors({global:'',
+                            fields:'',
+                            success:'Uploaded file successfully'})
 
-            // reset the form
-            setInputData(prev => ({
-            ...prev,
-            file_data: null,
-            name: '',
-            selectedFolder: '',
-            selectedCode: ''
-        }));
+                setFormIsSubmitted(true)
+
+                // reset the form
+                setInputData(prev => ({
+                ...prev,
+                file_data: null,
+                name: '',
+                selectedFolder: '',
+                selectedCode: ''
+            }));
+            } else {
+                    const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
+                    {
+                        "file_data": inputData.file_data,
+                        "name": inputData.name,
+                        "folder": inputData.selectedFolder,
+                        "access_code": inputData.selectedCode
+                    },
+                    {
+                    headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRFToken': Cookies.get('csrftoken')
+                    },
+                    withCredentials: true, // Optional: only needed if cookies are set
+                });
+                console.log("Successfully uploaded file", response.data)
+                if (response.status === 200 || response.status === 201) {
+                // success login 
+    
+                    }
+                setErrors(prev=>({
+                    ...prev,
+                    success:"Successfully uploaded file"
+                }))
+    
+                setFormIsSubmitted(true)
+
+                // reset the form
+                setInputData(prev => ({
+                ...prev,
+                file_data: null,
+                name: '',
+                selectedFolder: '',
+                selectedCode: ''
+            }));
+            }
         } catch (error) {
             setFormIsSubmitted(false)
             console.log("fileupload error")

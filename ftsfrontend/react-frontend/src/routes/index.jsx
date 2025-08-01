@@ -139,6 +139,10 @@ const Routes = () => {
                 element: <div><TeamView/></div>,
               },
               {
+                path: "workspace/team/create",
+                element: <><CreateTeam mode="create"/></>
+              },
+              {
                 path: "workspace/team/update/:teamId",
                 element: <><CreateTeam mode="update"/></>
               },

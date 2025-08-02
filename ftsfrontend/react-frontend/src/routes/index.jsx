@@ -43,7 +43,7 @@ import QuickDeleteTest from "../components/TestComp/Test";
 
 import AdminFileList from "../components/AdminSupervisor/AdminFileList";
 import AdminFileDelete from "../components/AdminSupervisor/AdminFileDelete";
-
+import Landing from "../components/Landing/Landing";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -72,7 +72,7 @@ const Routes = () => {
   const routesForPublic = [
     {
       path: "/",
-      element: <div>Home Page</div>,
+      element: <Landing/>,
     },
     {
       path: "/service",

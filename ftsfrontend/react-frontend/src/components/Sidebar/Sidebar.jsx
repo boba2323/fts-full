@@ -6,6 +6,7 @@ import { AiOutlineDatabase } from "react-icons/ai";
 import { AiOutlineTeam } from "react-icons/ai";
 import { FaPuzzlePiece } from 'react-icons/fa';
 import { AiOutlineLogout } from "react-icons/ai";
+import { FaUserShield } from 'react-icons/fa';
 
 const Sidebar = ({
     onClickHandler
@@ -30,20 +31,24 @@ const Sidebar = ({
   return (
     
     <div className="flex flex-col h-screen bg-white text-gray-600 p-4 border-r border-gray-200">
-      <div className="flex flex-row justify-start">
+      {/* <div className="flex flex-row justify-start">
         <button className="mb-3 block ps-2 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer" onClick={testClick} >usertest</button>
-      </div>
-      {userIn.In}
+      </div> */}
       {/* <h2 className="text-sm font-bold mb-6 ps-2">FTS</h2> */}
-      {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
-        ?<Link to={`admin`} ><div className="mb-3 block ps-1 hover:bg-green-50 rounded text-sm text-green-800 hover:border border-green-100 font-bold cursor-pointer">Admin</div ></Link>
-        :<></>
-      }
       <nav className="space-y-1">
+        {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
+          ?<Link to={`admin`} className="block" >
+            <div className="flex flex-row items-center px-4 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+              <FaUserShield size={20}/>
+              <div className=" flex flex-row items-center ps-4 text-sm font-bold text-purple-500">Admin</div>
+            </div>
+            </Link>
+          :<></>
+        }
         {/* https://reactrouter.com/6.28.0/start/tutorial#nesting-routes */}
         <Link to={``} className="block" >
         <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
-          <AiOutlineAppstore size={22}/>
+          <span><AiOutlineAppstore size={22}/></span>
           <div className=" flex flex-row items-center ps-4 text-xs ">Dashboard</div>
         </div>
         </Link>

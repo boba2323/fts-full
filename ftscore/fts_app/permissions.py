@@ -14,6 +14,9 @@ class RegisterUserPermission(permissions.BasePermission):
         # Allows any one to register but not view the list of users unless aunthenticated
         if not user.is_authenticated:
             return request.method == 'POST'
+        if user.is_team_level_L1:
+            if request.method == 'DELETE':
+                return False
         if user.supervisor: #full access
             return True
         if  user.is_team_level_L1:

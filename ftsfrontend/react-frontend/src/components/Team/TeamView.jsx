@@ -4,15 +4,16 @@ import Loading from '../Loading/Loading.jsx'
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
-
+import { FaFileLines } from "react-icons/fa6";
 import { FaGrip, FaList } from "react-icons/fa6";
+import { FaRegFileLines } from "react-icons/fa6";
 
 // https://ultimatecourses.com/blog/query-strings-search-params-react-router
 import { useSearchParams } from 'react-router-dom';
 
 import moment from 'moment'
 import { format, parseISO } from 'date-fns';
-
+import { FaUserGear, FaUserPen  } from "react-icons/fa6";
 import { Tooltip, Button } from "@material-tailwind/react";
 import { useAuth } from '../../authentication/authProvider.jsx';
 
@@ -31,6 +32,8 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   const [searchParamsTeamId, setSearchParamsTeamId] = useSearchParams()
 
   const [listView, setListView] = useState(true)
+  
+
   
   const {userIn, setUserIn, hitMeandFetch } = useAuth()
   let addFiles = null
@@ -205,21 +208,25 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               </div>
 
               <div className="flex flex-row member-card border-gray-50 py-5 pe-5">
-                <div className="leader-card w-40 h-52 bg-slate-50 border-s-4 border-t-4 border-white shadow-lg rounded-lg p-4 my-3 me-3">
-                  <div className="name flex flex-col flex-wrap">
-                    <h3 className='text-sm text-gray-700 tracking-wide font-semibold flex flex-wrap overflow-hidden'>
+                <div className="leader-card w-40 h-52 border border-gray-100 shadow-lg shadow-purple-50 rounded-lg">
+                  <div className="name flex flex-col flex-wrap justify-center items-center h-full">
+                    <FaUserGear size='50' className='text-gray-500'/>
+                    <h3 className='text-sm text-gray-700 tracking-wide font-semibold flex flex-wrap overflow-hidden pt-5'>
                       {teamViewData.leader_name}</h3>
-                    <h6 className='text-xs text-gray-500 tracking-wide font-thin'>Team Leader</h6>
+                    <h6 className='text-xs text-gray-500 tracking-wide font-thin pt-3'>Team Leader</h6>
                   </div>
                 </div>
                 <div className='flex flex-wrap'>
                   {
                   loading?<Loading/>
                          :teamViewData.workers.map(worker=>(
-                          <div className="worker-card w-28 h-32 max-w-28 min-w-28 bg-slate-50 border-s-4 border-t-4 border-white shadow-lg rounded-lg pt-4 p-2 my-3 me-3">
-                            <div className="name">
-                              <h3 className='text-sm text-gray-700 tracking-wide font-light overflow-hidden whitespace-nowrap text-ellipsis'>{worker.user}</h3>
-                              <h6 className='text-xs text-gray-500 tracking-wide font-thin'>Worker</h6>
+                          <div className="worker-card w-28 h-32 border border-gray-100 shadow-lg shadow-purple-50 rounded-lg  
+                          max-w-28 min-w-28  p-2 ms-6 my-3 me-3">
+                            <div className="name flex flex-col flex-wrap justify-center items-center h-full">
+                              <FaUserPen size='25' className='text-gray-500'/>
+                              <h3 className='text-xs text-gray-700 tracking-wide font-semibold flex flex-wrap overflow-hidden pt-2'>
+                                {worker.user}</h3>
+                              <h6 className='text-xs text-gray-500 tracking-wide font-thin pt-1'>Worker</h6>
                             </div>
                           </div>
                         ))
@@ -258,7 +265,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
             
           </div>
 
-          <div className="section-b flex flex-col">
+          <div className="section-b flex flex-col pb-16 pt-8">
             <div className="section-header flex flex-row justify-between">
               <h1 className="mt-2 text-gray-700 text-2xl tracking-widest font-semibold mb-2">Team Files</h1>
               {addFiles}
@@ -284,19 +291,18 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                 
             </div>
           </div>
-          <div className="section-c flex flex-col">
+          <div className="section-c flex flex-col pb-20 mt-15">
             <div className="section-header flex flex-row justify-between">
               <h1 className="mt-2 text-gray-700 text-2xl tracking-widest font-semibold mb-2">Modifications Commited By this Team</h1>
-              <div className='flex flex-row items-center mx-4 cursor-pointer gap-7'>
+              <div className='flex flex-row items-center mx-4  gap-7'>
                 <Tooltip className='border border-gray-400 bg-white shadow-sm text-gray-700' content="Sort by File" placement="top-end">
-                  <FaGrip onClick={()=>{setListView(false)}}/> 
+                  <FaGrip onClick={()=>{setListView(false)}} className='cursor-pointer'/> 
                 </Tooltip>
                 <Tooltip className='border border-gray-400 bg-white shadow-sm text-gray-700' content="List View" placement="top-end">
-                  <FaList onClick={()=>{setListView(true)}}/> 
+                  <FaList onClick={()=>{setListView(true)}} className='cursor-pointer'/> 
                 </Tooltip>
                  {/* TOOLTIP */}
               </div>
-
             </div>
               {userIn.team?.id?.toString() === teamId.toString()
               ?listView?<table className="modification ps-3 mb-5 my-3 ms-3 ">
@@ -332,11 +338,14 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                         {
                           filteredModData.map(fileMod=>(
                           <div className='filemod-block flex flex-col'>
-                            <div className="file-mod-card  w-16 h-20 bg-slate-50 border-s-4 border-t-4
-                            border-white shadow-lg rounded-lg  
-                            cursor-pointer
+                            <div className="file-mod-card  w-20 h-24
+                            cursor-pointer hover:bg-gray-100 rounded-sm
+                            flex flex-col justify-center items-center
+                            pt-4
                             ">
-                              <h1 className='text-left p-1 text-xs font-medium font-sans text-gray-700'>{fileMod.fileName}</h1>
+                              <FaRegFileLines className='text-gray-600' size='35'/>
+                              <h1 className='text-left p-1 text-xs font-medium font-sans text-gray-600 pt-2'>
+                                {fileMod.fileName}</h1>
                             </div>
                             <h6 className='text-left py-1 text-xs font-thin font-sans text-gray-500 overflow-hidden'>Times modified: {fileMod.modifications.length}</h6>
                           </div>

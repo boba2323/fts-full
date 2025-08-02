@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 // EPS
 const errorRenderHandle = ({errorResponse, fields, setErrors}) => {
     if (errorResponse.response) {
-        console.log("in erreor handler")
+        console.log("in error handler")
         const fieldErrors = {}      //field errors need fieldnames as keys
         const globalErrors = []    //global errors dont need field names hence no keys
         const fieldNames = fields

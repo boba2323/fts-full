@@ -109,9 +109,11 @@ class Team(models.Model):
         L1 teams will have access to all files, L2 teams will have access to only targetted files
         and L3 teams will have read only access to targetted files.'''
         from fts_app.models import Modification
+        if not logged_user.is_authenticated:
+            return File.objects.none()
         if logged_user.is_authenticated:
             # check for supervisor mode
-            if logged_user.is_supervisor:
+            if logged_user.is_a_god():
                 return File.objects.select_related( 'owner', 'folder', 'access_code').prefetch_related(
                     # https://docs.djangoproject.com/en/5.2/ref/models/querysets/
                     Prefetch('tags'),
@@ -120,13 +122,13 @@ class Team(models.Model):
                              queryset=Modification.objects.select_related('file', 'modified_by').order_by('date_modified'))
                 )
             # if user is not a part of a team, return None object queryset
-            user_team_membership = cls.get_user_team_membership(logged_user)
-            if not user_team_membership: #if team is None, there is no teammembership attached to the user, return a empty queryset
+            user_membership = logged_user.get_team_membership()
+            if not user_membership: #if team is None, there is no teammembership attached to the user, return a empty queryset
                 return File.objects.none()
             # if user is has a related membership instance
     
             # check if there is team that the user belongs to what are the levels of teams they belong to
-            user_team = user_team_membership.team
+            user_team = user_membership.team
             if not user_team: # if not team are attached to user, return empty queryset
                 return File.objects.none()
 
@@ -153,7 +155,7 @@ class Team(models.Model):
                     Prefetch('modifications', 
                             #  the queryset with be Modifications objects
                              queryset=Modification.objects.select_related('file', 'modified_by').order_by('date_modified'))
-                )
+                ).filter(access_code=access_code)
                     return files_accessible
             else:
                 return File.objects.none()

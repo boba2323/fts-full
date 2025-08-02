@@ -33,8 +33,8 @@ const UserList = ({supervisor}) => {
         fetchTeamData()
     }, [])
   return (
-    <div>
-        <div className="liststyle overflow-x-auto">
+    <div className=''>
+        <div className="liststyle overflow-x-auto pb-20">
         <table className=' w-full'>
             <thead>
             <tr className='border-b-2 border-gray-200 h-6'>
@@ -46,7 +46,7 @@ const UserList = ({supervisor}) => {
                 <th className='text-left ps-5 text-xs font-medium font-sans text-gray-700'>Role</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody className=''>
             {loading
             ? (<tr>
                 <td colSpan={6} className="flex justify-center items-center ps-5 py-3 text-sm text-gray-500">
@@ -77,7 +77,8 @@ const UserList = ({supervisor}) => {
                         :<></>
                         } */}
                         {supervisor?<td className='text-xs p-2  font-medium font-sans text-gray-200'><Link to={`delete/${user.id}`} >
-                                <div className='flex justify-center items-center rounded bg-red-500 align-middle p-1'>Delete</div></Link>
+                                <div className='flex justify-center items-center rounded bg-white border
+                                border-red-500 hover:bg-red-200 text-gray-700 align-middle p-1'>Delete</div></Link>
                             </td>
                         :<></>
                         }

@@ -10,7 +10,7 @@ import { useAuth } from '../../authentication/authProvider';
 import InputLabel from '../../pages/InputLabel';
 import AuthBanner from '../../pages/AuthBanner';
 import AuthButton from '../../pages/AuthButton';
-
+import errorRenderHandle from '../UtilsErrorRendering/ErrorRenderHandle'
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -25,8 +25,8 @@ const Landing = () => {
                                         success:''
                                         });
     const [inputData, setInputData ] = useState({
-            email:"admin2@gmail.com",
-            password:"admin2"
+            email:"a4@gmail.com",
+            password:"a4"
         })
 
     const onSupervisorEntry = async (e) => {

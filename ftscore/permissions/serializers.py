@@ -167,9 +167,6 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         leader = attrs.get('leader') #basically just a user
         team_leader_query = Team.objects.filter(leader=leader).select_related("leader")
         team_membership_leader_query = TeamMembership.objects.filter(user=leader, role="worker").select_related('user')
-        
- 
-        
 
         if self.instance:
             # checksif the user is a leader exists in another team

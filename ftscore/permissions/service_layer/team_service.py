@@ -51,7 +51,7 @@ class TeamService:
         if team.level == "L1":
             return basic_queryset_opt
         else:
-            if team.access_codes.all().exists():
+            if team.access_codes.exists():
                 team_code_instance = team.access_codes.first()  #dont forget we constrained the team to accept only 1 ac
                 files_with_team_code = basic_queryset_opt.filter(access_code=team_code_instance)
                 return files_with_team_code

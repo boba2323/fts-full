@@ -271,7 +271,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
               {addFiles}
             </div>
             <div className="file-parent-card ps-3 mb-3">
-            {userIn.team?.id?.toString() === teamId.toString()
+            {userIn.team?.id?.toString() === teamId.toString() || userIn.is_god
             ?loading?<Loading/>
                   :teamViewData.files_owned.map(file=>
                     // const iso_string = file.date_created
@@ -304,7 +304,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                  {/* TOOLTIP */}
               </div>
             </div>
-              {userIn.team?.id?.toString() === teamId.toString()
+              {userIn.team?.id?.toString() === teamId.toString() || userIn.is_god
               ?listView?<table className="modification ps-3 mb-5 my-3 ms-3 ">
                         <thead>
                           <tr className='border-b-2 border-gray-200 h-6'>

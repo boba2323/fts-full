@@ -9,18 +9,21 @@ export default function Breadcrumb() {
     console.log(location.pathname)
     
     const knownPaths = ['/fts', '/fts/workspace/team/:id', '/fts/workspace/teammembership/delete/:id',
-      '/fts/workspace/team/update/:id', '/fts/workspace/team/:id/files-upload', '/fts/workspace','/fts/teams','/fts/teams/:id'
+      '/fts/workspace/team/update/:id', '/fts/workspace/team/:id/files-upload', '/fts/workspace','/fts/teams','/fts/teams/:id',
+      '/fts/admin', '/fts/admin/admin-team', '/fts/admin/admin-files', '/fts/admin/admin-user',
+      '/fts/admin/admin-modification', '/fts/admin/admin-accesscode'
     ]
 
     const urlName = location.pathname.slice(1) //remove the first /
     console.log('urlname',urlName)
-    const urlList = urlName.split('/').slice(1)
+    // fts/admin/admin-files or /fts/teams/76 is what we get 
+    const urlList = urlName.split('/').slice(1) //get a array of the string broken at the / and remove fts item
     const urlListWithPlaceholderId = urlList.map(pathSegments=>{
       return (
       /^\d+$/.test(pathSegments)
-      ?':id'
+      ?':id' //for all items that are a regex int is turned into a ':id' string
       : pathSegments)
-    })
+    })  //thus we get a array with url broken down into individual path and any id turned into a string that says ":id"
 
 
     console.log("urlist",urlList)
@@ -40,9 +43,12 @@ export default function Breadcrumb() {
         {urlList.length>0
         ?<>
           {urlList.map((path, index)=>{
-            const captialisedPath = path.charAt(0).toUpperCase() + path.slice(1)
-            const progressivePathRealId = '/fts/' + urlList.slice(0, index+1).join('/')
+            const captialisedPath = path.charAt(0).toUpperCase() + path.slice(1) //converting each path first 
+            // char into Caps
+            const progressivePathRealId = '/fts/' + urlList.slice(0, index+1).join('/') //join with fts so we can get a 
+            // real path to navigate to
             const progressivePathPlaceholder = '/fts/' + urlListWithPlaceholderId.slice(0, index+1).join('/')
+            //rember the last index of slice is exclusive
             console.log('progressive paths with real id', progressivePathRealId)
             console.log('progressive paths with :id', progressivePathPlaceholder)
 

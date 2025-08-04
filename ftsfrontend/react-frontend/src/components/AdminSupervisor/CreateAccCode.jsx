@@ -14,9 +14,9 @@ import { useAuth } from '../../authentication/authProvider';
 const CreateAC= ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
-    const {userIn} = useAuth()
+    const {userIn, hitMeandFetch} = useAuth()
     if (userIn.is_temp || userIn.is_not_god_only_L2_L3_worker){
-        return <Navigate to="/fts" />
+        return <Navigate to="/fts/workspace" />
     }
 
     const {id} = useParams() 
@@ -172,7 +172,8 @@ const CreateAC= ({mode}) => {   //mode:create or update
         // we feed the team url to team, we get it from up above where we get the tea, for L2 leader
         let teamInput = acData.team
         if (userIn?.is_not_god_only_L2_L3_leader){
-            teamInput = acData.teamOptions[0]
+            teamInput = acData.teamOptions[0].url
+            console.log("notgotteaminput", teamInput)
         }
         if (!teamInput) {
             setErrors({
@@ -182,6 +183,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
             });
             return;
         }
+        console.log("team input", teamInput)
 
         e.preventDefault()
         try {
@@ -191,7 +193,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 accessPostResponse = await axios.post('http://127.0.0.1:8000/drf/accesscode/', 
                 {
 
-                    'team':teamInput.url,
+                    'team':teamInput,
                     'optional_description':acData.optional_description,
                 },
                 {
@@ -226,6 +228,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                     success: "Accesscode updated successfully!"
                 })
             }    
+            hitMeandFetch()
             console.log("AC created successfully!:", accessPostResponse.data)
             if (accessPostResponse.status === 200 || accessPostResponse.data === 201) {
             // success login 
@@ -240,7 +243,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
         }));
         } catch (error) {
             console.error(error)
-            console.log("ac crate error")
+            console.log("ac create error")
             setFormIsSubmitted(false)
             // we get this from login boiler code
             if (error.response) {

@@ -38,6 +38,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   const {userIn, setUserIn, hitMeandFetch } = useAuth()
   let addFiles = null
   let leaveTeam = null
+  let editTeam= null
   if (userIn.team?.id?.toString() === teamId.toString()){
     // console.log("yes its the user in team")
     leaveTeam = <div>
@@ -49,16 +50,24 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                       
                     </Link>
                   </div>
-                  <div className="addworker-button flex items-center justify-center text-xs
-                  text-gray-700 tracking-wide font-semibold ">
-                    <Link to={`/fts/workspace/team/update/${teamId}`} >
-                      <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:text-purple-400 mt-6'>
-                        Edit Team</p>
-                    </Link>
-                  </div>
               </div> 
   } else {
     leaveTeam =<></>
+  }
+
+  if (userIn.team?.id?.toString() === teamId.toString() || userIn.is_god){
+    // console.log("yes its the user in team")
+    editTeam = <div>
+                <div className="addworker-button flex items-center justify-center text-xs
+                text-gray-700 tracking-wide font-semibold ">
+                  <Link to={`/fts/workspace/team/update/${teamId}`} >
+                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:text-purple-400 mt-6'>
+                      Edit Team</p>
+                  </Link>
+                </div>
+              </div> 
+  } else {
+    editTeam =<></>
   }
 
   if (userIn.team?.id?.toString() === teamId.toString()){
@@ -245,6 +254,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                 <h1 className='font-semibold text-6xl text-gray-800'>{teamViewData.level}</h1>
               </div>
               {leaveTeam}
+              {editTeam}
               <div className="addworker-button flex flex-col items-start justify-center text-xs
               text-gray-700 tracking-wide font-light ">
                 {userIn.team?.id?.toString() === teamId.toString()

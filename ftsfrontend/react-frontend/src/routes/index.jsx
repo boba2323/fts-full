@@ -43,7 +43,7 @@ import QuickDeleteTest from "../components/TestComp/Test";
 
 import AdminFileList from "../components/AdminSupervisor/AdminFileList";
 import AdminFileDelete from "../components/AdminSupervisor/AdminFileDelete";
-
+import Landing from "../components/Landing/Landing";
 
 const FallbackRedirect = () => {
   const { userIn, loading } = useAuth();
@@ -71,12 +71,8 @@ const Routes = () => {
   // Define public routes accessible to all users
   const routesForPublic = [
     {
-      path: "/test",
-      element: <QuickDeleteTest/>,
-    },
-    {
       path: "/",
-      element: <div>Home Page</div>,
+      element: <Landing/>,
     },
     {
       path: "/service",
@@ -95,10 +91,6 @@ const Routes = () => {
       path: "/",
       element: <ProtectedRoute />, // Wrap the component in ProtectedRoute basically returns an OUTLET if authorised or rediects if not
       children: [
-        {
-          path: "/",
-          element: <div>User Home Page</div>,
-        },
         {
           path: "/profile",
           element: <div>User Profile</div>,
@@ -134,7 +126,10 @@ const Routes = () => {
                 path: "teams",
                 element: <div><Team/></div>,
               },
-              
+              {
+                path: "teams/:teamId",
+                element: <div><TeamView/></div>,
+              },
               {
                 path: "workspace",
                 element: <div><Workspace/></div>,
@@ -142,6 +137,10 @@ const Routes = () => {
               {
                 path: "workspace/team/:teamId",
                 element: <div><TeamView/></div>,
+              },
+              {
+                path: "workspace/team/create",
+                element: <><CreateTeam mode="create"/></>
               },
               {
                 path: "workspace/team/update/:teamId",

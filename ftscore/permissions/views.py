@@ -27,6 +27,7 @@ from datetime import timedelta
 from rest_framework.exceptions import ValidationError
 # ----
 
+from datetime import datetime
 import logging
 
 
@@ -63,7 +64,6 @@ class TeamViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
     
     def perform_destroy(self, instance):
-        print("fuck destroy in team")
         return super().perform_destroy(instance)
     
     # def list(self, request, *args, **kwargs):
@@ -152,7 +152,3 @@ class AccessCodeViewSet(viewsets.ModelViewSet):
         # https://stackoverflow.com/questions/31920853/aggregate-and-other-annotated-fields-in-django-rest-framework-serializers
         return queryset
 
-    # def get_permissions(self):
-    #     if self.action in ['create', 'update', 'partial_update', 'destroy']:
-    #         return [IsAuthenticated()]
-    #     return super().get_permissions()

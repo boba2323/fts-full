@@ -1,5 +1,6 @@
 // https://react-icons.github.io/react-icons/icons/fa6/
 import React, { useState } from 'react'
+import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import { FaArrowUpFromBracket } from "react-icons/fa6";
 import { FaUserGroup } from "react-icons/fa6";
 
@@ -20,22 +21,28 @@ const Header2 = ({
   // }
 
   return (
-    <div className='w-full h-9 flex flex-row bg-green-50 justify-between border-b-2 border-green-100 px-4
+    <div className='w-full h-9 flex flex-row bg-white justify-between border-b-2 px-4 border-t-2 border-gray-100
      *:border-opacity-25'>
-      <div className='flex flex-row'>left</div>
+      <div className='flex flex-row text-xs justify-center text-gray-700 text-center items-center'>
+        <Breadcrumb/>
+      </div>
       <div className="right flex flex-row justify-end gap-3">
-        <Link to={`upload-file`} >
+        {userIn.is_god
+        ? <Link to={`upload-file`} >
         <button 
-          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-center items-center"
+          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-gray-700 text-center items-center"
           > 
           <div className='pe-2'><FaArrowUpFromBracket /></div>
           File Upload
         </button>
         </Link>
+        :<></>
+        }
+       
         
         <Link to={`admin/create-team`} >
           <button 
-          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-center items-center"
+          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-gray-700 text-center items-center"
           > <IconContext.Provider value={{ color: "green", className: "global-class-name" }}>
             {/* https://github.com/react-icons/react-icons#configuration */}
               <div className='pe-2'><FaUserGroup  /></div>
@@ -44,10 +51,10 @@ const Header2 = ({
         </button>
         </Link>
         
-        
-        <Link to={`admin/create-accesscode`} >
+        {userIn.is_god
+        ?<Link to={`admin/create-accesscode`} >
           <button 
-          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-center items-center"
+          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-gray-700 text-center items-center"
           > <IconContext.Provider value={{ color: "green", className: "global-class-name" }}>
             {/* https://github.com/react-icons/react-icons#configuration */}
               <div className='pe-2'><FaUserGroup  /></div>
@@ -55,12 +62,10 @@ const Header2 = ({
           Access Code Create
         </button>
         </Link>
+        :<></>
+        }
         
-
-        
-      </div>
-      
-      
+      </div>      
       {/* {isUpload
       ?<></>
       :<button 

@@ -112,7 +112,7 @@ const Login = () => {
         mx-6 md:mx-0
          px-4 sm:px-6 md:px-10 border border-gray-200 h-full">
           <AuthBanner title = {"Welcome Back"} subtitle={"Please enter your details here"}/>
-          <p className="flex align-middle justify-center items-center text-center text-xs sm:text-xs text-green-700 mb-4">We encourage you to use a fake email to view this app</p>
+          <p className="flex align-middle justify-center items-center text-center text-xs sm:text-xs text-purple-700 mb-4">We encourage you to use a fake email to view this app</p>
           <div className="formcard">
             <form onSubmit={onLoginHandler}>
               <div className="flex flex-col">
@@ -138,7 +138,7 @@ const Login = () => {
                   placeholder="password"
                   onChange={onChangeHandler} 
                 />
-                <span className="flex flex-end justify-end text-xs sm:text-xs text-green-700 italic">
+                <span className="flex flex-end justify-end text-xs sm:text-xs text-purple-700 italic">
                   <a href="">Forgot password?</a>
                 </span>
                 <div className="mb-3"></div>
@@ -147,7 +147,8 @@ const Login = () => {
               <div className="register-div flex flex-col items-center justify-center pt-2 text-xs sm:text-xs
                 tracking-tight font-light
                 ">
-                  <p>If you dont have an account, <a href="" className="text-green-700 italic font-semibold">register here</a></p>
+                  <p>If you dont have an account, 
+                    <a href="signup" className="text-purple-700 italic font-semibold hover:text-orange-600"> register here</a></p>
               </div> 
             </form>
           </div>

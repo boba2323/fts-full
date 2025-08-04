@@ -7,8 +7,8 @@ const AdminModelCard = ({
     icon
 }) => {
   return (
-    <div className="admincard bg-gradient-to-b from-gray-100 to-gray-50 flex flex-col w-40 h-52 rounded-2xl 
-        shadow-sm
+    <div className="admincard border border-gray-100 shadow-lg shadow-purple-50 rounded-lg 
+        flex flex-col w-40 h-52 my-3
         hover:scale-105 hover:shadow-xl
         transition-all duration-500 group
         cursor-pointer
@@ -21,7 +21,7 @@ const AdminModelCard = ({
         <h1 className="teamname flex justify-center items-center 
             text-xl font-bold text-gray-700 mt-3 py-2
             transition-all duration-500 ease-out
-            group-hover:translate-y-[-2px] group-hover:scale-105 group-hover:text-green-600
+            group-hover:translate-y-[-2px] group-hover:scale-105 group-hover:text-orange-600
             delay-100">
             {teamname}
         </h1>

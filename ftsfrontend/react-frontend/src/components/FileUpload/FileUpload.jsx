@@ -8,12 +8,15 @@ import axios from 'axios';
 import AuthButton from '../../pages/AuthButton';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
-
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../authentication/authProvider';
 // https://www.geeksforgeeks.org/reactjs/file-uploading-in-react-js/
 const FileUpload = () => {
+    const {userIn} = useAuth()
+    if (userIn.is_temp || userIn.is_not_god_only_L2_L3_worker){
+        return <Navigate to="/fts" />
+    }
     const {teamId} = useParams()
-    const {userIn, setUserIn, hitMeandFetch} = useAuth()
     const INITIAL_STATE = {
         file_data:null,
         name:"",
@@ -178,45 +181,91 @@ const FileUpload = () => {
     const handleSubmit= async (e)=>{
         e.preventDefault()
         if (!inputData.name) {
-            setErrorMessage("All fields are required.");
+            setErrors({global:'Provide a name for the file!',
+                        fields:'',
+                        success:''})
             return;
         }
         setPostLoading(true)
         try {
-            const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
-                {
-                    "file_data": inputData.file_data,
-                    "name": inputData.name,
-                    "folder": inputData.selectedFolder,
-                    "access_code": inputData.selectedCode
-                },
-                {
-                headers: {
-                'Content-Type': 'multipart/form-data',
-                'X-CSRFToken': Cookies.get('csrftoken')
-                },
-                withCredentials: true, // Optional: only needed if cookies are set
-            });
-            console.log("Successfully uploaded file", response.data)
-            if (response.status === 200 || response.data === 201) {
-            // success login 
-  
-                }
-            setErrors(prev=>({
-                ...prev,
-                success:"Successfully uploaded file"
-            }))
-  
-            setFormIsSubmitted(true)
+                if (userIn.is_not_god_only_L2_L3) {
+                    console.log(userIn?.user_team_access_code_url?.[0])
+                    const userCode = userIn?.user_team_access_code_url?.[0]
+                    if (!userCode){
+                        setErrors( {global:'User does not have an access code',
+                                    fields:'',
+                                    success:''})
+                                        return;
+                                    }
+                    const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
+                    {
+                        "file_data": inputData.file_data,
+                        "name": inputData.name,
+                        "folder": inputData.selectedFolder,
+                        "access_code": userCode
+                    },
+                    {
+                    headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRFToken': Cookies.get('csrftoken')
+                    },
+                    withCredentials: true, // Optional: only needed if cookies are set
+                });
+                console.log("Successfully uploaded file", response.data)
+                if (response.status === 200 || response.status === 201) {
+                // success login 
+    
+                    }
+                setErrors({global:'',
+                            fields:'',
+                            success:'Uploaded file successfully'})
 
-            // reset the form
-            setInputData(prev => ({
-            ...prev,
-            file_data: null,
-            name: '',
-            selectedFolder: '',
-            selectedCode: ''
-        }));
+                setFormIsSubmitted(true)
+
+                // reset the form
+                setInputData(prev => ({
+                ...prev,
+                file_data: null,
+                name: '',
+                selectedFolder: '',
+                selectedCode: ''
+            }));
+            } else {
+                    const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
+                    {
+                        "file_data": inputData.file_data,
+                        "name": inputData.name,
+                        "folder": inputData.selectedFolder,
+                        "access_code": inputData.selectedCode
+                    },
+                    {
+                    headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRFToken': Cookies.get('csrftoken')
+                    },
+                    withCredentials: true, // Optional: only needed if cookies are set
+                });
+                console.log("Successfully uploaded file", response.data)
+                if (response.status === 200 || response.status === 201) {
+                // success login 
+    
+                    }
+                setErrors(prev=>({
+                    ...prev,
+                    success:"Successfully uploaded file"
+                }))
+    
+                setFormIsSubmitted(true)
+
+                // reset the form
+                setInputData(prev => ({
+                ...prev,
+                file_data: null,
+                name: '',
+                selectedFolder: '',
+                selectedCode: ''
+            }));
+            }
         } catch (error) {
             setFormIsSubmitted(false)
             console.log("fileupload error")
@@ -324,7 +373,9 @@ const FileUpload = () => {
                 />
                 <Space2/>
                 {displayFieldErrors('access_code')}
-                <SelectInput
+                {userIn.is_not_god_only_L2_L3_leader
+                ?<></>
+                :<SelectInput
                     name="selectedCode"
                     value={inputData.selectedCode}
                     onChange={accessCodeSelectHandler}
@@ -335,21 +386,14 @@ const FileUpload = () => {
                     keyType="code"
                     fieldDefiner="code"
                     serialiserTpe="url"
-                />
+                />}
+                
                 <Space2/>
-                {/* <InputLabel
-                    labelName={"Tags"}
-                    name="tags"
-                    inputType="text"
-                    value={inputData.tags}
-                    placeholder="Tags"
-                    onChange={onChangeHandler}
-                /> */}
             </div>
         </div>
         {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}
         <div className="flex flex-col w-1/3 m-5">
-            <div className=" h-56 flex flex-col border-dotted border-2 border-green-400 rounded-xl  justify-center items-center"> 
+            <div className=" h-56 flex flex-col border-dotted border-2 border-gray-600 rounded-xl  justify-center items-center"> 
                 
                 <div className='flex flex-col justify-center items-center'>
                     <input
@@ -363,21 +407,28 @@ const FileUpload = () => {
                     />
                     <label htmlFor="file-upload" className=" cursor-pointer flex flex-col justify-center items-center">
                         <FaArrowUpFromBracket size={24}/>
-                        <p className='text-emerald-600 text-sm mt-3 font-semibold'>Upload File</p>
+                        <p className='text-emerald-600 text-sm mt-3 font-semibold hover:text-purple-400'>
+                            Upload File</p>
                     </label>
                     {/* https://www.geeksforgeeks.org/reactjs/file-uploading-in-react-js/ */}
                     {inputData.file_data
                     ?<div className="flex flex-row">
-                        <p className='text-green-900 text-xs mt-1 font-semibold'>
+                        <p className='text-gray-800 text-xs mt-1 font-semibold'>
                             {inputData.file_data.name}
                         </p><button onClick={deleteFile} className='px-2'><FaTrash className="text-red-500"/></button>
                     </div>
-                    :<p className='text-green-400 text-xs mt-1 font-normal'>No file selected</p>
+                    :<p className='text-gray-600 text-xs mt-1 font-normal'>No file selected</p>
                     }
                     
                 </div>
             </div>
-            <AuthButton buttonText="Upload File"/>
+            <div className='flex w-full flex-row justify-center items-center '>
+                <button className='border border-gray-400 rounded-lg mt-4 py-3 w-32 text-gray-800 text-sm
+                hover:text-purple-400 hover:border-purple-400'>
+                    Upload File</button>
+            </div>
+            
+            {/* <AuthButton buttonText="Upload File"/> */}
         </div>
         
     </form>

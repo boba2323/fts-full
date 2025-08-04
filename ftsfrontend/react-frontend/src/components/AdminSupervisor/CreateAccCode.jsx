@@ -169,6 +169,20 @@ const CreateAC= ({mode}) => {   //mode:create or update
 
     // ===================SUBMIT FUNCTIION=====================
     const handleSubmit= async (e)=>{
+        // we feed the team url to team, we get it from up above where we get the tea, for L2 leader
+        let teamInput = acData.team
+        if (userIn?.is_not_god_only_L2_L3_leader){
+            teamInput = acData.teamOptions[0]
+        }
+        if (!teamInput) {
+            setErrors({
+                global: ["Seems like team is missing!"],
+                fields: {},
+                success: null
+            });
+            return;
+        }
+
         e.preventDefault()
         try {
             let accessPostResponse
@@ -176,7 +190,8 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 console.log("AC create post")
                 accessPostResponse = await axios.post('http://127.0.0.1:8000/drf/accesscode/', 
                 {
-                    'team':acData.team,
+
+                    'team':teamInput.url,
                     'optional_description':acData.optional_description,
                 },
                 {
@@ -315,18 +330,22 @@ const CreateAC= ({mode}) => {   //mode:create or update
                     <Space2/>
                     {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
                     {displayFieldErrors("team")}
-                    <SelectInput
-                        name="team"  //make sure the name is unique and matches the state name
-                        value={acData.team}
-                        onChange={teamSelectHandler}
-                        labelName="Select Team"
-                        selectField="Choose a team"
-                        fieldOptions={acData.teamOptions}
-                        loading={loadingTeamData}
-                        keyType="id"
-                        fieldDefiner="name"
-                        serialiserTpe="url"
-                    />
+                    {userIn?.is_not_god_only_L2_L3_leader
+                    ?<></>
+                    :<>{displayFieldErrors("team")}
+                        <SelectInput
+                            name="team"  //make sure the name is unique and matches the state name
+                            value={acData.team}
+                            onChange={teamSelectHandler}
+                            labelName="Select Team"
+                            selectField="Choose a team"
+                            fieldOptions={acData.teamOptions}
+                            loading={loadingTeamData}
+                            keyType="id"
+                            fieldDefiner="name"
+                            serialiserTpe="url"
+                        /></>}
+                    
                     <Space2/>
                 </div>
             </div>

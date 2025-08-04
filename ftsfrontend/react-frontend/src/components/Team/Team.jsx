@@ -60,7 +60,7 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
               </tr>)
             : (teamData.map((team) => (
                                   <tr key={team.id} className='border-b-2 border-gray-50 h-8'>
-                                    <Link to={`/fts/admin/admin-team/${team.id}`} >
+                                    <Link to={`/fts/teams/${team.id}`} >
                                       <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.name }</td>
                                     </Link>
                                     {/* <td className='ps-5'>{format(new Date(file.date_created), 'dd MMM yyyy')}</td> */}

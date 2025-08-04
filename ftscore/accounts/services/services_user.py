@@ -6,7 +6,7 @@ class UserServices:
     def get_available_non_team_users():
         User = get_user_model()  #preverts the AUTHUSER from being called too early
         query_of_non_team_users = User.objects.filter(memberships__isnull=True)
-        if query_of_non_team_users:
+        if query_of_non_team_users.exists():
             return query_of_non_team_users
         return None
     

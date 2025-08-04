@@ -63,7 +63,7 @@ const AccessCodeList = ({supervisor}) => {  //supervisor is a boolean to toggle 
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{ac.team_name }</td>
                                     <td className='ps-5
                                         text-xs font-light font-sans text-gray-700'
-                                        >{moment(format(new Date(ac.created_at), 'yyyy-MM-dd')).fromNow(true)} ago</td>
+                                        >{moment(ac.created_at).fromNow(true)} ago</td>
                                     {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.membership_users }</td> */}
                                     {/* <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{team.memberships }</td> */}
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{ac.expires_at }</td>

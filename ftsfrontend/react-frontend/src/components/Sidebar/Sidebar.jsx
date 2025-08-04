@@ -1,5 +1,13 @@
 import { Outlet, Link } from "react-router-dom";
 import {useAuth} from "../../authentication/authProvider"
+import { AiOutlineAppstore } from "react-icons/ai";
+import { AiOutlineDesktop } from "react-icons/ai";
+import { AiOutlineDatabase } from "react-icons/ai";
+import { AiOutlineTeam } from "react-icons/ai";
+import { FaPuzzlePiece } from 'react-icons/fa';
+import { AiOutlineLogout } from "react-icons/ai";
+import { FaUserShield } from 'react-icons/fa';
+
 const Sidebar = ({
     onClickHandler
   }) => {
@@ -22,34 +30,60 @@ const Sidebar = ({
   }
   return (
     
-    <div className="flex flex-col h-screen bg-gray-100 text-gray-600 p-4">
-      
-      <button onClick={testClick} >usertest</button>
-      {userIn.In}
-      <h2 className="text-sm font-bold mb-6 ps-2">FTS</h2>
-      {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
-        ?<Link to={`admin`} ><div className="mb-3 block ps-1 hover:bg-green-50 rounded text-sm text-green-800 hover:border border-green-100 font-bold cursor-pointer">Admin</div ></Link>
-        :<></>
-      }
-      <nav>
+    <div className="flex flex-col h-screen bg-white text-gray-600 p-4 border-r border-gray-200">
+      {/* <div className="flex flex-row justify-start">
+        <button className="mb-3 block ps-2 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer" onClick={testClick} >usertest</button>
+      </div> */}
+      {/* <h2 className="text-sm font-bold mb-6 ps-2">FTS</h2> */}
+      <nav className="space-y-1">
+        {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
+          ?<Link to={`admin`} className="block" >
+            <div className="flex flex-row items-center px-4 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+              <FaUserShield size={20}/>
+              <div className=" flex flex-row items-center ps-4 text-sm font-bold text-purple-500">Admin</div>
+            </div>
+            </Link>
+          :<></>
+        }
         {/* https://reactrouter.com/6.28.0/start/tutorial#nesting-routes */}
-        <Link to={``} >
-          <div className="mb-3 block ps-1 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer">Dashboard</div>
+        <Link to={``} className="block" >
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+          <span><AiOutlineAppstore size={22}/></span>
+          <div className=" flex flex-row items-center ps-4 text-xs ">Dashboard</div>
+        </div>
         </Link>
-        <Link to={`workspace`} >
-          <div className="mb-3 block ps-1 hover:bg-green-50 rounded text-xs  hover:border border-green-100 cursor-pointer">Workspace</div>
+
+        <Link to={`workspace`} className="block">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+          <AiOutlineDesktop size={22}/>
+          <div className="flex flex-row items-center ps-4 text-xs">Workspace</div>
+        </div>
         </Link>
-        <Link to={`files`} >
-          <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Files</div>
+
+        <Link to={`files`} className="block">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+          <AiOutlineDatabase size={21}/>
+          <div className=" flex flex-row items-center ps-4 text-xs">Files</div>
+        </div>
         </Link>
-        <Link to={`teams`}  >
-          <div className="block my-3 ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Teams</div>
+
+        <Link to={`teams`} className="block" >
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+          <FaPuzzlePiece  size={20}/>
+          <div className="flex flex-row items-center ps-4 text-xs">Teams</div>
+        </div>
         </Link>
-        <Link to={`users`}>
-          <div className="my-3 block ps-1 hover:bg-green-50 rounded text-xs hover:border border-green-100 cursor-pointer">Users</div>
+
+        <Link to={`users`} className="block">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+          <AiOutlineTeam size={22}/>
+          <div className="flex flex-row items-center ps-4 text-xs">Users</div>
+        </div>
         </Link>
-        
-        <a href="http://127.0.0.1:5173/logout" className="my-3 block ps-1 hover:bg-red-200 rounded text-xs hover:border border-green-100">Logout</a>
+        <div className="flex flex-row items-center px-3 py-3 rounded-md hover:bg-deep-orange-50 cursor-pointer">
+          <AiOutlineLogout/>
+          <a href="http://127.0.0.1:5173/logout" className="block text-xs ps-5 ">Logout</a>
+        </div>
       </nav>
     </div>
   )

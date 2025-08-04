@@ -4,7 +4,9 @@ User = get_user_model()
 from permissions.serializers import TeamSerializer
 
 from accounts.services import UserServices
-
+from django.apps import apps
+from rest_framework.reverse import reverse
+AccessCode = apps.get_model('permissions', 'AccessCode')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     # to show the reverse fields relat4ed to user, we need to explicitly create fields for it. we are doing it
@@ -13,7 +15,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     created_access_codes=serializers.HyperlinkedRelatedField(
         many=True, 
         view_name='accesscode-detail', 
-        read_only=True
+        read_only=True,
+        lookup_field='masked_id'
     )  # Reverse relation to AccessCode model
 
     team = serializers.SerializerMethodField()
@@ -34,10 +37,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     access_code = serializers.SerializerMethodField()
     is_not_god_only_L2_L3_leader = serializers.SerializerMethodField()
     is_not_god_only_L2_L3_worker =serializers.SerializerMethodField()
+    user_team_access_code_url =serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'email', 'password', "team", 'belongs_to_team', "team_access_level",
-                  "role", "access_code", "created_access_codes",
+                  "role", "access_code", "created_access_codes", 'user_team_access_code_url',
                   "memberships",
                   'membership_id',
                   'role',
@@ -59,6 +63,19 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         if membership.all().exists():
             membership_instance = membership.first()
             return membership_instance.id
+        
+    def get_user_team_access_code_url(self, user):
+        request = self.context.get('request')
+        user_membership = user.get_team_membership()
+        if not user_membership:
+            return []
+        user_team = user_membership.team
+        accesscodes = AccessCode.objects.filter(team=user_team)
+        
+        return [
+            reverse('accesscode-detail', kwargs={'masked_id': ac.masked_id}, request=request)
+            for ac in accesscodes
+        ]
     
     def get_access_code(self, user):
         return user.get_access_code_instance()

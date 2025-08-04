@@ -9,7 +9,7 @@ from rest_framework.validators import UniqueTogetherValidator,UniqueValidator
 
 from django.db.models import Prefetch
 from permissions.service_layer import TeamService
-
+from datetime import datetime, timedelta
 User = get_user_model()
 
 class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
@@ -106,14 +106,20 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     #     lookup_field='masked_id',
     # )
     files_owned = serializers.SerializerMethodField()
+    ac_presentor = serializers.SerializerMethodField()
     class Meta:
         model = Team
         fields = ('id', 'name', 'url', 'name', 'created_at', 'leader','leader_name', 'membership_users',
-                   'workers',
+                   'workers', "ac_presentor",
                      'memberships', 'level', 'access_codes', "access_code_code", "files_owned" )
         # extra_kwargs = {
         #     'access_codes': {'view_name': 'accesscode-detail','lookup_field': 'masked_id'},
         # }
+
+    def get_ac_presentor(self, team):
+        ac_code= team.access_codes
+        if ac_code.exists():
+            return f"{str(ac_code.first().code)[:3]}... belongs to team {team}"
         
     def get_files_owned(self, team):
         file_query = TeamService.get_accessible_files_for_the_team_only(team)
@@ -161,9 +167,6 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         leader = attrs.get('leader') #basically just a user
         team_leader_query = Team.objects.filter(leader=leader).select_related("leader")
         team_membership_leader_query = TeamMembership.objects.filter(user=leader, role="worker").select_related('user')
-        
- 
-        
 
         if self.instance:
             # checksif the user is a leader exists in another team
@@ -206,9 +209,10 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field= 'masked_id'
     )
     team_name=serializers.SerializerMethodField()
+    ac_presenter = serializers.SerializerMethodField()
     class Meta:
         model = AccessCode
-        fields = ( 'url', 'code', 'masked_id', 'team', 'team_name', 'created_by', 'created_at', 'expires_at', 'is_active', 'optional_description')
+        fields = ( 'url', 'code', 'ac_presenter', 'masked_id', 'team', 'team_name', 'created_by', 'created_at', 'expires_at', 'is_active', 'optional_description')
         # extra_kwargs = {
         #     'url': {'view_name': 'accesscode','lookup_field': 'masked_id'},
         # }
@@ -217,6 +221,14 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
             team=obj.team.name
             return team
         return "No team assigned"
+    
+    def get_ac_presenter(self, obj):
+        if obj.team:
+            team=obj.team.name
+            return f"Access code: {str(obj.code)[:4]}... belonging to team {team}"
+
+
+
     # https://www.django-rest-framework.org/api-guide/serializers/#field-level-validation
     # we are adding a validation in the field rather than in the object
 
@@ -239,3 +251,18 @@ class AccessCodeSerializer(serializers.HyperlinkedModelSerializer):
     #     # team = validated_data['team']
     #     # if team.pk == self.pk:
     #     return instance
+    def validate(self, attrs):
+        
+        request = self.context.get('request')
+        created_at =  attrs.get('expires_at')
+        expires_at = attrs.get('expires_at')
+        user = request.user    
+        if not user.get_team_membership() and not user.is_a_god():
+            raise serializers.ValidationError("You are not in a team")   
+        if user.is_team_level_L2 and user.is_team_leader():
+            attrs['created_by'] = user
+            print(created_at)
+            expires_at = datetime.now() + timedelta(seconds=5)
+            attrs['expires_at'] = expires_at
+            attrs['team'] = user.get_team_membership().team
+        return attrs

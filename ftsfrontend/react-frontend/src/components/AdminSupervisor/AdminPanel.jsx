@@ -18,51 +18,12 @@ const AdminPanel = () => {
   
   return (
     <>
-    {/* {
-      adminPanel?<div>
-        Welcome Superviser. You have full control here
-        you can create teams, modufy teams, delete teams
-        CUD teams
-        CUD files
-        CUD user
-        <div>Current URL is {location.pathname}</div>
-        RU modifications
-        RU actionlogs
-        <div className="card-canvas flex flex-col">
-          <div className="row-top flex flex-row justify-center items-center justify-content-between my-3">
-            <nav className='flex flex-row space-x-8'>
-              <Link to={`admin-team`}>
-                <AdminModelCard teamname={"Teams" } membercount={"View all the teams that have been created. Make new teams and edit or delete the existing ones"}/>
-              </Link>
-              
-              <AdminModelCard teamname={"Files" }  membercount={"5"}/>
-              <AdminModelCard teamname={"Users" }  membercount={"5"}/>
-            </nav>
-          </div>
-
-          <div className="row-bottom flex flex-row justify-center items-center justify-content-between mt-2 ">
-            <nav className='flex flex-row space-x-10'>
-              <AdminModelCard teamname={"Modification"}   membercount={"5"}/>
-              <AdminModelCard teamname={"ActionLog" } membercount={"5"}/>
-            </nav>
-          </div>
-        </div>
-    </div>:adminTeamCreate?
-      <Outlet/>
-      :<></>
-    } */}
-    
-    
-    <div>
-        Welcome Superviser. You have full control here
-        you can create teams, modufy teams, delete teams
-        CUD teams
-        CUD files
-        CUD user
-        <div>Current URL is {location.pathname}</div>
-        RU modifications
-        RU actionlogs
-        <div className="card-canvas flex flex-col">
+    <div className='px-6 pt-3 pb-32 mb-20'>
+      <h1 className='text-lg text-gray-700 font-semibold mb-2'>Admin Dashboard</h1>
+      <h1 className='text-sm text-gray-500 font-light mb-14'>
+        Admins have access to perform all operations. They include supervisors as well as Team L2 members</h1>
+        <div className="flex flex-row border-b-2 border-gray-300"></div>
+        <div className="card-canvas flex flex-col mt-8 pt-10">
           <div className="row-top flex flex-row justify-center items-center justify-content-between my-3">
             <nav className='flex flex-row space-x-8'>
               <Link to={`admin-team`}>

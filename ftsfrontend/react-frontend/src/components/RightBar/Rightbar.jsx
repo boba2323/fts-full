@@ -50,7 +50,7 @@ const Rightbar = () => {
   
 
   return (
-    <div className="flex flex-col h-screen bg-green-50 text-green-900 pb-4">
+    <div className="flex flex-col h-screen bg-white text-gray-600 pb-4 ps-3 border-l border-gray-200">
       <div className='mb-4'>
         <h2 className='font-bold text-sm mb-3 ps-2 mt-6'>User credentials</h2>
         <nav className="space-y-2">
@@ -66,7 +66,7 @@ const Rightbar = () => {
             font-medium"
             >Email: {userData['email']}</a>
           }
-          {loading
+          {/* {loading
           ?<p>loading</p>
           :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-green-100
             font-medium"
@@ -77,7 +77,7 @@ const Rightbar = () => {
           :<p className="block ps-2 rounded text-xs 
             font-medium "
             >Team Acess Level: {userData['team_access_level']}</p>
-          }
+          } */}
           {loading
           ?<p>loading</p>
           :<p className="block ps-2 rounded text-xs 
@@ -86,11 +86,14 @@ const Rightbar = () => {
           }
         </nav>
       </div>
-      <h2 className="text-sm font-bold mb-6 ps-2">{loading
-                                                ?<p>loading</p>
-                                                : 
-                                                    <p className='font-bold text-sm'><span className='font-light text-sm'>Team Name:</span> {userData['belongs_to_team']}</p>
-                                                  }</h2>
+      <h2 
+      className="text-sm font-bold mb-2 ps-2">
+        {loading
+        ?<p>loading</p>
+        :<p className='font-bold text-sm'><span className='font-light text-sm'>
+          Team Name:</span> {userData['belongs_to_team']}</p>
+        }
+      </h2>
       <nav className="space-y-3">
         {/* {loading
         ? <p>loading</p>
@@ -99,11 +102,12 @@ const Rightbar = () => {
         
         {loading
         ? <p>loading</p>
-        :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-green-100">Team Level: {team?.level}</a>
+        :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-gray-100">
+          Team Level: {team?.level}</a>
         }
         {loading
         ? <p>loading</p>
-        :<div className="block ps-2 rounded text-xs  border-green-100">
+        :<div className="block ps-2 rounded text-xs  border-gray-700">
           <span className='font-normal mb-3'>Team Workers:</span> {team?.workers
           ? team.workers.map((worker)=>(
             <span className='mt-2 me-1'key={worker.id} >
@@ -115,7 +119,8 @@ const Rightbar = () => {
         }
         {loading
         ? <p>loading</p>
-        :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-green-100">Team Access Code: {team?.access_code_code}</a>
+        :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-green-100">
+          Team Access Code: {team?.access_code_code}</a>
         }
       </nav>
 

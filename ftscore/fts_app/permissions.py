@@ -14,6 +14,9 @@ class RegisterUserPermission(permissions.BasePermission):
         # Allows any one to register but not view the list of users unless aunthenticated
         if not user.is_authenticated:
             return request.method == 'POST'
+        if user.is_team_level_L1:
+            if request.method == 'DELETE':
+                return False
         if user.supervisor: #full access
             return True
         if  user.is_team_level_L1:
@@ -50,7 +53,6 @@ class TeamsAndRolesFiles(permissions.BasePermission):
     # https://stackoverflow.com/questions/43064417/whats-the-differences-between-has-object-permission-and-has-permission
     # has_permission is called on all HTTP requests whereas, 
     # has_object_permission is called from DRF's method def get_object(self).
-    #  Hence, has_object_permission method is available for GET, PUT, DELETE, not for POST requesy
     # so we replicate the check permnission code blocks in each method
     
     def has_permission(self, request, view):
@@ -70,6 +72,7 @@ class TeamsAndRolesFiles(permissions.BasePermission):
 
 
     def _check_permissions(self, request):
+        user = request.user
         user_membership = request.user.memberships.first()
         if not user_membership:
             return False
@@ -86,6 +89,9 @@ class TeamsAndRolesFiles(permissions.BasePermission):
                 return True
             elif user_role == "worker" and user_team_level == 'L2':
                 return False
+            elif user.is_a_temp():
+                return False
+            
             
         elif request.method in ["PATCH", "PUT"] :
             if user_team_level == "L3":
@@ -96,7 +102,10 @@ class TeamsAndRolesFiles(permissions.BasePermission):
                 return True
             elif user_role == "worker" and user_team_level == 'L2':
                 return True
+            elif user.is_a_temp():
+                return False
             return False
+
         
         elif request.method == "GET":
             return True

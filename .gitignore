@@ -16,6 +16,7 @@ env/
 *.crt
 .env.prod
 .env.dev
+.env*
 
 # React / Node.js
 node_modules/

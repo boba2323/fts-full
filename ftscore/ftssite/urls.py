@@ -57,6 +57,11 @@ urlpatterns = [
     path('test-destroy/', TestDestroyView.as_view(), name='test-destroy'),
 ] + debug_toolbar_urls()
 
+
+# urlpatterns = [
+#     path()
+# ] 
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

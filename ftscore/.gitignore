@@ -15,15 +15,15 @@ env/
 *.pub
 *.crt
 .env.prod
-.env.dev
-
+.env.prod
 # React / Node.js
 node_modules/
 dist/
 build/
 *.log
 .env.local
-.env.*
+.env.dev
+.env.prod
 
 # OS Files
 .DS_Store

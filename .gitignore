@@ -21,8 +21,8 @@ dist/
 build/
 *.log
 .env.local
-.env.development
-.env.production
+.env.dev
+.env.prod
 
 # OS Files
 .DS_Store

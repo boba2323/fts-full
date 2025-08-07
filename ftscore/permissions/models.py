@@ -196,8 +196,8 @@ class Team(models.Model):
         for membership in self.memberships.all():
             membership.apply_permissions_to_team_members()
 
-    def create_or_update_TM(self, team, new_leader, created_first_time, previous_leader):
-        TeamService.create_or_update_team_membership(self, team, new_leader, created_first_time, previous_leader)
+    def create_or_update_TM(self, new_leader, created_first_time, previous_leader):
+        TeamService.create_or_update_team_membership(self, new_leader, created_first_time, previous_leader)
 
     def save(self, *args, **kwargs):
         # we can add some validation here to check if the team name is unique
@@ -223,7 +223,7 @@ class Team(models.Model):
 
         # the team model should be saved first as good code practices
         super().save(*args, **kwargs)
-        self.create_or_update_TM(self, self.leader, created_first_time, previous_leader)
+        self.create_or_update_TM(self.leader, created_first_time, previous_leader)
 
     
 

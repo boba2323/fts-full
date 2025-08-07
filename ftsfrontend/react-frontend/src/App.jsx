@@ -2,11 +2,11 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 // import './App.css'
-
 // =========for authentication==========
 import {AuthProvider} from "./authentication/authProvider";
 // we import from the index in routes
 import Routes from "./routes";
+import { ToastContainer } from 'react-toastify';
 // ======================================
 
 
@@ -21,6 +21,7 @@ function App() {
     </h1> */}
 
     <AuthProvider>
+      <ToastContainer position="bottom-right" />
       <Routes />
     </AuthProvider>
     </>

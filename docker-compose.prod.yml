@@ -1,0 +1,92 @@
+# https://www.docker.com/blog/how-to-dockerize-django-app/
+
+# https://stackoverflow.com/questions/48495663/docker-compose-env-file-not-working
+# very important. The env_file: field is for setting the default environment for a container. Values set in this can be used in the container, but not in the Compose file.
+
+
+services:
+
+ db:
+   image: postgres:16
+   environment:
+     POSTGRES_DB: 'fts1'
+     POSTGRES_USER: 'postgres'
+     POSTGRES_PASSWORD: 'black'
+   ports:
+     - "5432:5432"
+   volumes:
+     - postgres_data:/var/lib/postgresql/data
+   env_file:
+     - ftscore/.env
+
+ django-web:
+   build:
+      context: ftscore
+      dockerfile: Dockerfile
+  #  entrypoint: ./entrypoint.sh
+   container_name: django-docker
+   expose:
+     - "8000"
+   depends_on:
+     - db
+     - redis
+  #  environment:
+  #    DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}                          # having environment clashes with the env_file. the env_file is for container only and does not apply to compose while environment i suspect gets its values from the any env at the root as compose
+  #    DEBUG: ${DEBUG}
+  #    DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+  #    DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+  #    DATABASE_ENGINE: ${DATABASE_ENGINE}
+  #    DATABASE_NAME: ${DATABASE_NAME}
+  #    DATABASE_USERNAME: ${DATABASE_USERNAME}
+  #    DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+  #    DATABASE_HOST: ${DATABASE_HOST}
+  #    DATABASE_PORT: ${DATABASE_PORT}
+   env_file:
+     - ftscore/.env
+   volumes:
+      - static_volume:/app/staticfiles 
+
+ nginx:
+   build: ./nginx
+   ports:
+     - 1337:80
+   depends_on:
+     - django-web
+   volumes:
+     - static_volume:/app/staticfiles
+
+ redis:
+   image: redis:alpine
+  # https://saasitive.com/tutorial/django-celery-redis-postgres-docker-compose/
+   restart: unless-stopped
+   expose:
+      - 6379
+
+
+ celery:
+   build:
+     context: ftscore
+   entrypoint: ./worker-entrypoint.sh
+   restart: always
+  # command: celery -A mysite.celery worker --loglevel=INFO
+   container_name: celery_container
+   depends_on:
+    - redis
+    - db
+
+
+ react-web:
+   build: 
+     context: ./ftsfrontend/react-frontend
+     dockerfile: Dockerfile
+   container_name: react-container-web
+   ports:
+     - "3000:80"
+   volumes: []
+      # - ./ftsfrontend/react-frontend:/frontend
+
+
+volumes:
+   postgres_data:
+   static_volume:
+

@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS = []
 
@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     # for cors api calls
     'corsheaders',
 
-    'django_celery_beat'
+    'django_celery_beat',
+
+    'storages'
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -147,16 +149,69 @@ WSGI_APPLICATION = 'ftssite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+ONLINE_DB = False
+# if ONLINE_DB:
+#     DATABASES = {
+#   'default': {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'NAME': os.getenv('PGDATABASE'),
+#     'USER': os.getenv('PGUSER'),
+#     'PASSWORD': os.getenv('PGPASSWORD'),
+#     'HOST': os.getenv('PGHOST'),
+#     'PORT': os.getenv('PGPORT', 5432),
+#     'OPTIONS': {
+#       'sslmode': 'require',
+#     },
+#     'DISABLE_SERVER_SIDE_CURSORS': True,
+#   }
+# }
+# elif DEBUG == False:
+#     DATABASES = {
+#     "default": {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DATABASE_NAME', 'fts1'),
+#         'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
+#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
+#         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+#         'PORT': os.getenv('DATABASE_PORT', 5432),
+#     }
+# }
+# else: 
+#     DATABASES = {
+#     "default": {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME':  'fts1',
+#         'USER':  'postgres',
+#         'PASSWORD':  'black',
+#         'HOST': 'localhost',
+#         'PORT':  5432,
+#     }
+# }
+import os
+
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fts1',
-        'USER': 'postgres',
-        'PASSWORD': 'black',
+        'NAME':  'fts1',
+        'USER':  'postgres',
+        'PASSWORD':  'black',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT':  5432,
     }
 }
+
+
+# DATABASES = {
+#     "default": {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DATABASE_NAME', 'fts1'),
+#         'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
+#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
+#         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+#         'PORT': os.getenv('DATABASE_PORT', 5432),
+#     }
+# }
+
 
 
 # Password validation
@@ -196,8 +251,28 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT =  os.path.join(BASE_DIR, 'staticfiles')
 # for collectstatic
-MEDIA_URL = '/media/'
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+
+USE_SPACES = True
+if USE_SPACES:
+    # settings
+    AWS_ACCESS_KEY_ID = os.getenv('DO_bucket_access_key_id')
+    AWS_SECRET_ACCESS_KEY = os.getenv('DO_SECRET_ACCESS_KEY')
+
+    AWS_STORAGE_BUCKET_NAME = os.getenv('DO_AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_ENDPOINT_URL = os.getenv('DO_AWS_S3_ENDPOINT_URL')
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_DEFAULT_ACL = 'public-read'
+
+    PUBLIC_MEDIA_LOCATION = 'crumpet'
+
+    # Use CDN for serving media
+    MEDIA_URL = os.getenv('DO_BUCKET_CDN_ENDPOINT') + '/crumpet/'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -251,7 +326,23 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
+    "http://localhost:1337",
 ]
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
+
+STORAGES = {
+    "default": {
+        "BACKEND": 'ftssite.storage_backends.PublicMediaStorage',
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+BROKER_URL = os.getenv('REDIS', 'redis://redis:6379/0')
+
+print("[DEBUG] AWS_S3_ENDPOINT_URL =", AWS_S3_ENDPOINT_URL)
+print("[DEBUG] MEDIA_URL =", MEDIA_URL)
+print("Connecting to DB:", os.getenv("DATABASE_HOST"), os.getenv("DATABASE_NAME"), os.getenv("DATABASE_USERNAME"))

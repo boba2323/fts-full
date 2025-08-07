@@ -86,10 +86,14 @@ class UsersViewSet(viewsets.ModelViewSet):
 
 
 class UserNonTeamViewSet(viewsets.ModelViewSet):
-    queryset = UserServices.get_available_non_team_users()
+    
     serializer_class = UserSerializer
     permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
     authentication_classes = [CustomAuthentication]
+
+    def get_queryset(self):
+        queryset = UserServices.get_available_non_team_users()
+        return queryset
 
     
 
@@ -102,27 +106,6 @@ class FileViewSet(viewsets.ModelViewSet):
 
     #  checking for request meta
     def list(self, request, *args, **kwargs):
-        # print("=== HEADERS ===")
-        # for key, value in request.headers.items():
-        #     print(f"{key}: {value}")
-
-        # print("=== META ===")
-        # for key, value in request.META.items():
-        #     print(f"{key}: {value}")
-
-        # REMEMBER THE TOKEN WAS SAVED INTO THE SESSION INSIDE THE CUSTOM MyTokenObtainPairSerializer
-        # print('\n\n=============TOKEN OBTAINED INSIDE A VIEW, THE FILEVIEW================\n')
-        # print(request.session.get('token'))
-
-        # print('\n\n=============HEADERS================\n')
-        # pprint(request.headers)
-        # pprint(request.headers['Sec-Fetch-Dest'])
-        # https://shafialam.medium.com/django-rest-framework-user-authentication-under-the-hood-http-basic-authentication-671933f06336
-        # getting hold of the meta http authorisation 
-        # this doesnt work because the request is sent before the method is executed
-        # request.META['HTTP_AUTHORIZATION'] = f'Bearer {request.session['token']}'
-        # request_token=request.META.get('HTTP_AUTHORIZATION')
-        # print(request_token)
         return super().list(request, *args, **kwargs)
 
     def get_queryset(self):

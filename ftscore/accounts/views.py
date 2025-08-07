@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
-from .serialiser import UserSerializer
+from .serialiser import UserSerializer, UserCreateSerializer
 from accounts.serialiser import MyTokenObtainPairSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
@@ -22,7 +22,7 @@ User = get_user_model()
 class RegisterView(CreateAPIView):
     authentication_classes = []  # No authentication required for registration
     permission_classes = [AllowAny]  # Allow any user to access this view
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
 
     def post(self, request, format=None):
         serializer_context = {
@@ -30,7 +30,7 @@ class RegisterView(CreateAPIView):
             }
         # this is what traceback tells us to do add a context
         # https://stackoverflow.com/questions/34438290/assertionerror-hyperlinkedidentityfield-requires-the-request-in-the-serialize
-        serializer = UserSerializer(data=request.data, context=serializer_context)
+        serializer = UserCreateSerializer(data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

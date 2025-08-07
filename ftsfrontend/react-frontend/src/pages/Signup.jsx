@@ -4,21 +4,27 @@ import InputLabel from "./InputLabel";
 import AuthButton from "./AuthButton";
 import AuthBanner from "./AuthBanner";
 import { useState } from "react";
-
+import { useLogin } from "../authentication/useLogin";
 // for api
 import axios from 'axios';
 import Cookies from 'js-cookie';
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 const Signup = () => {
+
+  const loginUser = useLogin()
+
   const [message, setMessage] = useState(null);
   const [inputData, setInputData ] = useState({
     username:"",
     email:"",
     password:""
   })
-  // this is for loading state, i want to put a spinner while the form is sbumitting
   const [loading, setLoading] = useState(false);
 
-  // const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
     const {name, value} = e.target;
@@ -30,21 +36,11 @@ const Signup = () => {
 
   const onSubmitHandler = async  (e) => {
     e.preventDefault();
-
     console.log("Form submitted:", inputData);
-  
-    // Simulate successful signup and redirect
-
-    // navigate("/", { replace: true });
-  
-
-    // https://axios-http.com/docs/post_example
-
     if (!inputData.username || !inputData.email || !inputData.password) {
       setMessage("All fields are required.");
       return;
     }
-
     setLoading(true);
     setMessage(null);
     try {
@@ -61,8 +57,13 @@ const Signup = () => {
         console.log("User successfully created:", response.data);
         setMessage("Signup successful!");
       }
-
       
+      await loginUser({
+        email: inputData.email,
+        password: inputData.password,
+        setLoading,
+      });
+
       console.log('catching response data', response.data);
       // https://axios-http.com/docs/handling_errors
     } catch (error) {
@@ -94,6 +95,7 @@ const Signup = () => {
   return (
   <>
     <div className="flex flex-col justify-center items-center min-h-screen pt-14 pb-10">
+      <ToastContainer />
         <div className="formdiv flex flex-col w-1/3 px-10 border border-gray-200 
         min-h-[500px] pb-3" //these classes are to keep the signup button stay inside the form when the validation messgae shows
         >
@@ -107,10 +109,16 @@ const Signup = () => {
                   placeholder={"Username"} onChange={onChangeHandler}/>
                 <div className="mb-3"></div>
                 {message && (
-                    <div className="text-red-500 mb-3 border border-red-500 p-2 rounded bg-red-50">
-                      {message}
-                    </div>
-                  )}
+                  <div
+                    className={`mb-3 border p-2 rounded ${
+                      message === "Signup successful!"
+                        ? "text-blue-500 border-blue-500 bg-blue-50"
+                        : "text-red-500 border-red-500 bg-red-50"
+                    }`}
+                  >
+                    {message}
+                  </div>
+                )}
                 <InputLabel id={"email"} name={"email"} inputType={"email"}
                   inputValue={inputData.email} labelName={"Email"}
                   placeholder={"Email"} onChange={onChangeHandler}/>

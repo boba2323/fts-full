@@ -19,9 +19,10 @@ const DeleteSelfMembership = () => {
     }
 
 
-    console.log("membership url" ,userIn.memberships[0])  
+      
     const handleDeleteMembershipSubmit = async () => {
         try {
+          console.log("membership url" ,userIn.memberships)
           console.log("membership url" ,userIn.memberships[0])
           const response = await axios.delete(userIn.memberships[0], 
               {

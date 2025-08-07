@@ -10,7 +10,8 @@ from django.db.models import Q, Prefetch
 User = get_user_model()
 
 class TeamService:
-    def create_or_update_team_membership(self, team, new_leader, created_first_time, previous_leader):
+    @staticmethod
+    def create_or_update_team_membership(team, new_leader, created_first_time, previous_leader):
         '''with flags created first time, it checks if the team instance exists, if it does, it finds the 
         TM related to the team and leader and updates the TM with new leader, if team does not exist, it create a new
         TM with the leader in the current team field'''

@@ -6,7 +6,21 @@ from permissions.serializers import TeamSerializer
 from accounts.services import UserServices
 from django.apps import apps
 from rest_framework.reverse import reverse
+from django.db.models import Prefetch
+
 AccessCode = apps.get_model('permissions', 'AccessCode')
+
+# just for signup
+class UserCreateSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     # to show the reverse fields relat4ed to user, we need to explicitly create fields for it. we are doing it
@@ -56,13 +70,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                   "is_not_god_only_L2_L3_leader",
                   "is_not_god_only_L2_L3_worker",
                   ]  # Include 'url' field
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True},
+                        # 'memberships':{'read_only':True}
+                        }
 
     def get_membership_id(self, user):
-        membership = user.memberships
-        if membership.all().exists():
-            membership_instance = membership.first()
-            return membership_instance.id
+        membership = user.get_team_membership()
+        if membership:
+            return membership.id
+        return None
         
     def get_user_team_access_code_url(self, user):
         request = self.context.get('request')
@@ -70,8 +86,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         if not user_membership:
             return []
         user_team = user_membership.team
-        accesscodes = AccessCode.objects.filter(team=user_team)
-        
+        Team = apps.get_model('permissions', 'Team')
+        TeamMembership = apps.get_model('permissions', 'TeamMembership')
+        accesscodes = AccessCode.objects.filter(team=user_team).select_related("created_by", "team")
         return [
             reverse('accesscode-detail', kwargs={'masked_id': ac.masked_id}, request=request)
             for ac in accesscodes
@@ -107,6 +124,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             return {"id":obj.get_team_membership().team.id,
                     "name": obj.get_team_membership().team.name}
         return None
+    
+    def validate(self, attrs):
+        return super().validate(attrs)
 
     def create(self, validated_data):
         password = validated_data.pop('password')

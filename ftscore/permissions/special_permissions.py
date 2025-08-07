@@ -51,7 +51,7 @@ class TeamPermissions(permissions.BasePermission):
             #     return True
             # elif user.is_not_god_only_L2_L3_leader():
             #     return True
-            # elif user.is_temp:
+            # elif user.is_a_temp():
             #     return True
             if user.is_not_god_only_L2_L3_worker():
                 return False
@@ -84,7 +84,7 @@ class TeamPermissions(permissions.BasePermission):
             #     return True
             # elif user.is_not_god_only_L2_L3_leader():
             #     return True
-            # elif user.is_temp:
+            # elif user.is_a_temp():
             #     return True
             if user.is_not_god_only_L2_L3_worker():
                 return False
@@ -97,7 +97,7 @@ class TeamPermissions(permissions.BasePermission):
                 return True
             elif user.is_not_god_only_L2_L3_leader():
                 return True
-            elif user.is_temp:
+            elif user.is_a_temp():
                 return False
             elif user.is_not_god_only_L2_L3_worker():
                 return False
@@ -122,7 +122,7 @@ class TeamMembershipPermissions(permissions.BasePermission):
                 return True
             elif user.is_not_god_only_L2_L3_worker():
                 return False
-            elif user.is_temp:
+            elif user.is_a_temp():
                 return True
             else:
                 return False

@@ -46,21 +46,24 @@ router.register(r'teams', permissions_views.TeamViewSet, basename='team')
 router.register(r'teammembership', permissions_views.TeamMembershipViewSet, basename='teammembership')
 router.register(r'accesscode', permissions_views.AccessCodeViewSet, basename='accesscode')
 
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('', include('fts_app.urls')),
+#     path('accounts/', include('accounts.urls')),  # Include the URLs from the fts_app
+    
+#     # drf views
+#     path('drf/', include(router.urls)),
+#     path('api-auth/', include('rest_framework.urls')),
+#     path('test-destroy/', TestDestroyView.as_view(), name='test-destroy'),
+# ] + debug_toolbar_urls()
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('fts_app.urls')),
-    path('accounts/', include('accounts.urls')),  # Include the URLs from the fts_app
-    
-    # drf views
-    path('drf/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls')),
-    path('test-destroy/', TestDestroyView.as_view(), name='test-destroy'),
+    path('apiv1/', include(router.urls)), 
+    path('apiv1/accounts/', include('accounts.urls')), 
+    path('apiv1/api-auth/', include('rest_framework.urls')), 
 ] + debug_toolbar_urls()
-
-
-# urlpatterns = [
-#     path()
-# ] 
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

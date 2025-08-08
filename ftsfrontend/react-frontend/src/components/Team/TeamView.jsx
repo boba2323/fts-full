@@ -18,6 +18,7 @@ import { Tooltip, Button } from "@material-tailwind/react";
 import { useAuth } from '../../authentication/authProvider.jsx';
 
 const TeamView = () => {  //supervisor is a boolean to toggle between team update
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [teamViewData, setTeamViewData] =useState()
   const [extraViewModificationQSData, setExtraViewModificationQSData] = useState([])
   const [filteredModData, setFilteredModData] = useState([])
@@ -118,7 +119,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
     const fetchModificationObjects = async ()=>{
       try {
         setLoadingMod(true)
-        const responseModification = await axios.get(`http://127.0.0.1:8000/drf/modifications/?teamId=${teamViewData.id}`,
+        const responseModification = await axios.get(`${API_BASE_URL}/modifications/?teamId=${teamViewData.id}`,
           {
           headers: {
             'Content-Type': 'application/json',
@@ -142,7 +143,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
       // console.log("csrftoken = ", Cookies.get('csrftoken'))
         setLoading(true)
         try {
-            const responseTeam = await axios.get(`http://127.0.0.1:8000/drf/teams/${teamId}/`,
+            const responseTeam = await axios.get(`${API_BASE_URL}/teams/${teamId}/`,
               {
               headers: {
                 'Content-Type': 'application/json',

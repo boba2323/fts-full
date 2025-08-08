@@ -9,6 +9,7 @@ const AuthContext = createContext();
 // this is the AuthProvider component that wraps around the children components
 // authprovider is used to wrapped the routes component in App.jsx
 export const AuthProvider = ({ children }) => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   // this function puts the userIn value inside the child components via context. we apply it at app.jsx
   const [userIn, setUserIn] = useState(undefined) //we can udefined or nothing
   const [loading, setLoading] = useState(true)  //this is for making sure we only load the pages when the endpoints are done hitted
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   // setUserin also worked but sending the function is better
   const hitMeandFetch =async ()=> {
       try{
-        const response = await axios.get('http://127.0.0.1:8000/accounts/me/', {
+        const response = await axios.get(`${API_BASE_URL}/accounts/me/`, {
             headers: {
               'Content-Type': 'application/json',
               // 'X-CSRFToken': Cookies.get('csrftoken')

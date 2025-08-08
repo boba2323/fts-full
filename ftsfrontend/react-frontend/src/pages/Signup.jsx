@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 const Signup = () => {
-
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const loginUser = useLogin()
 
   const [message, setMessage] = useState(null);
@@ -44,7 +44,7 @@ const Signup = () => {
     setLoading(true);
     setMessage(null);
     try {
-      const response = await axios.post('http://127.0.0.1:8000/accounts/signup/', inputData, {
+      const response = await axios.post(`${API_BASE_URL}/accounts/signup/`, inputData, {
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': Cookies.get('csrftoken')

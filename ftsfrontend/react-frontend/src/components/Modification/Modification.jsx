@@ -11,11 +11,12 @@ const Modification = ({supervisor}) => {  //supervisor is a boolean to toggle be
   const [loading, setLoading] = useState()
 
   useEffect (()=>{
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const fetchModData = async ()=>{
       console.log("csrftoken = ", Cookies.get('csrftoken'))
         setLoading(true)
         try {
-            const response = await axios.get('http://127.0.0.1:8000/drf/modifications/',
+            const response = await axios.get(`${API_BASE_URL}/modifications/`,
               {
               headers: {
                 'Content-Type': 'application/json',

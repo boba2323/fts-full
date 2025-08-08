@@ -11,10 +11,11 @@ import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const TeamPostApi = async()=>{
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     try {
         let response
         if (mode==="create"){
-            response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
+            response = await axios.post(`${API_BASE_URL}/teams/`, 
             {
                 'name':inputData.name,
                 'leader':inputData.leader,
@@ -28,7 +29,7 @@ const TeamPostApi = async()=>{
             withCredentials: true, // Optional: only needed if cookies are set
         });
         } else if (mode==="update"){
-            response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
+            response = await axios.put(`${API_BASE_URL}/teams/${teamId}/`, 
             {
                 'name':teamData.name,
                 'leader':teamData.leader,

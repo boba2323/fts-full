@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 export const useLogin = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const { hitMeandFetch } = useAuth();
   const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ export const useLogin = () => {
     try {
       setLoading?.(true);
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/api/token/",
+        `${API_BASE_URL}/accounts/api/token/`,
         { email, password },
         {
           headers: {

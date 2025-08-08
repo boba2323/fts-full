@@ -12,6 +12,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../authentication/authProvider';
 // https://www.geeksforgeeks.org/reactjs/file-uploading-in-react-js/
 const FileUpload = () => {
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const {userIn} = useAuth()
     if (userIn.is_temp || userIn.is_not_god_only_L2_L3_worker){
         return <Navigate to="/fts" />
@@ -90,7 +91,7 @@ const FileUpload = () => {
     const fetchFolderAPI =async()=>{
         setLoadingFields(true)
         try {
-            const response = await axios.get("http://127.0.0.1:8000/drf/folders/", {
+            const response = await axios.get(`${API_BASE_URL}/folders/`, {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -120,7 +121,7 @@ const FileUpload = () => {
         setLoadingFields(true)
         if (userIn.is_not_god_only_L2_L3 || userIn.is_temp){
             try {
-            const response = await axios.get(`http://127.0.0.1:8000/drf/accesscode/?teamId=${teamId}`, {
+            const response = await axios.get(`${API_BASE_URL}/accesscode/?teamId=${teamId}`, {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -146,7 +147,7 @@ const FileUpload = () => {
         }
         } else {
                         try {
-            const response = await axios.get("http://127.0.0.1:8000/drf/accesscode/", {
+            const response = await axios.get(`{API_BASE_URL}/accesscode/`, {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -197,7 +198,7 @@ const FileUpload = () => {
                                     success:''})
                                         return;
                                     }
-                    const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
+                    const response = await axios.post(`${API_BASE_URL}/files/`, 
                     {
                         "file_data": inputData.file_data,
                         "name": inputData.name,
@@ -231,7 +232,7 @@ const FileUpload = () => {
                 selectedCode: ''
             }));
             } else {
-                    const response = await axios.post('http://127.0.0.1:8000/drf/files/', 
+                    const response = await axios.post(`{API_BASE_URL}/files/`, 
                     {
                         "file_data": inputData.file_data,
                         "name": inputData.name,

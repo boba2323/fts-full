@@ -5,6 +5,7 @@ import { data, useParams } from 'react-router-dom';
 
 // https://dev.to/darkmavis1980/fetching-data-with-react-hooks-and-axios-114h
 const Rightbar = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [userData, setData] = useState()
   const [loading, setLoading] = useState(true);
   const [team, setTeam] = useState()
@@ -13,7 +14,7 @@ const Rightbar = () => {
     const fetchData = async ()=>{
       setLoading(true)
       try {
-            const response = await axios.get("http://127.0.0.1:8000/accounts/me/",
+            const response = await axios.get(`${API_BASE_URL}/accounts/me/`,
               {
             headers: {
               'Content-Type': 'application/json'
@@ -24,7 +25,7 @@ const Rightbar = () => {
           setData(response.data)
           // we get the team detail from the api and store it
           if (response.data.team){
-              const responseTeam =await axios.get(`http://127.0.0.1:8000/drf/teams/${response.data['team']['id']}`,
+              const responseTeam =await axios.get(`${API_BASE_URL}/teams/${response.data['team']['id']}`,
                 {
               headers: {
                 'Content-Type': 'application/json'

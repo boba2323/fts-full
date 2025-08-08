@@ -14,7 +14,7 @@ import Cookies from 'js-cookie';
 const CreateTeam = ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
-
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const {userIn, setUserIn, loading, hitMeandFetch} = useAuth()
     const {teamId} = useParams() 
     const [finishloadingTeamUpdateData, setFinishLoadingTeamUpdateData] = useState(false)
@@ -56,7 +56,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             console.log("in the createinit data")
             try {
                 console.log("in the try block")
-                const response = await axios.get(`http://127.0.0.1:8000/drf/teams/${teamId}/`, {
+                const response = await axios.get(`${API_BASE_URL}/teams/${teamId}/`, {
                     headers: {
                     'Content-Type': 'application/json'
                     },
@@ -126,7 +126,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
     const fetchUserNonTeamApi =async()=>{
         setLoadingFields(true)
         try {
-            const response = await axios.get("http://127.0.0.1:8000/drf/users/", {
+            const response = await axios.get(`${API_BASE_URL}/users/`, {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -208,7 +208,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             let response
             let responseMembership
             if (mode==="create"){
-                response = await axios.post('http://127.0.0.1:8000/drf/teams/', 
+                response = await axios.post(`${API_BASE_URL}/teams/`, 
                 {
                     'name':inputData.name,
                     'leader':inputData.leader,
@@ -223,7 +223,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             });
              
             } else if (mode==="update"){
-                response = await axios.put(`http://127.0.0.1:8000/drf/teams/${teamId}/`, 
+                response = await axios.put(`${API_BASE_URL}/teams/${teamId}/`, 
                 {
                     'name':inputData.name,
                     'leader':inputData.leader,
@@ -239,7 +239,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             }
             if (addWorker){
                 console.log(response.data.url, inputWorker)
-                responseMembership = await axios.post('http://127.0.0.1:8000/drf/teammembership/', 
+                responseMembership = await axios.post(`${API_BASE_URL}/teammembership/`, 
                 {
                     'user':inputWorker,
                     'team':response.data.url,

@@ -14,6 +14,7 @@ import { useAuth } from '../../authentication/authProvider';
 const CreateAC= ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const {userIn, hitMeandFetch} = useAuth()
     if (userIn.is_temp || userIn.is_not_god_only_L2_L3_worker){
         return <Navigate to="/fts/workspace" />
@@ -45,7 +46,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
             console.log("in the createinit data")
             try {
                 console.log("in the try block")
-                const teamUpdateResponse = await axios.get(`http://127.0.0.1:8000/drf/accesscode/${id}/`, {
+                const teamUpdateResponse = await axios.get(`${API_BASE_URL}/accesscode/${id}/`, {
                     headers: {
                     'Content-Type': 'application/json'
                     },
@@ -103,7 +104,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 const teamId = userIn.team.id
                 try {
                 console.log("in the getteamlist try block")
-                const response = await axios.get(`http://127.0.0.1:8000/drf/teams/${teamId}`, {
+                const response = await axios.get(`${API_BASE_URL}/teams/${teamId}`, {
                     headers: {
                     'Content-Type': 'application/json'
                     },
@@ -133,7 +134,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
             }else {
                 try {
                 console.log("in the getteamlist try block")
-                const response = await axios.get(`http://127.0.0.1:8000/drf/teams/`, {
+                const response = await axios.get(`${API_BASE_URL}/teams/`, {
                     headers: {
                     'Content-Type': 'application/json'
                     },
@@ -190,7 +191,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
             let accessPostResponse
             if (mode==="create"){
                 console.log("AC create post")
-                accessPostResponse = await axios.post('http://127.0.0.1:8000/drf/accesscode/', 
+                accessPostResponse = await axios.post('${API_BASE_URL}/accesscode/', 
                 {
 
                     'team':teamInput,
@@ -210,7 +211,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 })             
             } else if (mode==="update"){
                 console.log("AC update post")
-                accessPostResponse = await axios.put(`http://127.0.0.1:8000/drf/accesscode/${id}/`, 
+                accessPostResponse = await axios.put(`${API_BASE_URL}/accesscode/${id}/`, 
                 {
                     'team':acData.team,
                     'optional_description':acData.optional_description,

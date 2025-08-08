@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const AccessCodeList = ({supervisor}) => {  //supervisor is a boolean to toggle between accesscode update
+
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [accessCodeData, setAccessCodeData] =useState([])
   const [loading, setLoading] = useState()
 
@@ -15,7 +17,7 @@ const AccessCodeList = ({supervisor}) => {  //supervisor is a boolean to toggle 
       console.log("csrftoken = ", Cookies.get('csrftoken'))
         setLoading(true)
         try {
-            const response = await axios.get('http://127.0.0.1:8000/drf/accesscode/',
+            const response = await axios.get(`${API_BASE_URL}/accesscode/`,
               {
               headers: {
                 'Content-Type': 'application/json',

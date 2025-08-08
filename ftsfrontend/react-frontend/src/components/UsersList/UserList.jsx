@@ -14,7 +14,7 @@ const UserList = ({supervisor}) => {
     const fetchTeamData = async ()=>{
         setLoading(true)
         try {
-            const response = await axios.get('http://127.0.0.1:8000/drf/users/',
+            const response = await axios.get(`${API_BASE_URL}/users/`,
                 {
                 headers: {
                 'Content-Type': 'application/json'

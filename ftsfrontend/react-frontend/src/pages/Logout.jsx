@@ -8,12 +8,13 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 const Logout = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const { userIn, setUserIn } = useAuth();
   const navigate = useNavigate();
 
   const logoutHandler = async (e)=> {
     try {
-        const response = await axios.post("http://127.0.0.1:8000/accounts/logout/",{}, {
+        const response = await axios.post(`${API_BASE_URL}/accounts/logout/`,{}, {
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': Cookies.get('csrftoken')

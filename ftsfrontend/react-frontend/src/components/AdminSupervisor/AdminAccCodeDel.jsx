@@ -4,11 +4,13 @@ import { useParams } from 'react-router-dom';
 import Modal from '../Modal/ModalDeleteTeam';
 import Cookies from 'js-cookie';
 const AdminAccCodeDelete =() => {
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
+
     const [open, setOpen] = useState(true)
     const {id} = useParams()
     const handleDeleteSubmit = async () => {
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/drf/accesscode/${id}/`, 
+            const response = await axios.delete(`${API_BASE_URL}accesscode/${id}/`, 
                 {
                 headers: {
                 'Content-Type': 'application/json',

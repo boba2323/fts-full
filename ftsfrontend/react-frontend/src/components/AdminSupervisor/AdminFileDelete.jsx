@@ -5,11 +5,12 @@ import Modal from '../Modal/ModalDeleteTeam';
 import Cookies from 'js-cookie';
 
 const AdminFileDelete =() => {
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const [open, setOpen] = useState(true)
     const {fileId} = useParams()
     const handleDeleteSubmit = async () => {
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/drf/files/${fileId}/`, 
+            const response = await axios.delete(`${API_BASE_URL}/files/${fileId}/`, 
                 {
                 headers: {
                 'Content-Type': 'application/json',

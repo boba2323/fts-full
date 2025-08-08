@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between team update
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [teamData, setTeamData] =useState([])
   const [loading, setLoading] = useState()
 
@@ -15,7 +16,7 @@ const Team = ({supervisor}) => {  //supervisor is a boolean to toggle between te
       console.log("csrftoken = ", Cookies.get('csrftoken'))
         setLoading(true)
         try {
-            const response = await axios.get('http://127.0.0.1:8000/drf/teams/',
+            const response = await axios.get(`${API_BASE_URL}/teams/`,
               {
               headers: {
                 'Content-Type': 'application/json',

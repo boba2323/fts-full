@@ -8,6 +8,7 @@ import { useState } from "react";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 const Login = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const { userIn, setUserIn, hitMeandFetch } = useAuth();
   const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/accounts/api/token/', inputData, {
+      const response = await axios.post(`${API_BASE_URL}/accounts/api/token/`, inputData, {
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': Cookies.get('csrftoken')

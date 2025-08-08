@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 
 const FileList = ({supervisor}) => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [fileData, setData] = useState([])
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +13,7 @@ const FileList = ({supervisor}) => {
     const fetchData = async ()=>{
       setLoading(true)
       try {
-        const response = await axios.get("http://127.0.0.1:8000/drf/files/",
+        const response = await axios.get(`${API_BASE_URL}/files/`,
             {
         headers: {
           'Content-Type': 'application/json'

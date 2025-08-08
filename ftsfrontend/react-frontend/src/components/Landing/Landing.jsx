@@ -16,6 +16,7 @@ import Cookies from 'js-cookie';
 
 
 const Landing = () => {
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const { userIn, setUserIn, hitMeandFetch } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -33,7 +34,7 @@ const Landing = () => {
         setLoading(true)
         e.preventDefault()
         try {
-        const response = await axios.post('http://127.0.0.1:8000/accounts/api/token/', inputData, {
+        const response = await axios.post(`${API_BASE_URL}/accounts/api/token/`, inputData, {
             headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': Cookies.get('csrftoken')

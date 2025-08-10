@@ -11,6 +11,7 @@ import { FaUserShield } from 'react-icons/fa';
 const Sidebar = ({
     onClickHandler
   }) => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const { userIn, setUserIn, loading, hitMeandFetch } = useAuth();
   const onClickHandlerNative =()=>{
     // console.log(isUpload)
@@ -80,10 +81,13 @@ const Sidebar = ({
           <div className="flex flex-row items-center ps-4 text-xs">Users</div>
         </div>
         </Link>
+        <Link to={`/logout`}>
         <div className="flex flex-row items-center px-3 py-3 rounded-md hover:bg-deep-orange-50 cursor-pointer">
           <AiOutlineLogout/>
-          <a href="http://127.0.0.1:5173/logout" className="block text-xs ps-5 ">Logout</a>
+          
+            <p className="block text-xs ps-5 ">Logout</p>
         </div>
+        </Link>
       </nav>
     </div>
   )

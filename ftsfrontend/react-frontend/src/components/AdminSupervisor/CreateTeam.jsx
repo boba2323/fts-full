@@ -16,6 +16,7 @@ import Cookies from 'js-cookie';
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from '../Loading/Loading';
 
 const CreateTeam = ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
@@ -133,7 +134,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
     const fetchUserNonTeamApi =async()=>{
         setLoadingFields(true)
         try {
-            const response = await axios.get('${API_BASE_URL}/users/', {
+            const response = await axios.get(`${API_BASE_URL}/users/`, {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -151,6 +152,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 leaderOptions: response.data
                 }))
             }
+            console.log("users", inputData.leaderOptions)
         } catch (error) {
             console.error(error)
             setInputData((prev)=>({
@@ -453,8 +455,8 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                     {displayFieldErrors("leader")}
 
                     {/* if user is a not in team, hes not SU or SV hes not in L1, he wont see leader input*/}
-                    {
-                    userIn?.is_temp?<></>   
+                    {loadingFields?<Loading/>
+                    :userIn?.is_temp && inputData? <Loading/>   
                           :userIn.is_not_god_only_L2_L3?<></>
                           :<SelectInput
                             name="selectedUser"  //make sure the name is unique and matches the state name
@@ -467,10 +469,9 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                             keyType="id"
                             fieldDefiner="username"
                             serialiserTpe="url"
-                        />
-                    }
+                        />}
                     {
-                    userIn?.is_temp?<></>
+                    userIn?.is_temp && inputData?.LEVELOPTIONS?  <></>
                         :userIn.is_not_god_only_L2_L3?<></>
                         :<SelectInput
                             name="selectedLevel"
@@ -514,7 +515,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 onClick={()=>setAddWorker(false)}>Cancel</button>
                           : <></>}
                 <AuthButton buttonText="Save Team"/>
-                {addWorker?<>
+                {addWorker && inputData?.leaderOptions?<>
                             <Space2/>
                             {displayFieldErrors("user")}
                             <SelectInput 

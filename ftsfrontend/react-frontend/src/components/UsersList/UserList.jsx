@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 
 const UserList = ({supervisor}) => {
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const [userData, setUserData] =useState([])
     const [loading, setLoading] = useState()
     
@@ -23,7 +24,7 @@ const UserList = ({supervisor}) => {
                 }
             )
             setUserData(response.data)
-        } catch {
+        } catch (error){
             console.error("Error fetching file data:", error)
             setUserData([])
         } finally {

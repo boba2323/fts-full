@@ -18,7 +18,8 @@ RUN pip install --upgrade pip
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \
-    gcc 
+    gcc \
+    netcat-openbsd
 
 # Copy the requirements file first (better caching)
 COPY requirements.txt /app/
@@ -33,7 +34,8 @@ RUN pip install --upgrade pip
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \
-    gcc 
+    gcc \
+    netcat-openbsd
  
 RUN useradd -m -r appuser && \
    mkdir /app && \

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import { data, useParams } from 'react-router-dom';
+import { useAuth } from '../../authentication/authProvider';
 
 
 // https://dev.to/darkmavis1980/fetching-data-with-react-hooks-and-axios-114h
 const Rightbar = () => {
+  const {userIn, hitMeandFetch} = useAuth()
   const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [userData, setData] = useState()
   const [loading, setLoading] = useState(true);
@@ -46,7 +48,7 @@ const Rightbar = () => {
         }
       }
     fetchData()
-  }, [])
+  }, [userIn?.team])
   
   
 

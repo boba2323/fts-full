@@ -191,7 +191,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
             let accessPostResponse
             if (mode==="create"){
                 console.log("AC create post")
-                accessPostResponse = await axios.post('${API_BASE_URL}/accesscode/', 
+                accessPostResponse = await axios.post(`${API_BASE_URL}/accesscode/`, 
                 {
 
                     'team':teamInput,
@@ -334,7 +334,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                     <Space2/>
                     {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
                     {displayFieldErrors("team")}
-                    {userIn?.is_not_god_only_L2_L3_leader
+                    {userIn?.is_not_god_only_L2_L3_leader && acData?.teamOptions
                     ?<></>
                     :<>{displayFieldErrors("team")}
                         <SelectInput

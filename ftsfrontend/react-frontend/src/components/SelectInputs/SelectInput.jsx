@@ -18,6 +18,12 @@ const SelectInput = ({
     // inputValue  //this prop is obtained from signup page the parent component. we pass the value from there to the 
     // inputlabel component to maintain a single source of truth for the input value
     }) => {
+      let safefieldOptions =[]
+      if (!Array.isArray(fieldOptions)){
+        safefieldOptions = []
+      } else {
+        safefieldOptions = fieldOptions
+      }
   return (
     <div>
       <label htmlFor={name}  className="selectinput flex flex-start items-center justify-start w-full text-gray-700 my-1 sm:text-xs font-bold mb-2 py-2">{labelName}</label>  
@@ -39,7 +45,7 @@ const SelectInput = ({
                 {/* https://forum.djangoproject.com/t/post-to-hyperlinkedmodelserializer/6889 */}
                 {/* for value, we must enter the urls since the serialiser in backend in a a hyperlinkedomdel */}
               <option value=''>{selectField}</option>  
-              {fieldOptions.map((field)=>{
+              {safefieldOptions.map((field)=>{
                   return<option key={field[keyType]} value={field[serialiserTpe]}>{field[fieldDefiner]}</option>
                       }
                   )

@@ -37,6 +37,9 @@ class AccessCodePermission(permissions.BasePermission):
 class TeamPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
+
+        if not user.is_authenticated:
+            return False
     # Read-only permissions are allowed for any request
         if user.supervisor or user.is_superuser: #full access
             return True

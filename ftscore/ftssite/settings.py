@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -120,10 +120,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    # for cors api calls
-    'corsheaders.middleware.CorsMiddleware',
-
-  
 ]
 
 ROOT_URLCONF = 'ftssite.urls'
@@ -187,30 +183,30 @@ ONLINE_DB = False
 #         'PORT':  5432,
 #     }
 # }
-import os
-
-DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME':  'fts1',
-        'USER':  'postgres',
-        'PASSWORD':  'black',
-        'HOST': 'localhost',
-        'PORT':  5432,
-    }
-}
-
+# import os
 
 # DATABASES = {
 #     "default": {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DATABASE_NAME', 'fts1'),
-#         'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
-#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
-#         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
-#         'PORT': os.getenv('DATABASE_PORT', 5432),
+#         'NAME':  'fts1',
+#         'USER':  'postgres',
+#         'PASSWORD':  'black',
+#         'HOST': 'localhost',
+#         'PORT':  5432,
 #     }
 # }
+
+
+DATABASES = {
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME', 'fts1'),
+        'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': os.getenv('DATABASE_PORT', 5432),
+    }
+}
 
 
 
@@ -319,7 +315,8 @@ CACHES = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://127.0.0.1:5173"
+    "http://127.0.0.1:5173",
+    "http://localhost:1337",
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
@@ -328,9 +325,27 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:1337",
 ]
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = True
+
+
+CORS_ALLOW_HEADERS = [
+'accept',
+'accept-encoding',
+'authorization',
+'content-type',
+'dnt',
+'origin',
+'user-agent',
+'x-csrftoken',
+'x-requested-with',
+]
+
+# CORS_ALLOW_ALL_ORIGINS=True
+
+
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 STORAGES = {
     "default": {

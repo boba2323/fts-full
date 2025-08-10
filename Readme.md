@@ -15,3 +15,12 @@ Add ONLYOFFICE
 AI search (distant possibility)
 Notifications and communications
 Performance
+
+
+### Things to check before dockerising and running the nginx server
+# Your VITE_API_URL=http://localhost/apiv1. #This is for non dockerised runs
+# VITE_API_URL=http://localhost:1337/apiv1
+
+THIS is for nginx server
+
+# Check your database as well in settings.py, make sure it depends on db

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function Breadcrumb() {
     const location = useLocation()
-    console.log(location.pathname)
+    // console.log(location.pathname)
     
     const knownPaths = ['/fts', '/fts/workspace/team/:id', '/fts/workspace/teammembership/delete/:id',
       '/fts/workspace/team/update/:id', '/fts/workspace/team/:id/files-upload', '/fts/workspace','/fts/teams','/fts/teams/:id',
@@ -15,7 +15,7 @@ export default function Breadcrumb() {
     ]
 
     const urlName = location.pathname.slice(1) //remove the first /
-    console.log('urlname',urlName)
+    // console.log('urlname',urlName)
     // fts/admin/admin-files or /fts/teams/76 is what we get 
     const urlList = urlName.split('/').slice(1) //get a array of the string broken at the / and remove fts item
     const urlListWithPlaceholderId = urlList.map(pathSegments=>{
@@ -26,10 +26,10 @@ export default function Breadcrumb() {
     })  //thus we get a array with url broken down into individual path and any id turned into a string that says ":id"
 
 
-    console.log("urlist",urlList)
-    console.log("path array with placeholder id", urlListWithPlaceholderId)
+    // console.log("urlist",urlList)
+    // console.log("path array with placeholder id", urlListWithPlaceholderId)
     const outPath = '/fts/' + urlList.slice(0).join('/')
-    console.log('real out path', outPath)
+    // console.log('real out path', outPath)
 
   return (
     <div className="bg-white ">
@@ -49,8 +49,8 @@ export default function Breadcrumb() {
             // real path to navigate to
             const progressivePathPlaceholder = '/fts/' + urlListWithPlaceholderId.slice(0, index+1).join('/')
             //rember the last index of slice is exclusive
-            console.log('progressive paths with real id', progressivePathRealId)
-            console.log('progressive paths with :id', progressivePathPlaceholder)
+            // console.log('progressive paths with real id', progressivePathRealId)
+            // console.log('progressive paths with :id', progressivePathPlaceholder)
 
             return (
               <div className="flex flex-row" key={index}>

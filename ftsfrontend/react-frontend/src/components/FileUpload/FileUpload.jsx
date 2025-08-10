@@ -101,6 +101,7 @@ const FileUpload = () => {
                 ...prev,
                 folderOptions: response.data
             }))
+            console.log('folderOptions:', inputData?.folderOptions);
         } catch (error) {
 
             console.error(error)
@@ -133,8 +134,10 @@ const FileUpload = () => {
             }))
 
             if (response.status===200){
-                console.log("accesscode api hit")
+                console.log("accesscode api hit", response.data)
+                console.log("accessoption array", inputData?.accessCodeOptions)
             }
+            console.log("accessoption array", inputData?.accessCodeOptions)
         } catch (error) {
 
             console.error(error)
@@ -146,8 +149,8 @@ const FileUpload = () => {
             setLoadingFields(false)
         }
         } else {
-                        try {
-            const response = await axios.get(`{API_BASE_URL}/accesscode/`, {
+            try {
+            const response = await axios.get(`${API_BASE_URL}/accesscode/`, {
                 headers: {
                 'Content-Type': 'application/json'
                 },
@@ -159,8 +162,9 @@ const FileUpload = () => {
             }))
 
             if (response.status===200){
-                console.log("accesscode api hit")
+                console.log("accesscode api hit", response.data)
             }
+            console.log("accessoption array", inputData?.accessCodeOptions)
         } catch (error) {
 
             console.error(error)
@@ -232,7 +236,7 @@ const FileUpload = () => {
                 selectedCode: ''
             }));
             } else {
-                    const response = await axios.post(`{API_BASE_URL}/files/`, 
+                    const response = await axios.post(`${API_BASE_URL}/files/`, 
                     {
                         "file_data": inputData.file_data,
                         "name": inputData.name,
@@ -360,7 +364,7 @@ const FileUpload = () => {
                 <Space2/>
                 {/* when we send back the data we must send url since the serialiser is a hyperlinkedmodel */}
                 {displayFieldErrors('folder')}
-                <SelectInput
+                {inputData?.folderOptions?<SelectInput
                     name="selectedFolder"  //make sure the name is unique and matches the state name
                     value={inputData.selectedFolder}
                     onChange={folderSelectHandler}
@@ -372,11 +376,13 @@ const FileUpload = () => {
                     fieldDefiner="name"
                     serialiserTpe="url"
                 />
+                :<></>}
                 <Space2/>
                 {displayFieldErrors('access_code')}
-                {userIn.is_not_god_only_L2_L3_leader
+                {userIn.is_not_god_only_L2_L3_leader 
                 ?<></>
-                :<SelectInput
+                :inputData?.accessCodeOptions?
+                <SelectInput
                     name="selectedCode"
                     value={inputData.selectedCode}
                     onChange={accessCodeSelectHandler}
@@ -387,7 +393,7 @@ const FileUpload = () => {
                     keyType="code"
                     fieldDefiner="code"
                     serialiserTpe="url"
-                />}
+                />:null}
                 
                 <Space2/>
             </div>

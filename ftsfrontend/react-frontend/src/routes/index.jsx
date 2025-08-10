@@ -39,7 +39,7 @@ import TeamView from "../components/Team/TeamView";
 
 import Workspace from "../components/Workspace/Workspace";
 import DeleteSelfMembership from "../components/Team/DeleteSelfMembership";
-import QuickDeleteTest from "../components/TestComp/Test";
+// import QuickDeleteTest from "../components/TestComp/Test";
 
 import AdminFileList from "../components/AdminSupervisor/AdminFileList";
 import AdminFileDelete from "../components/AdminSupervisor/AdminFileDelete";

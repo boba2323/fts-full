@@ -281,6 +281,9 @@ INTERNAL_IPS = [
     # ...
     "127.0.0.1",
     # ...
+    '139.59.60.118:1337',
+    '139.59.60.118'
+
 ]
 
 DEBUG_TOOLBAR_PANELS = [
@@ -317,6 +320,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:1337",
+
+    'http://139.59.60.118:1337',
+    'http://139.59.60.118',
+    'https://139.59.60.118:1337',
+    'https://139.59.60.118',
+
+    'http://www.crumpet.cc',
+    'http://.crumpet.cc',
+    'https://www.crumpet.cc',
+    'https://.crumpet.cc',
+    
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
@@ -324,6 +338,16 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:3000",
     "http://localhost:1337",
+
+    'http://139.59.60.118:1337',
+    'http://139.59.60.118',
+    'https://139.59.60.118:1337',
+    'https://139.59.60.118',
+
+    'http://www.crumpet.cc',
+    'http://.crumpet.cc',
+    'https://www.crumpet.cc',
+    'https://.crumpet.cc',
 ]
 
 

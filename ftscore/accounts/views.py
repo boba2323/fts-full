@@ -72,14 +72,14 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response.set_cookie(key='access',
                             value=access_token,
                             httponly=True,
-                            secure=True, #True in production however we set to True in dev too here because with lax samesite and false secure, the browser blocks cross site requests
+                            secure=False, #True in production however we set to True in dev too here because with lax samesite and false secure, the browser blocks cross site requests
                             samesite='none',
                             # max_age=3600
                             ) #false for development)
         response.set_cookie(key='refresh',
                             value=refresh_token,
                             httponly=True,
-                            secure=True,
+                            secure=False,
                             samesite='none',
                             # max_age=3600
                             )
@@ -118,7 +118,7 @@ class CustomRefreshTokenView(TokenRefreshView):
             key='access',
             value=access_token,
             httponly=True,
-            secure=True,  # True in production however we set to True here because with lax samesite and false secure, the browser blocks cross site requests
+            secure=False,  # True in production however we set to True here because with lax samesite and false secure, the browser blocks cross site requests
             samesite='none',
             max_age=3600
         )
@@ -127,7 +127,7 @@ class CustomRefreshTokenView(TokenRefreshView):
             key='refresh',
             value=refresh_token,
             httponly=True,
-            secure=True,  # True in production
+            secure=False,  # True in production
             samesite='none',
             max_age=3600
 

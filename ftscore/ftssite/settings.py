@@ -185,28 +185,28 @@ ONLINE_DB = False
 # }
 # import os
 
-# DATABASES = {
-#     "default": {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME':  'fts1',
-#         'USER':  'postgres',
-#         'PASSWORD':  'black',
-#         'HOST': 'localhost',
-#         'PORT':  5432,
-#     }
-# }
-
-
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME', 'fts1'),
-        'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
-        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
-        'PORT': os.getenv('DATABASE_PORT', 5432),
+        'NAME':  'fts1',
+        'USER':  'postgres',
+        'PASSWORD':  'black',
+        'HOST': 'localhost',
+        'PORT':  5432,
     }
 }
+
+
+# DATABASES = {
+#     "default": {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DATABASE_NAME', 'fts1'),
+#         'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
+#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
+#         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+#         'PORT': os.getenv('DATABASE_PORT', 5432),
+#     }
+# }
 
 
 

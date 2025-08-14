@@ -1,6 +1,8 @@
 # https://www.procoding.org/jwt-token-as-httponly-cookie-in-django
 # bullshit way, doesnt account for csrf token, didnt even bother to fix 
-
+# ================================================
+# DRF disables CSRF handling for APIViews
+# ==========================================
 # https://dev.to/bhavanaeh/jwt-authentication-with-django-rest-framework-what-why-how-50kj
 
 # https://dev.to/a_atalla/django-rest-framework-custom-jwt-authentication-5n5
@@ -38,8 +40,13 @@ def enforce_csrf(request):
     # print("Request method:", request.method)
     # populates request.META['CSRF_COOKIE'], which is used in process_view()
     check.process_request(request)
+
+    print("check csrf",check)
     reason = check.process_view(request, None, (), {})
     if reason:
+        # logging
+        print(reason)
+
         # CSRF failed, bail with explicit error message
         raise exceptions.PermissionDenied('CSRF Failed: %s' % reason)
  
@@ -50,7 +57,7 @@ def enforce_csrf(request):
     
 class CustomAuthentication(JWTAuthentication):
     def authenticate(self, request): #Authenticate the request and return a two-tuple of (user, token).
-        # print('authenticate')
+        print('authentication where csrf wil also be enforced')
         header = self.get_header(request)  #Extracts the header containing the JSON web token from the given request
         # print("in auth")
         raw_token = request.COOKIES.get('access') 
@@ -80,7 +87,7 @@ class CustomAuthentication(JWTAuthentication):
             # auth the csrf is called authmatically the rest we have to do it for ouerselves
             enforce_csrf(request)
         expected_user = self.get_user(validated_token)
-        # print("expected user" ,expected_user)
+        print("expected user" ,expected_user)
         return expected_user, validated_token #Attempts to find and return a user using the given validated token.
     
 # plug it to settings

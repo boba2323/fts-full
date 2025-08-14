@@ -15,6 +15,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from accounts.authenticate import CustomAuthentication
 from django.db.models import Prefetch
+
+from django.utils.decorators import method_decorator
+# this is for csrf
+from django.views.decorators.csrf import ensure_csrf_cookie
 User = get_user_model()
 # # Create your views here.
 # # this view is just for creating users without exposing the user list and does not need amy perms
@@ -37,6 +41,7 @@ class RegisterView(CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 # this is the login view
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 class CustomTokenObtainPairView(TokenObtainPairView):
     # https://stackoverflow.com/questions/66197928/django-rest-how-do-i-return-simplejwt-access-and-refresh-tokens-as-httponly-coo
 # https://medium.com/@cassymyo/how-to-get-token-user-information-using-simple-jwt-django-rest-framework-and-react-js-part-1-af528bab854a

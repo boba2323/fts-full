@@ -60,7 +60,7 @@ const AccessCodeList = ({supervisor}) => {  //supervisor is a boolean to toggle 
               </tr>)
             : (accessCodeData.map((ac) => (
                                   <tr key={ac.id} className='border-b-2 border-gray-50 h-8'>
-                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={ac.url}>{ac.code }</a></td>
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a >{ac.code }</a></td>
                                     {/* <td className='ps-5'>{format(new Date(file.date_created), 'dd MMM yyyy')}</td> */}
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{ac.team_name }</td>
                                     <td className='ps-5

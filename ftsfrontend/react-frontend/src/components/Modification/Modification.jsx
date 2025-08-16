@@ -56,7 +56,7 @@ const Modification = ({supervisor}) => {  //supervisor is a boolean to toggle be
               </tr>)
             : (modData.map((modification) => (
                                   <tr key={modification.id} className='border-b-2 border-gray-50 h-8'>
-                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={modification.url}>{modification.file_name_at_modification }</a></td>
+                                    <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a>{modification.file_name_at_modification }</a></td>
                                     <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{modification.modified_by_username_at_modification }</td>
                                     <td className='ps-5
                                     text-xs font-light font-sans text-gray-700'

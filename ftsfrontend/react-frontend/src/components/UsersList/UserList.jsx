@@ -58,7 +58,7 @@ const UserList = ({supervisor}) => {
                 (user) => 
                     (
                     <tr key={user.id} className='border-b-2 border-gray-50 h-8'>
-                        <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={user.url}>{user.username }</a></td>
+                        <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a>{user.username }</a></td>
                         <td className='ps-5 text-xs font-medium font-sans text-gray-700'>{user.email }</td>
                         {/* <td className='ps-5
                         text-xs font-light font-sans text-gray-700'

@@ -1,0 +1,67 @@
+
+services:
+
+ db:
+   image: postgres:16
+   environment:
+     POSTGRES_DB: 'fts1'
+     POSTGRES_USER: 'postgres'
+     POSTGRES_PASSWORD: 'black'
+   ports:
+     - "5432:5432"
+   volumes:
+     - postgres_data:/var/lib/postgresql/data
+   env_file:
+     - ftscore/.env.dev
+
+ django-web:
+   build:
+      context: ftscore
+      dockerfile: Dockerfile
+   expose:
+     - "8000"
+   depends_on:
+     - db
+     - redis
+   env_file:
+     - ftscore/.env.dev
+   volumes:
+      - static_volume:/app/staticfiles 
+
+ nginx:
+   build:
+      context: .
+      dockerfile: nginx/Dockerfile
+   ports:
+     - 1337:80
+   depends_on:
+     - django-web
+   volumes:
+     - static_volume:/app/staticfiles
+   env_file:
+     - ftscore/.env.dev
+
+ redis:
+   image: redis:alpine
+   restart: unless-stopped
+   expose:
+      - 6379
+   env_file:
+     - ftscore/.env.dev
+
+
+ celery:
+   build:
+     context: ftscore
+   entrypoint: ./worker-entrypoint.sh
+   restart: always
+   container_name: celery_container
+   depends_on:
+    - redis
+    - db
+   env_file:
+     - ftscore/.env.dev
+
+volumes:
+   postgres_data:
+   static_volume:

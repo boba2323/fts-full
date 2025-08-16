@@ -15,11 +15,17 @@ from datetime import timedelta
 import os
 
 from dotenv import load_dotenv
-load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_DEV_PATH = BASE_DIR / '.env.dev'
+ENV_PROD_PATH = BASE_DIR / '.env.prod'
 
+# ===============================IMPORTANT ==================================
+# LOAD A ENV DEV DURING LOCAL RUN BUT A ENV PROD OR DEFAULT FOR PRODUCTION
+load_dotenv()
+# ===========================================================================
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -145,47 +151,36 @@ WSGI_APPLICATION = 'ftssite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-ONLINE_DB = False
-# if ONLINE_DB:
-#     DATABASES = {
-#   'default': {
-#     'ENGINE': 'django.db.backends.postgresql',
-#     'NAME': os.getenv('PGDATABASE'),
-#     'USER': os.getenv('PGUSER'),
-#     'PASSWORD': os.getenv('PGPASSWORD'),
-#     'HOST': os.getenv('PGHOST'),
-#     'PORT': os.getenv('PGPORT', 5432),
-#     'OPTIONS': {
-#       'sslmode': 'require',
-#     },
-#     'DISABLE_SERVER_SIDE_CURSORS': True,
-#   }
-# }
-# elif DEBUG == False:
-#     DATABASES = {
-#     "default": {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DATABASE_NAME', 'fts1'),
-#         'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
-#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
-#         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
-#         'PORT': os.getenv('DATABASE_PORT', 5432),
-#     }
-# }
-# else: 
-#     DATABASES = {
-#     "default": {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME':  'fts1',
-#         'USER':  'postgres',
-#         'PASSWORD':  'black',
-#         'HOST': 'localhost',
-#         'PORT':  5432,
-#     }
-# }
-# import os
 
-DATABASES = {
+# if DATABASE_CONTAINER:
+#     DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('PGDATABASE'),
+#         'USER': os.getenv('PGUSER'),
+#         'PASSWORD': os.getenv('PGPASSWORD'),
+#         'HOST': os.getenv('PGHOST'),
+#         'PORT': os.getenv('PGPORT', 5432),
+#         'OPTIONS': {
+#         'sslmode': 'require',
+#         },
+#         'DISABLE_SERVER_SIDE_CURSORS': True,
+#     }
+#     }
+DATABASE_CONTAINER = os.environ['DATABASE_CONTAINER'] == 'True'
+if DATABASE_CONTAINER == True:
+    DATABASES = {
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME', 'fts1'),
+        'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': os.getenv('DATABASE_PORT', 5432),
+        }
+    }
+else: 
+    DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME':  'fts1',
@@ -193,21 +188,8 @@ DATABASES = {
         'PASSWORD':  'black',
         'HOST': 'localhost',
         'PORT':  5432,
+        }
     }
-}
-
-
-# DATABASES = {
-#     "default": {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DATABASE_NAME', 'fts1'),
-#         'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
-#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'black'),
-#         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
-#         'PORT': os.getenv('DATABASE_PORT', 5432),
-#     }
-# }
-
 
 
 # Password validation

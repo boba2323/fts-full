@@ -55,7 +55,7 @@ const FileList = ({supervisor}) => {
                 </tr>)
               : (fileData.map((file) => (
                                     <tr key={file.id} className='border-b-2 border-gray-50 h-8'>
-                                      <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a href={file.url}>{file.name }</a></td>
+                                      <td className='ps-5 text-xs font-medium font-sans text-gray-700'><a>{file.name }</a></td>
                                       {/* <td className='ps-5'>{format(new Date(file.date_created), 'dd MMM yyyy')}</td> */}
                                       <td className='ps-5
                                       text-xs font-light font-sans text-gray-700'

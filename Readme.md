@@ -21,6 +21,9 @@ Performance
 # Your VITE_API_URL=http://localhost/apiv1. #This is for non dockerised runs
 # VITE_API_URL=http://localhost:1337/apiv1
 
+## UPDATE
+Just use VITE_API_URL=/apiv1
+
 THIS is for nginx server
 
 # Check your database as well in settings.py, make sure it depends on db

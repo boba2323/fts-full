@@ -9,8 +9,6 @@ import { useAuth } from '../../authentication/authProvider';
 // https://github.com/react-icons/react-icons#configuration
 // this for styling icons
 import { IconContext } from "react-icons";
-
-
 const Header2 = ({
 }) => {
   // get the user from the context authProvider
@@ -21,6 +19,7 @@ const Header2 = ({
   // }
 
   return (
+    
     <div className='w-full h-9 flex flex-row bg-white justify-between border-b-2 px-4 border-t-2 border-gray-100
      *:border-opacity-25'>
       <div className='flex flex-row text-xs justify-center text-gray-700 text-center items-center'>

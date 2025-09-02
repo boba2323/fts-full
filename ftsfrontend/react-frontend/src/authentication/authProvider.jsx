@@ -46,7 +46,9 @@ export const AuthProvider = ({ children }) => {
         console.log("auth error")
         console.error(error)
         console.log(error.message)
-        console.log( "error response data",error.response.data)
+        if (error.response?.data){
+          console.log( "error response data",error.response.data)
+        }
         setUserIn(null)
        } finally {
         setLoading(false)  //loading is over now wecan call the pages

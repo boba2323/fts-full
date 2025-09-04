@@ -58,6 +58,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
     // ==================get team data==============================
 
     useEffect(()=>{
+        console.log("effect fired")
         // ========================GET INDIVIDUAL TEAM and the data with it aong with the workers==============================
         const createInitalUpdateData = async()=>{
             setFinishLoadingTeamUpdateData(false)
@@ -161,6 +162,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             }))
         } finally {
             setLoadingFields(false)
+            console.log(loadingFields)
         }
     }
     fetchUserNonTeamApi()
@@ -376,7 +378,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             console.log("Team created successfully!:", response.data)
             
             const showToastMessage = () => {
-                toast.success("Success Notification !", {
+                toast.success("Team created successfully", {
                 position: "bottom-right"
                 });
             };
@@ -443,6 +445,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             return "text-blue-500 border-blue-500 bg-blue-50"
         }
     }
+    console.log( "loading fields",loadingFields)
     
   return (
     <div>
@@ -476,7 +479,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
 
                     {/* if user is a not in team, hes not SU or SV hes not in L1, he wont see leader input*/}
                     {loadingFields?<Loading/>
-                    :userIn?.is_temp && inputData? <Loading/>   
+                    :userIn?.is_temp && inputData? <></>   
                           :userIn.is_not_god_only_L2_L3?<></>
                           :<SelectInput
                             name="selectedUser"  //make sure the name is unique and matches the state name
@@ -521,7 +524,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                                 >Remove Worker</button>
                         </div>
                     ))
-                    :<div className='text-gray-500 text-sm'>Nothing to see!</div>}
+                    :<div className='text-gray-500 text-sm'>Nothing to see</div>}
                 </div>
             </div>
             {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}

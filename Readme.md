@@ -46,15 +46,15 @@ What we did
 # To set up the droplet/VPS
 1.	npm run build
 2.  docker compose -f ../docker-compose.prod.yml up —build
-3.	sudo docker login -u rkmech
-4.	docker tag postgres:16 rkmech/crumpet:postgres16
-5.	docker commit 3d293410df7f rkmech/crumpet:postgres16 (may not be needed)
+3.	sudo docker login -u username
+4.	docker tag postgres:16 username/crumpet:postgres16
+5.	docker commit 3d293410df7f username/crumpet:postgres16 (may not be needed)
 6.	ssh -i /home/boxxxx3/.ssh/crumpet crumpetuser@139xxxxx118 (if the key exists)
 7.	There, we create a directory, say crumpet. Inside it, make a docker compose and a env. 
 We can just copy paste the local env into the droplet env. 
 8.	services:
  db:
-   image: rkmech/crumpet:postgres16
+   image: xxxx/crumpet:postgres16
    environment:
      POSTGRES_DB: 'xxxx'
      POSTGRES_USER: 'poxxxes'

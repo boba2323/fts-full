@@ -126,7 +126,7 @@ const Login = () => {
             <form onSubmit={onLoginHandler}>
               <div className="flex flex-col">
                 {message && (
-                    <div className="text-red-500 mb-3 border border-red-500 p-2 rounded bg-red-50">
+                    <div className="flex justify-center items-center text-red-500 text-xs mb-3 mt-2 border border-red-500 p-1 rounded bg-red-50">
                       {message}
                     </div>
                   )}

@@ -42,3 +42,22 @@ What we did
 6.	In actual WORKDIR, made a new nginx.conf
 7.	Edited the compose file, added certbox service
 8.	Bind mounted the nginx file to the service so the standalone nginx file overwrites for ssl.
+
+# To set up the droplet/VPS
+1.	npm run build
+2.  docker compose -f ../docker-compose.prod.yml up —build
+3.	sudo docker login -u rkmech
+4.	docker tag postgres:16 rkmech/crumpet:postgres16
+5.	docker commit 3d293410df7f rkmech/crumpet:postgres16 (may not be needed)
+6.	ssh -i /home/boxxxx3/.ssh/crumpet crumpetuser@139xxxxx118 (if the key exists)
+7.	There, we create a directory, say crumpet. Inside it, make a docker compose and a env. 
+We can just copy paste the local env into the droplet env. 
+8.	services:
+ db:
+   image: rkmech/crumpet:postgres16
+   environment:
+     POSTGRES_DB: 'xxxx'
+     POSTGRES_USER: 'poxxxes'
+     POSTGRES_PASSWORD: 'xxxx'
+9.	The above is your docker compose and how it will download the docker images
+10.	sudo docker compose up –d

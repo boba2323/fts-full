@@ -46,7 +46,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
                   <div className="leave-button flex items-center justify-center text-xs
                     text-gray-700 tracking-wide font-semibold cursor-pointer mb-3">
                     <Link to={`/fts/workspace/teammembership/delete/${teamId}`} >
-                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:text-deep-purple-600'>
+                    <p className=' flex items-center justify-center p-1 rounded cursor-pointer hover:text-orange-600'>
                       Leave Team</p>
                       
                     </Link>
@@ -74,7 +74,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   if (userIn.team?.id?.toString() === teamId.toString()){
     addFiles= <Link to={`/fts/workspace/team/${teamId}/files-upload`}>
                   <div className=' flex flex-row text-gray-700 text-sm 
-                  items-center hover:text-deep-purple-600 cursor-pointer font-semibold p-1 rounded my-2'>
+                  items-center hover:text-purple-500 cursor-pointer font-semibold p-1 rounded my-2'>
                       Upload Files
                   </div>
               </Link> 
@@ -284,20 +284,30 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
             <div className="file-parent-card ps-3 mb-3">
             {userIn.team?.id?.toString() === teamId.toString() || userIn.is_god
             ?loading?<Loading/>
-                  :teamViewData.files_owned.map(file=>
+            :<table className='file w-full mb-5 my-3 '>
+                <thead>
+                  <tr className='border-b-2 border-gray-200 h-6'>
+                    <th className='text-left w-1/2 ps-4 text-xs font-medium font-sans text-gray-700'>File Name</th>
+                    <th className='text-left w-1/2 text-xs font-medium font-sans text-gray-700'>Date uploaded</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teamViewData.files_owned.map(file=>
                     // const iso_string = file.date_created
                     // const date = new Date(iso_string).toLocaleDateString()
                     (
-                    <div className="file-card flex flex-row py-4 border justify-between border-gray-100">
-                      <p className='text-xs ps-4 font-medium font-sans text-gray-700'>{file.name}</p>
-                      <p className='text-xs ps-4 font-medium font-sans text-gray-700'>{new Date(file.date_created).toLocaleDateString('en-IN',{
+                    <tr key={file.id} className="file-card py-4 border border-gray-100">
+                      <td className='text-xs ps-4 py-4 font-medium font-sans text-gray-700'>{file.name}</td>
+                      <td className='text-xs  py-4 font-medium font-sans text-gray-700'>{new Date(file.date_created).toLocaleDateString('en-IN',{
                           year: "numeric",
                           month: "long",
                           day: "numeric",
                         })}
-                      </p>
-                    </div>
-                  ))
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             :<></>}              
                 
             </div>

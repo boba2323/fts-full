@@ -6,7 +6,8 @@ import viteLogo from '/vite.svg'
 import {AuthProvider} from "./authentication/authProvider";
 // we import from the index in routes
 import Routes from "./routes";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // ======================================
 
 

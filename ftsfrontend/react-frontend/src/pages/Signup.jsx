@@ -1,4 +1,4 @@
-import { data, useNavigate } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../authentication/authProvider";
 import InputLabel from "./InputLabel";
 import AuthButton from "./AuthButton";
@@ -101,6 +101,12 @@ const Signup = () => {
         >
           <AuthBanner title = {"Sign Up Here"} subtitle={"Please enter your details to make an account"}/>
           <div className="formcard">
+            <p className="flex flex-row justify-self-center text-sm mb-3 font-semibold text-gray-700"> Or hop to 
+              <Link to="/fts/workspace">
+                <span className="text-purple-600">&nbsp;Login
+                </span>
+              </Link>
+            </p>
 
             <form onSubmit={onSubmitHandler}>
               <div className="flex flex-col">

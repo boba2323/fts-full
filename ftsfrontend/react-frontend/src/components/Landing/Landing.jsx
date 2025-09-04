@@ -83,7 +83,7 @@ const Landing = () => {
       <div className='pb-20 mb-20'>
         <div className="min-h-96 bg-gradient-to-r from-purple-700 to-purple-300 ">
           <header className='px-12 pt-16'>
-            <h2 className='text-4xl font-extrabold mb-2 text-gray-100'>Welcome to FTS</h2>
+            <h2 className='text-4xl font-extrabold mb-2 text-gray-100'>Welcome to Crumpet</h2>
             <p className='mt-5 text-xl font-medium text-gray-300 w-2/5'>The enterprise file management and privacy compliant system</p>
           </header>
           <div className='flex flex-col px-12'>

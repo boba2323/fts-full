@@ -39,50 +39,57 @@ const Sidebar = ({
       <nav className="space-y-1">
         {userIn.is_supervisor || userIn.is_superuser || userIn.is_Team_L1 || userIn.is_staff
           ?<Link to={`admin`} className="block" >
-            <div className="flex flex-row items-center px-4 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+            <div className="flex flex-row items-center px-4 py-2 rounded-md hover:bg-light-blue-50
+            active:bg-light-blue-100 cursor-pointer">
               <FaUserShield size={20}/>
-              <div className=" flex flex-row items-center ps-4 text-sm font-bold text-purple-500">Admin</div>
+              <div className=" flex flex-row items-center ps-4 text-xs font-semibold">Admin</div>
             </div>
             </Link>
           :<></>
         }
         {/* https://reactrouter.com/6.28.0/start/tutorial#nesting-routes */}
         <Link to={``} className="block" >
-        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50
+        active:bg-light-blue-100 cursor-pointer">
           <span><AiOutlineAppstore size={22}/></span>
           <div className=" flex flex-row items-center ps-4 text-xs ">Dashboard</div>
         </div>
         </Link>
 
         <Link to={`workspace`} className="block">
-        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50
+        active:bg-light-blue-100 cursor-pointer">
           <AiOutlineDesktop size={22}/>
           <div className="flex flex-row items-center ps-4 text-xs">Workspace</div>
         </div>
         </Link>
 
         <Link to={`files`} className="block">
-        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50
+        active:bg-light-blue-100 cursor-pointer">
           <AiOutlineDatabase size={21}/>
           <div className=" flex flex-row items-center ps-4 text-xs">Files</div>
         </div>
         </Link>
 
         <Link to={`teams`} className="block" >
-        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50
+        active:bg-light-blue-100 cursor-pointer">
           <FaPuzzlePiece  size={20}/>
           <div className="flex flex-row items-center ps-4 text-xs">Teams</div>
         </div>
         </Link>
 
         <Link to={`users`} className="block">
-        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50 cursor-pointer">
+        <div className="flex flex-row items-center px-3 py-2 rounded-md hover:bg-light-blue-50
+        active:bg-light-blue-100 cursor-pointer">
           <AiOutlineTeam size={22}/>
           <div className="flex flex-row items-center ps-4 text-xs">Users</div>
         </div>
         </Link>
         <Link to={`/logout`}>
-        <div className="flex flex-row items-center px-3 py-3 rounded-md hover:bg-deep-orange-50 cursor-pointer">
+        <div className="flex flex-row items-center px-3 py-3 rounded-md hover:bg-deep-orange-50
+        active:bg-deep-orange-100 cursor-pointer">
           <AiOutlineLogout/>
           
             <p className="block text-xs ps-5 ">Logout</p>

@@ -309,9 +309,9 @@ CORS_ALLOWED_ORIGINS = [
     'https://139.59.60.118',
 
     'http://www.crumpet.cc',
-    'http://.crumpet.cc',
+    'http://crumpet.cc',
     'https://www.crumpet.cc',
-    'https://.crumpet.cc',
+    'https://crumpet.cc',
     
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
@@ -327,9 +327,9 @@ CSRF_TRUSTED_ORIGINS = [
     'https://139.59.60.118',
 
     'http://www.crumpet.cc',
-    'http://.crumpet.cc',
+    'http://crumpet.cc',
     'https://www.crumpet.cc',
-    'https://.crumpet.cc',
+    'https://crumpet.cc',
 ]
 
 

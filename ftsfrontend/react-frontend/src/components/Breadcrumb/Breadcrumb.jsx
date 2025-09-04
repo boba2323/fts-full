@@ -37,7 +37,7 @@ export default function Breadcrumb() {
         <Link
           to={`/fts/`}
           className=" cursor-pointer  hover:underline">
-          FTS
+          Crumpet
         </Link>
         <AiOutlineRight />
         {urlList.length>0
@@ -66,7 +66,7 @@ export default function Breadcrumb() {
                 }
                 
                 {index<urlList.length-1
-                ?<AiOutlineRight />
+                ?<div className="flex justify-center items-center ps-1"> <AiOutlineRight /></div> 
                 :<></>}
               </div>)
             }

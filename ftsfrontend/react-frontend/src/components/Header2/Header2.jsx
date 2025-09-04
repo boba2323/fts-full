@@ -30,9 +30,13 @@ const Header2 = ({
         {userIn.is_god
         ? <Link to={`upload-file`} >
         <button 
-          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-gray-700 text-center items-center"
+          className="fileupload flex my-2 px-2 hover:bg-light-blue-50 transition duration-50 rounded-sm text-xs justify-center
+            active:bg-light-blue-100
+          bg-white  text-gray-700 text-center items-center"
           > 
-          <div className='pe-2'><FaArrowUpFromBracket /></div>
+          <IconContext.Provider value={{ color: "orange", className: "global-class-name" }}>
+            <div className='pe-2'><FaArrowUpFromBracket /></div>
+          </IconContext.Provider>
           File Upload
         </button>
         </Link>
@@ -42,8 +46,9 @@ const Header2 = ({
         
         <Link to={`admin/create-team`} >
           <button 
-          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-gray-700 text-center items-center"
-          > <IconContext.Provider value={{ color: "green", className: "global-class-name" }}>
+          className="fileupload flex my-2 px-2 hover:bg-light-blue-50 transition duration-50 
+          active:bg-light-blue-100  rounded-sm text-xs justify-center bg-white  text-gray-700 text-center items-center"
+          > <IconContext.Provider value={{ color: "orange", className: "global-class-name" }}>
             {/* https://github.com/react-icons/react-icons#configuration */}
               <div className='pe-2'><FaUserGroup  /></div>
             </IconContext.Provider>
@@ -54,8 +59,9 @@ const Header2 = ({
         {userIn.is_god
         ?<Link to={`admin/create-accesscode`} >
           <button 
-          className="fileupload flex my-2 px-2 hover:bg-yellow-50 transition duration-1000 hover:border rounded-sm text-xs justify-center bg-white border-green-100 text-gray-700 text-center items-center"
-          > <IconContext.Provider value={{ color: "green", className: "global-class-name" }}>
+          className="fileupload flex my-2 px-2 hover:bg-light-blue-50 transition duration-50 
+          active:bg-light-blue-100  rounded-sm text-xs justify-center bg-white  text-gray-700 text-center items-center"
+          > <IconContext.Provider value={{ color: "orange", className: "global-class-name" }}>
             {/* https://github.com/react-icons/react-icons#configuration */}
               <div className='pe-2'><FaUserGroup  /></div>
             </IconContext.Provider>

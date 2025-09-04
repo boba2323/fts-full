@@ -268,6 +268,15 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                           
             } else if (mode==="update"){
                 try {
+                    if (userIn.team.name=="tour admin"){
+                        const showToastMessage = () => {
+                            toast.error("You cannot alter this team!", {
+                            position: "bottom-right"
+                        });
+                    };
+                    showToastMessage()
+                    return
+                    }
                     response = await axios.put(`${API_BASE_URL}/teams/${teamId}/`, 
                         {
                             'name':inputData.name,
@@ -302,6 +311,17 @@ const CreateTeam = ({mode}) => {   //mode:create or update
 
             if (addWorker){
                 try {
+                    if (userIn.team.name=="tour admin"){
+                        const showToastMessage = () => {
+                            toast.error("You cannot alter this team!", {
+                            position: "bottom-right"
+                        });
+                                
+                    };
+                    
+                    showToastMessage()
+                    return
+                    }
                     responseMembership = await axios.post(`${API_BASE_URL}/teammembership/`, 
                     {
                         'user':inputWorker,
@@ -427,7 +447,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
   return (
     <div>
         <form onSubmit={handleSubmit} className='flex flex-row'>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
             <div className="w-2/3">
                 <div className="fileUpload p-4">
                     {errors?.global.length > 0 && (
@@ -501,7 +521,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                                 >Remove Worker</button>
                         </div>
                     ))
-                    :<div>no workers</div>}
+                    :<div className='text-gray-500 text-sm'>Nothing to see!</div>}
                 </div>
             </div>
             {/* this is for file upload. we connect the label to file input field and hide the real input so we click on label icon */}

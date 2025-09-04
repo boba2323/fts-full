@@ -9,7 +9,7 @@ const Header = () => {
         <div className="flag-2 flex ps-4 flex-row justify-start items-center w-10/12">
             <Link to={``} >
             <div className="flag py-2 ">
-                <div className="top text-xl font-extrabold tracking-widest text-gray-700">F T S</div>
+                <div className="top text-xl font-extrabold tracking-widest text-gray-700">Crumpet</div>
                 <div className="bottom text-xs font-medium text-gray-700">A file system</div>
             </div>
             </Link>

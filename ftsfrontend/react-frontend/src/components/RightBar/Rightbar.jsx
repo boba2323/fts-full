@@ -53,21 +53,21 @@ const Rightbar = () => {
   
 
   return (
-    <div className="flex flex-col h-screen bg-white text-gray-600 pb-4 ps-3 border-l border-gray-200">
+    <div className="flex flex-col h-screen bg-white text-gray-600 pb-4 ps-3 border-s border-gray-100 ">
       <div className='mb-4'>
         <h2 className='font-bold text-sm mb-3 ps-2 mt-6'>User credentials</h2>
         <nav className="space-y-2">
           {loading
           ?<p>loading</p>
-          :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-sm hover:border border-green-100
+          :<p className="block ps-2  rounded text-sm 
             font-bold"
-            >{userData.username}</a>
+            >{userData.username}</p>
           }
           {loading
           ?<p>loading</p>
-          :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-green-100
+          :<p className="block ps-2  rounded text-xs 
             font-medium"
-            >Email: {userData['email']}</a>
+            >Email: {userData['email']}</p>
           }
           {/* {loading
           ?<p>loading</p>
@@ -105,12 +105,12 @@ const Rightbar = () => {
         
         {loading
         ? <p>loading</p>
-        :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-gray-100">
-          Team Level: {team?.level}</a>
+        :<p className="block ps-2  rounded text-xs ">
+          Team Level: {team?.level}</p>
         }
         {loading
         ? <p>loading</p>
-        :<div className="block ps-2 rounded text-xs  border-gray-700">
+        :<div className="block ps-2 rounded text-xs ">
           <span className='font-normal mb-3'>Team Workers:</span> {team?.workers
           ? team.workers.map((worker)=>(
             <span className='mt-2 me-1'key={worker.id} >
@@ -122,8 +122,8 @@ const Rightbar = () => {
         }
         {loading
         ? <p>loading</p>
-        :<a href="#" className="block ps-2 hover:bg-green-50 rounded text-xs hover:border border-green-100">
-          Team Access Code: {team?.access_code_code}</a>
+        :<p className="block ps-2  rounded text-xs ">
+          Team Access Code: {team?.access_code_code}</p>
         }
       </nav>
 

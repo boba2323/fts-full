@@ -7,6 +7,7 @@ import { useState } from "react";
 // for api
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Link } from "react-router-dom";
 const Login = () => {
   const API_BASE_URL = import.meta.env.VITE_API_URL;
   const { userIn, setUserIn, hitMeandFetch } = useAuth();
@@ -113,7 +114,14 @@ const Login = () => {
         mx-6 md:mx-0
          px-4 sm:px-6 md:px-10 border border-gray-200 h-full">
           <AuthBanner title = {"Welcome Back"} subtitle={"Please enter your details here"}/>
+          
           <p className="flex align-middle justify-center items-center text-center text-xs sm:text-xs text-purple-700 mb-4">We encourage you to use a fake email to view this app</p>
+          <Link to='/'>
+          <div className="flex flex-row justify-center mt-1">
+            <p className="text-xs text-gray-700 hover:text-orange-700 active:text-orange-900">Back to landing page</p>
+          </div>
+          </Link>
+          
           <div className="formcard">
             <form onSubmit={onLoginHandler}>
               <div className="flex flex-col">

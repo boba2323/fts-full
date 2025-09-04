@@ -40,13 +40,15 @@ export default function Modal({
             >
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
-                    <ExclamationTriangleIcon aria-hidden="true" className="size-6 text-red-600" />
+                  <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-purple-100 sm:mx-0 sm:size-10">
+                    <ExclamationTriangleIcon aria-hidden="true" className="size-6 text-white" />
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <DialogTitle as="h3" className="text-base font-semibold text-gray-900">
-                      Delete this {target}
-                    </DialogTitle>
+                    <div className='flex flex-row items-center'>
+                      <DialogTitle as="h3" className="flex items-center text-base font-semibold text-gray-700">
+                        Delete this {target}
+                      </DialogTitle>
+                    </div>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                         {message}
@@ -55,11 +57,14 @@ export default function Modal({
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+              <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <button
                   type="button"
                   onClick={handleClick }
-                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto"
+                  className="inline-flex w-full justify-center rounded-md text-orange-700 px-3 py-2 text-sm
+                  ring-1 ring-transparent
+                  hover:ring-inset hover:ring-orange-300 bg-white
+                  sm:ml-3 sm:w-auto"
                 >
                   Delete {target}
                 </button>
@@ -69,7 +74,10 @@ export default function Modal({
                   onClick={
                     () => setOpen(false)
                   }
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                  className="mt-3 inline-flex w-full justify-center rounded-md
+                    ring-1 ring-transparent
+                    hover:ring-inset hover:ring-purple-300
+                  bg-white px-3 py-2 text-sm  text-gray-700 sm:mt-0 sm:w-auto"
                 >
                   Cancel
                 </button>

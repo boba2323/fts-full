@@ -131,8 +131,9 @@ const CreateTeam = ({mode}) => {   //mode:create or update
         }))
     }
 // =======================================USER  API for workers and leader?===================================
-    useEffect(()=>{
+    
     const fetchUserNonTeamApi =async()=>{
+        const fullUserArray = []
         setLoadingFields(true)
         try {
             const response = await axios.get(`${API_BASE_URL}/users/`, {
@@ -141,8 +142,22 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 },
                 withCredentials: true,
             })
+            fullUserArray.push(...response.data.results)
+            while (response.data.next){ 
+                const next = await axios.get(response.data.next,
+                    {
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }
+                ) //pagination handling if there are more pages
+                fullUserArray.push(...next.data.results)
+                response.data.next = next.data.next
+                }
+
             if (userIn.is_temp || userIn.is_not_god_only_L2_L3) {
-                const newUserQS = response.data.filter(user=>user.is_temp)
+                const newUserQS = fullUserArray.filter(user=>user.is_temp)
                 setInputData((prev)=>({
                 ...prev,
                 leaderOptions: newUserQS
@@ -150,9 +165,10 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             } else {
                 setInputData((prev)=>({
                 ...prev,
-                leaderOptions: response.data
+                leaderOptions: fullUserArray
                 }))
             }
+            console.log("API users", fullUserArray)
             console.log("users", inputData.leaderOptions)
         } catch (error) {
             console.error(error)
@@ -165,7 +181,9 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             console.log(loadingFields)
         }
     }
-    fetchUserNonTeamApi()
+
+    useEffect(()=>{
+        fetchUserNonTeamApi()
     }, [inputData.workers])  //evertime we try to add a worker, workers array length changes triggering a re fetching of users that will populate the workerrs display?
 
     // =====================handle worker===========================
@@ -196,6 +214,12 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             })
             console.log("state after setting")
             console.log(inputData.workers)
+            const showToastMessage = () => {
+                toast.success("worker removed successfully", {
+                position: "bottom-right"
+                });
+            };
+            showToastMessage()
             
         } catch (error) {
             console.log(error.response.data)
@@ -256,7 +280,14 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         name: "",
                         leader: '',
                         level: '',
-                        }));   
+                        }));  
+                        
+                    const showToastMessage = () => {
+                        toast.success("Team created successfully", {
+                        position: "bottom-right"
+                        });
+                    };
+                    showToastMessage()
                 } catch (error){
                     console.log("create error")
                     console.log(error.response.data)
@@ -299,6 +330,12 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         success: "Team updated successfully!"
                         })
                     hitMeandFetch()
+                    const showToastMessage = () => {
+                        toast.success("Team updated successfully", {
+                        position: "bottom-right"
+                        });
+                    };
+                    showToastMessage()
                 } catch (error) {
                     console.log("update error")
                     console.log(error.response.data)
@@ -310,18 +347,17 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         })
                 }
             }
-
+            console.log("add worker", addWorker)
             if (addWorker){
                 try {
-                    if (userIn.team.name=="tour admin"){
+                    if (userIn?.team?.name=="tour admin"){
+                        console.log("cannot alter tour admin team")
                         const showToastMessage = () => {
                             toast.error("You cannot alter this team!", {
                             position: "bottom-right"
                         });
-                                
-                    };
-                    
-                    showToastMessage()
+                        };
+                        showToastMessage()
                     return
                     }
                     responseMembership = await axios.post(`${API_BASE_URL}/teammembership/`, 
@@ -340,6 +376,7 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                     
                     // console.log( "response data",responseMembership.data)
                     const team_url = responseMembership.data.team
+                    console.log("team url", responseMembership.data)
                     const teamData = await axios.get(team_url, {
                         headers: {
                             'Content-Type': 'application/json',
@@ -360,10 +397,15 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                         fields: {},
                         success: "Worker added successfully!"
                         })
+                        const showToastMessage = () => {
+                            toast.success("Worker added successfully", {
+                            position: "bottom-right"
+                            });
+                        };
+                        showToastMessage()
                 } catch (error) {
                     setFormIsSubmitted(false)
-                    console.log("add worker error")
-                    console.log(error.response.data)
+                    console.log( "add worker error", error)
                     errorRenderHandle(
                         {
                         errorResponse: error,
@@ -377,15 +419,9 @@ const CreateTeam = ({mode}) => {   //mode:create or update
             hitMeandFetch()
             console.log("Team created successfully!:", response.data)
             
-            const showToastMessage = () => {
-                toast.success("Team created successfully", {
-                position: "bottom-right"
-                });
-            };
-            showToastMessage()
         } catch (error) {
             // console.error(error)
-            console.log("team crate error")
+            console.log( "team create error", error)
             setFormIsSubmitted(false)
             // we get this from login boiler code
             if (error.response) {
@@ -534,28 +570,29 @@ const CreateTeam = ({mode}) => {   //mode:create or update
                 {/* {inputData?.workers?.length > 0? <button type="button" className='mt-2 py-1 flex border-2 border-red-300 text-center align-middle justify-center rounded-md' 
                 onClick={removeWoker}>Remove Worker</button>
                                    :<></> } */}
-                {addWorker? <button type="button" className='mt-2 py-1 flex border-2 bg-red-300 border-red-300 text-center align-middle justify-center rounded-md' 
-                onClick={()=>setAddWorker(false)}>Cancel</button>
-                          : <></>}
+                {addWorker
+                ? <button type="button" className='mt-2 py-1 flex border-2 bg-red-300 border-red-300 text-center align-middle justify-center rounded-md' 
+                            onClick={()=>setAddWorker(false)}>Cancel</button>
+                : <></>}
                 <AuthButton buttonText="Save Team"/>
-                {addWorker && inputData?.leaderOptions?<>
-                            <Space2/>
-                            {displayFieldErrors("user")}
-                            <SelectInput 
-                            name="selectedWorkers"
-                            value={inputWorker}  // the value is an url not an object 
-                            onChange={workerChangeHandler}
-                            labelName="Add a Worker"
-                            selectField="Choose a user as worker"
-                            fieldOptions={inputData.leaderOptions}
-                            loading={loadingFields}
-                            keyType="id"
-                            fieldDefiner="username"
-                            serialiserTpe="url"
-                            />
-                            </>
-                        
-                          :<></>}
+                {addWorker && inputData?.leaderOptions?
+                <>
+                    <Space2/>
+                    {displayFieldErrors("user")}
+                    <SelectInput 
+                    name="selectedWorkers"
+                    value={inputWorker}  // the value is an url not an object 
+                    onChange={workerChangeHandler}
+                    labelName="Add a Worker"
+                    selectField="Choose a user as worker"
+                    fieldOptions={inputData.leaderOptions}
+                    loading={loadingFields}
+                    keyType="id"
+                    fieldDefiner="username"
+                    serialiserTpe="url"
+                    />
+                </>
+                :<></>}
             </div>
             <div>
             </div>

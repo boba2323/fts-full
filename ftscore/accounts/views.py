@@ -157,6 +157,7 @@ class LoggedUserView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [CustomAuthentication]
 
     def get(self, request):
+        print("accounts")
         user = request.user
         if not user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)

@@ -99,7 +99,7 @@ const FileUpload = () => {
             })
             setInputData((prev)=>({
                 ...prev,
-                folderOptions: response.data
+                folderOptions: response.data.results
             }))
             console.log('folderOptions:', inputData?.folderOptions);
         } catch (error) {
@@ -130,7 +130,7 @@ const FileUpload = () => {
             })
             setInputData((prev)=>({
                 ...prev,
-                accessCodeOptions: response.data
+                accessCodeOptions: response.data.results
             }))
 
             if (response.status===200){
@@ -158,7 +158,7 @@ const FileUpload = () => {
             })
             setInputData((prev)=>({
                 ...prev,
-                accessCodeOptions: response.data
+                accessCodeOptions: response.data.results
             }))
 
             if (response.status===200){
@@ -255,10 +255,9 @@ const FileUpload = () => {
                 // success login 
     
                     }
-                setErrors(prev=>({
-                    ...prev,
-                    success:"Successfully uploaded file"
-                }))
+                setErrors({global:'',
+                            fields:'',
+                            success:'Uploaded file successfully'})
     
                 setFormIsSubmitted(true)
 

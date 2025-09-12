@@ -17,6 +17,11 @@ import { FaUserGear, FaUserPen  } from "react-icons/fa6";
 import { Tooltip, Button } from "@material-tailwind/react";
 import { useAuth } from '../../authentication/authProvider.jsx';
 
+import ModalSearch from '../Modal/ModalSearch.jsx';
+// import { useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import PaginationSticker from '../Pagination/PaginationSticker.jsx';
+
 const TeamView = () => {  //supervisor is a boolean to toggle between team update
   const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [teamViewData, setTeamViewData] =useState()
@@ -33,6 +38,28 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
   const [searchParamsTeamId, setSearchParamsTeamId] = useSearchParams()
 
   const [listView, setListView] = useState(true)
+
+  // modal state definition
+  const [open, setOpen] = useState(false)
+
+  // pagination state definitions
+  const [responseData, setResponseData] = useState({})
+  const [pageNumSearch, setPageNumSearch] = useState(1)
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageQueryParam = searchParams.get("page");
+  const [searchQuery, setSearchQuery] = useState(pageQueryParam || "");
+  const pageSize = 10; // <- match your DRF PAGE_SIZE
+  const navigate = useNavigate();
+
+  const clickSearch = (event) =>{
+      //onclick function wrapping the fetchuserdata to be passed to teh modal
+      setSearchParams({page: searchQuery})
+
+      console.log( "page number entered into the search",pageNumSearch)
+      console.log("search params after setting it", searchParams.get("page"))
+      navigate(`?page=${searchQuery}`)
+  }
   
 
   
@@ -128,7 +155,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
           withCredentials: true, // Optional: only needed if cookies are set
           }
         )
-        setExtraViewModificationQSData(responseModification.data)
+        setExtraViewModificationQSData(responseModification.data.results)
       } catch (error) {
         console.error(error)
       } finally {
@@ -142,6 +169,7 @@ const TeamView = () => {  //supervisor is a boolean to toggle between team updat
     const fetchTeamViewData = async ()=>{
       // console.log("csrftoken = ", Cookies.get('csrftoken'))
         setLoading(true)
+        console.log("teamview url check",`${API_BASE_URL}/teams/${teamId}/`)
         try {
             const responseTeam = await axios.get(`${API_BASE_URL}/teams/${teamId}/`,
               {

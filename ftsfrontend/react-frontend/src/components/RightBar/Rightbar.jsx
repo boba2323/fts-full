@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import { data, useParams } from 'react-router-dom';
 import { useAuth } from '../../authentication/authProvider';
-
+import Cookies from 'js-cookie';
 
 // https://dev.to/darkmavis1980/fetching-data-with-react-hooks-and-axios-114h
 const Rightbar = () => {
@@ -12,44 +12,36 @@ const Rightbar = () => {
   const [loading, setLoading] = useState(true);
   const [team, setTeam] = useState()
 
-  useEffect(()=>{
-    const fetchData = async ()=>{
-      setLoading(true)
-      try {
-            const response = await axios.get(`${API_BASE_URL}/accounts/me/`,
-              {
+  const fetchUserTeamData = async ()=>{
+    setLoading(true)
+    try {
+      // console.log("rightbar me respinse ",`${API_BASE_URL}/teams/${response.data['team']['id']}`)
+      if (userIn.team?.id){
+          const responseTeam =await axios.get(`${API_BASE_URL}/teams/${userIn.team.id}`,
+            {
             headers: {
-              'Content-Type': 'application/json'
-            },
-            withCredentials: true, // Optional: only needed if cookies are set
-            }
-          )
-          setData(response.data)
-          // we get the team detail from the api and store it
-          if (response.data.team){
-              const responseTeam =await axios.get(`${API_BASE_URL}/teams/${response.data['team']['id']}`,
-                {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true, // Optional: only needed if cookies are set
-              }
-              )
-              setTeam(responseTeam.data)
-          } else {
-            console.log("teamapi not accessed")
+              'Content-Type': 'application/json',
+              'X-CSRFToken': Cookies.get('csrftoken')
+          },
+          withCredentials: true, // Optional: only needed if cookies are set
           }
-        } catch (error) {
-          console.error("Error fetching data:", error)
-          setTeam()
-          setData(error.message)
-        } finally {
-          setLoading(false)
-        }
+          )
+          setTeam(responseTeam.data)
+      } else {
+        console.log("user has no team")
       }
-    fetchData()
-  }, [userIn?.team])
-  
+    } catch (error) {
+      console.error("Error fetching data:", error.response.data)
+      setTeam()
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
+  useEffect(()=>{
+    fetchUserTeamData()
+  }, [userIn?.team?.id])
   
 
   return (
@@ -61,13 +53,13 @@ const Rightbar = () => {
           ?<p>loading</p>
           :<p className="block ps-2  rounded text-sm 
             font-bold"
-            >{userData.username}</p>
+            >{userIn.username}</p>
           }
           {loading
           ?<p>loading</p>
           :<p className="block ps-2  rounded text-xs 
             font-medium"
-            >Email: {userData['email']}</p>
+            >Email: {userIn['email']}</p>
           }
           {/* {loading
           ?<p>loading</p>
@@ -85,7 +77,7 @@ const Rightbar = () => {
           ?<p>loading</p>
           :<p className="block ps-2 rounded text-xs 
             font-medium"
-            >Role in Team: {userData['role']}</p>
+            >Role in Team: {userIn['role']}</p>
           }
         </nav>
       </div>
@@ -94,7 +86,7 @@ const Rightbar = () => {
         {loading
         ?<p>loading</p>
         :<p className='font-bold text-sm'><span className='font-light text-sm'>
-          Team Name:</span> {userData['belongs_to_team']}</p>
+          Team Name:</span> {userIn['belongs_to_team']}</p>
         }
       </h2>
       <nav className="space-y-3">
@@ -106,7 +98,7 @@ const Rightbar = () => {
         {loading
         ? <p>loading</p>
         :<p className="block ps-2  rounded text-xs ">
-          Team Level: {team?.level}</p>
+          Team Level: {userIn?.team_access_level}</p>
         }
         {loading
         ? <p>loading</p>

@@ -11,6 +11,10 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
 import { useAuth } from '../../authentication/authProvider';
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const CreateAC= ({mode}) => {   //mode:create or update
     // teamId is retrieved in createteam.jsx to render the required team it is found in route/index where it is
     //  passed in url and in team.jsx where the value is passed to it
@@ -112,6 +116,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 })
 
                 const teamListSelectData=response.data
+                console.log("response data", teamListSelectData)
                 setACData((prev) => ({
                     ...prev,
                     teamOptions:[teamListSelectData] //needs to be  array
@@ -141,7 +146,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                     withCredentials: true,
                 })
 
-                const teamListSelectData=response.data
+                const teamListSelectData=response.data.results
                 setACData((prev) => ({
                     ...prev,
                     teamOptions:teamListSelectData
@@ -170,23 +175,33 @@ const CreateAC= ({mode}) => {   //mode:create or update
 
     // ===================SUBMIT FUNCTIION=====================
     const handleSubmit= async (e)=>{
+        e.preventDefault()
         // we feed the team url to team, we get it from up above where we get the tea, for L2 leader
         let teamInput = acData.team
+        console.log("teamInput", teamInput)
+        console.log("acData.teamOptions", acData)
         if (userIn?.is_not_god_only_L2_L3_leader){
             teamInput = acData.teamOptions[0].url
             console.log("notgotteaminput", teamInput)
         }
         if (!teamInput) {
+            console.log("no team selected")
             setErrors({
                 global: ["Seems like team is missing!"],
                 fields: {},
                 success: null
             });
+            const showToastMessage = () => {
+                toast.error("Seems like team is missinbg", {
+                position: "bottom-right"
+            });
+            };
+            showToastMessage()
             return;
         }
         console.log("team input", teamInput)
 
-        e.preventDefault()
+        
         try {
             let accessPostResponse
             if (mode==="create"){

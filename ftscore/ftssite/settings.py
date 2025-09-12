@@ -89,6 +89,9 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
     ),
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 SIMPLE_JWT = {
@@ -363,6 +366,17 @@ STORAGES = {
 }
 
 BROKER_URL = os.getenv('REDIS', 'redis://redis:6379/0')
+
+# https://stackoverflow.com/questions/71555212/django-rest-framework-mixed-content
+# to convert serialised httplinks to https
+if DATABASE_CONTAINER == True:
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('X-FORWARDED-PROTO', 'https')
+else:
+    USE_X_FORWARDED_HOST = False
+    SECURE_PROXY_SSL_HEADER = None
+# also see
+# https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/upgrade-insecure-requests
 
 print("[DEBUG] AWS_S3_ENDPOINT_URL =", AWS_S3_ENDPOINT_URL)
 print("[DEBUG] MEDIA_URL =", MEDIA_URL)

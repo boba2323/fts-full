@@ -102,11 +102,10 @@ class Myuser(AbstractBaseUser, PermissionsMixin):
     def get_team_membership(self):
         # cool way of getting a model without the silly circular import issue
         TeamMembership = apps.get_model('permissions', 'TeamMembership')
-        user_membership = self.memberships.select_related("team", "user")
-        if user_membership.exists():
-            team_membership_of_user = self.memberships.first()
-            return team_membership_of_user
-        return None
+        if not hasattr(self, "_cached_team_membership"):
+            memberships = list(self.memberships.select_related("team", "user").all())
+            self._cached_team_membership = memberships[0] if memberships else None
+        return self._cached_team_membership
     
     @property
     def is_team_level_L1(self):

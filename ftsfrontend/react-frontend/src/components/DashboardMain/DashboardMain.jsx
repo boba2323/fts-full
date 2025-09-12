@@ -108,23 +108,26 @@ const DashboardMain = () => {
                 <ul className='space-y-1 text-base text-gray-700 font-thin list-none'>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>Duis eu luctus nulla. Ut vel rhoncus diam. Donec et semper neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas</p>
+                    <p>Users can create teams and add others and provide access to the files they upload</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>  Make teams </p>
+                    <p>You can create only one team at a time for now to keep the flow simple</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>  Make teams </p>
+                    <p>Removing a user from a team takes away their ability to view your files</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>  Make teams </p>
+                    <p>Team leaders exercise full control over their teams</p>
                   </li>
                 </ul>
               </div>
-              <div className="right w-1/2"></div>
+              <div className="right w-1/2 ps-10">
+                <img src="/crumpetlanding2.jpg" alt="placeholder fts image" className='w-[450px] h-auto border-8
+                border-orange-100 rounded-xl  shadow-md' />
+              </div>
               
             </aside >
             <aside className='py-4 my-5 flex flex-row items-center justify-between'>
@@ -136,15 +139,15 @@ const DashboardMain = () => {
                 <ul className='space-y-1 text-base text-gray-700 font-thin'>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC </p>
+                    <p>Actions of a team are recorded in the database</p>
                   </li>
                   <li className='flex flex-row items-start gap-2 '>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>"At vero eos et accusamus et iusto odio dignissimos ducimus.</p>
+                    <p>The logs are available for all members of the team to see</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>Donec scelerisque turpis sed fermentum vehicula. Suspendisse potenti. Aenean vulputate volutpat iaculis. Morbi porta neque non turpis dictum feugiat. Aliquam erat volutpat.</p>
+                    <p>More comprehensive logging planned. Detailed logs will point to every actions of the team members in a easy to read and intuitive way</p>
                   </li>
                 </ul>
               </div>
@@ -155,19 +158,19 @@ const DashboardMain = () => {
                 <ul className='space-y-1 text-base text-gray-700 font-thin'>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p> Make teams </p>
+                    <p> Access keys permit teams to upload (and work) on files. Without them, it is not possible</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p>  Make teams </p>
+                    <p>They provide enhanced control over how a team uses its ability to upload (and work) on files</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p>  Make teams </p>
+                    <p>Access keys can be made to expire after a time by kicking off tasks in a celery beat scheduler </p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p>  Make teams </p>
+                    <p>It also provides more ways to perform logging actions</p>
                   </li>
                 </ul>
               </div>

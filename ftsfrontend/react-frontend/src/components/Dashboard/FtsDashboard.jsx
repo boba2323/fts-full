@@ -6,6 +6,7 @@ import Rightbar from "../RightBar/Rightbar"
 import DashboardMain from "../DashboardMain/DashboardMain"
 import FileUpload from "../FileUpload/FileUpload"
 import { Outlet } from "react-router-dom"
+import Footer from "../Footer/Footer"
 
 const FtsDashBoard = () =>{
     const [isUpload, setIsUpload] = useState(false);
@@ -32,6 +33,7 @@ const FtsDashBoard = () =>{
                 <Rightbar/>
             </div>
         </div>
+        <Footer/>
         </>
     )
 }

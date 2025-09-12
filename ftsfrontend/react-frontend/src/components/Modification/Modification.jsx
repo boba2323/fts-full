@@ -6,35 +6,74 @@ import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
+import ModalSearch from '../Modal/ModalSearch.jsx';
+import { useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import PaginationSticker from '../Pagination/PaginationSticker.jsx';
+
 const Modification = ({supervisor}) => {  //supervisor is a boolean to toggle between team update
   const [modData, setModData] =useState([])
   const [loading, setLoading] = useState()
 
-  useEffect (()=>{
-    const API_BASE_URL = import.meta.env.VITE_API_URL;
-    const fetchModData = async ()=>{
-      console.log("csrftoken = ", Cookies.get('csrftoken'))
-        setLoading(true)
-        try {
-            const response = await axios.get(`${API_BASE_URL}/modifications/`,
-              {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-              },
-              withCredentials: true, // Optional: only needed if cookies are set
-              }
-            )
-            setModData(response.data)
-        } catch (error) {
-          console.error("Error fetching modification data:", error)
-          setModData([])
-        } finally {
-          setLoading(false)
-        }
+  // modal state definition
+  const [open, setOpen] = useState(false)
+
+  // pagination state definitions
+  const [responseData, setResponseData] = useState({})
+  const [pageNumSearch, setPageNumSearch] = useState(1)
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageQueryParam = searchParams.get("page");
+  const [searchQuery, setSearchQuery] = useState(pageQueryParam || "");
+  const pageSize = 10; // <- match your DRF PAGE_SIZE
+  const navigate = useNavigate();
+
+  const clickSearch = (event) =>{
+      //onclick function wrapping the fetchuserdata to be passed to teh modal
+      setSearchParams({page: searchQuery})
+
+      console.log( "page number entered into the search",pageNumSearch)
+      console.log("search params after setting it", searchParams.get("page"))
+      navigate(`?page=${searchQuery}`)
+  }
+
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const fetchModData = async ()=>{
+    console.log("csrftoken = ", Cookies.get('csrftoken'))
+      setLoading(true)
+      try {
+          const response = await axios.get(`${API_BASE_URL}/modifications/`,
+            {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': Cookies.get('csrftoken')
+            },
+            withCredentials: true, // Optional: only needed if cookies are set
+            }
+          )
+          // pagination data saved to state
+          setResponseData(response.data)
+          // -------------------------
+          setModData(response.data.results)
+      } catch (error) {
+        console.error("Error fetching modification data:", error)
+        setModData([])
+      } finally {
+        setLoading(false)
       }
+    }
+
+  useEffect (()=>{
       fetchModData()
-    }, [])
+    }, [pageQueryParam])
+
+  // pagination modal serach handler
+  const onSearchHandler = (e) => {
+      const {name, value} = e.target;
+          setPageNumSearch(value)
+          setSearchQuery(value)
+          console.log("expected search query updated with value from input", searchQuery)
+      }
   return (
     <div>
       <div className="liststyle overflow-x-auto">
@@ -70,6 +109,23 @@ const Modification = ({supervisor}) => {  //supervisor is a boolean to toggle be
             }
           </tbody>
         </table>
+        <div >
+            <ModalSearch 
+                open={open}
+                setOpen={setOpen}
+                inputPgNum={pageNumSearch}
+                onClickStartSearch ={clickSearch}
+                onChange={onSearchHandler}
+                maxPageNum={ Math.ceil(responseData.count / pageSize)}
+            />
+            <PaginationSticker
+                responseData={responseData}
+                onClick={()=>{
+                        setOpen(true)
+                        }}
+                pageQueryParam={pageQueryParam}
+            />  
+            </div>
       </div>
     </div>
   )

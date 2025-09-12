@@ -11,14 +11,16 @@ class RegisterUserPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
         
-        # Allows any one to register but not view the list of users unless aunthenticated
+        if user.supervisor or request.user.is_superuser: #full access
+            return True
+        
+        # let anonymous users make post request, basically allow them to signup
         if not user.is_authenticated:
             return request.method == 'POST'
+        
         if user.is_team_level_L1:
             if request.method == 'DELETE':
                 return False
-        if user.supervisor: #full access
-            return True
         if  user.is_team_level_L1:
             return True
         if request.method == 'POST':
@@ -28,7 +30,28 @@ class RegisterUserPermission(permissions.BasePermission):
         # For other methods, check if the user is authenticated
         if request.method in permissions.SAFE_METHODS:
             return user.is_authenticated
-        return False
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+        if user.supervisor or request.user.is_superuser: #full access
+            return True
+        if not user.is_authenticated:
+            return request.method == 'POST'
+        if user.is_team_level_L1:
+            if request.method == 'DELETE':
+                return False
+        if  user.is_team_level_L1:
+            return True
+        if request.method == 'POST':
+            if user.is_team_level_L1 and user.is_team_leader():
+                return True
+            return False
+        # For other methods, check if the user is authenticated
+        if request.method in permissions.SAFE_METHODS:
+            return user.is_authenticated
+        return obj == user
+    
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -36,7 +59,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     # Read-only permissions are allowed for any request
         if user.supervisor or user.is_superuser: #full access
             return True
-        if  user.is_team_level_L1:
+        if user.is_team_level_L1:
             return True
         if request.method in permissions.SAFE_METHODS:
             return True

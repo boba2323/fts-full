@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns';
-import moment from 'moment';
+
 import { FaUsers, FaKey, FaClipboardList, FaPlus  } from 'react-icons/fa';
 import { FaForward } from "react-icons/fa6";
 import { FaPaperclip } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../authentication/authProvider';
-import InputLabel from '../../pages/InputLabel';
-import AuthBanner from '../../pages/AuthBanner';
-import AuthButton from '../../pages/AuthButton';
+import { useState } from 'react';
 import errorRenderHandle from '../UtilsErrorRendering/ErrorRenderHandle'
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import HeaderLanding from '../Header/HeaderLanding'
+import Footer from '../Footer/Footer';
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 
 const Landing = () => {
@@ -80,7 +79,8 @@ const Landing = () => {
     
   return (
     <div >
-      <div className='pb-20 mb-20'>
+      <HeaderLanding/>
+      <div className=''>
         <div className="min-h-96 bg-gradient-to-r from-purple-700 to-purple-300 ">
           <header className='px-12 pt-16'>
             <h2 className='text-4xl font-extrabold mb-2 text-gray-100'>Welcome to Crumpet</h2>
@@ -161,66 +161,70 @@ const Landing = () => {
                 <ul className='space-y-1 text-base text-gray-700 font-thin list-none'>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>Duis eu luctus nulla. Ut vel rhoncus diam. Donec et semper neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas</p>
+                    <p>Users can create teams and add others and provide access to the files they upload</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>  Make teams </p>
+                    <p>You can create only one team at a time for now to keep the flow simple</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>  Make teams </p>
+                    <p>Removing a user from a team takes away their ability to view your files</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>  Make teams </p>
+                    <p>Team leaders exercise full control over their teams</p>
                   </li>
                 </ul>
               </div>
-              <div className="right w-1/2"></div>
+              <div className="right w-1/2 ps-10">
+                <img src="/crumpetlanding2.jpg" alt="placeholder fts image" className='w-[450px] h-auto border-8
+                border-orange-100 rounded-xl  shadow-md' />
+              </div>
               
             </aside >
             <aside className='py-4 my-5 flex flex-row items-center justify-between'>
               <div className="left w-1/2">
-              <img src="/genericfts.jpg" alt="placeholder fts image" className='w-[450px] h-auto border-8
-              border-purple-100 rounded-xl  shadow-md' /></div>
+                <img src="/genericfts.jpg" alt="placeholder fts image" className='w-[450px] h-auto border-8
+                border-purple-100 rounded-xl  shadow-md' />
+              </div>
               <div className="right w-1/2">
-                <h1 className='text-2xl  font-bold pb-6'>Logging, Audit trails</h1>
+                <h1 className='text-2xl  font-bold pb-6'>Modifcation of files and Logging trails</h1>
                 <ul className='space-y-1 text-base text-gray-700 font-thin'>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC </p>
+                    <p>Actions of a team are recorded in the database</p>
                   </li>
                   <li className='flex flex-row items-start gap-2 '>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>"At vero eos et accusamus et iusto odio dignissimos ducimus.</p>
+                    <p>The logs are available for all members of the team to see</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <span><FaPaperclip className='text-purple-500 mt-1' size='16'/></span>
-                    <p>Donec scelerisque turpis sed fermentum vehicula. Suspendisse potenti. Aenean vulputate volutpat iaculis. Morbi porta neque non turpis dictum feugiat. Aliquam erat volutpat.</p>
+                    <p>More comprehensive logging planned. Detailed logs will point to every actions of the team members in a easy to read and intuitive way</p>
                   </li>
                 </ul>
               </div>
             </aside >
             <aside className='py-4 my-5 flex flex-row'>
               <div className="left w-1/2">
-                <h1 className='text-2xl  font-bold py-6'>Time  Based Access Keys</h1>
+                <h1 className='text-2xl  font-bold py-6'>Time Based Access Keys</h1>
                 <ul className='space-y-1 text-base text-gray-700 font-thin'>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p> Make teams </p>
+                    <p> Access keys permit teams to upload (and work) on files. Without them, it is not possible</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p>  Make teams </p>
+                    <p>They provide enhanced control over how a team uses its ability to upload (and work) on files</p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p>  Make teams </p>
+                    <p>Access keys can be made to expire after a time by kicking off tasks in a celery beat scheduler </p>
                   </li>
                   <li className='flex flex-row items-start gap-2'>
                     <FaPaperclip className='text-purple-500 mt-1'/>
-                    <p>  Make teams </p>
+                    <p>It also provides more ways to perform logging actions</p>
                   </li>
                 </ul>
               </div>
@@ -229,7 +233,52 @@ const Landing = () => {
             </aside >
           </section>
         </div>
+
+        <section className="future-scope bg-gradient-to-r from-purple-500 to-purple-300 py-20 px-20  shadow-inner mt-16">
+          <header className="text-center mb-12">
+            <h2 className="text-2xl font-bold text-gray-50">
+              Future Planned <span className="text-orange-600">Scope</span>
+            </h2>
+            <p className="mt-4 text-gray-100 font-light">
+              What’s next for Crumpet — continuously evolving to match enterprise needs
+            </p>
+          </header>
+          <div className="flex flex-row justify-around gap-8 flex-wrap">
+            <div className="card bg-white shadow-purple-50 rounded-xl p-6 py-8 hover:shadow-xl transition w-80 h-60 border border-gray-100">
+              <div className="flex flex-col items- justify-start mb-2">
+                <FaMagnifyingGlass  className="text-purple-500" size={26}/>
+                <h3 className="pt-5 text-xl font-semibold text-gray-800">Semantic Search</h3>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Semantic and context-aware file search, making it easier to search through large swathes of documents.Easier to locate
+                even if you dont know what you are looking for.
+              </p>
+            </div>
+
+            <div className="card bg-white shadow-purple-50 rounded-xl p-6 hover:shadow-xl transition w-80 h-60 border border-gray-100">
+              <div className="flex flex-col items- justify-start mb-2">
+                <FaPaperclip className="text-purple-500" size={26}/>
+                <h3 className="pt-5 text-xl font-semibold text-gray-800">In App editing</h3>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Work on files with your team simultaneously with live editing, comments etc. with the help of third party applications.
+              </p>
+            </div>
+
+            <div className="card bg-white shadow-purple-50 rounded-xl p-6 hover:shadow-xl transition w-80 h-60 border border-gray-100">
+              <div className="flex flex-col items- justify-start mb-2">
+                <FaClipboardList className="text-purple-500" size={26}/>
+                <h3 className="pt-5 text-xl font-semibold text-gray-800">Advanced Security & Logging</h3>
+              </div>
+              <p className="text-gray-600 text-sm">
+                More complex permissions systems, more details of logging and records of historical data.
+              </p>
+            </div>
+          </div>
+        </section>
+
       </div>
+      <Footer/>
     </div>
   )
 }

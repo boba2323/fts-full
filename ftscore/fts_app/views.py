@@ -73,7 +73,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     )
 
     serializer_class = AccountUserSerialiser
-    permission_classes = [RegisterUserPermission, IsAuthorOrReadOnly]
+    permission_classes = [RegisterUserPermission]
     authentication_classes = [CustomAuthentication]
 
     def list(self, request, *args, **kwargs):

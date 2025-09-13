@@ -88,7 +88,7 @@ const Workspace = () => {
                 <FaUsers size='15' className='text-purple-200'/>
                 <Link to={`team/${userAttribute.teamId}`} 
                   className='text-orange-600 px-3 p-1 text-sm'>
-                  {userIn.team.name}</Link>
+                  {userIn?.team?.name}</Link>
               </div> 
             :<div className='flex flex-row justify-center items-center'>
               <p className='text-gray-500  p-1 text-sm '>No teams</p>

@@ -115,7 +115,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
                     withCredentials: true,
                 })
 
-                const teamListSelectData=response.data
+                const teamListSelectData=response.data.url
                 console.log("response data", teamListSelectData)
                 setACData((prev) => ({
                     ...prev,
@@ -124,21 +124,21 @@ const CreateAC= ({mode}) => {   //mode:create or update
                 console.log("teams api hit")
                 console.log(teamListSelectData)
                 
-            } catch (error){
-                console.log("in the catch block")
-                console.log(error)
-                setACData((prev) => ({
-                    ...prev,
-                    teamOptions:[]
-                }));
-            } finally {
-                setLoadingTeamData(false)  
-                console.log("in the final block")       
-            }
+                } catch (error){
+                    console.log("in the catch block")
+                    console.log(error)
+                    setACData((prev) => ({
+                        ...prev,
+                        teamOptions:[]
+                    }));
+                } finally {
+                    setLoadingTeamData(false)  
+                    console.log("in the final block")       
+                }
 
             }else {
                 try {
-                console.log("in the getteamlist try block")
+                console.log("in the getteamlist try block god leader")
                 const response = await axios.get(`${API_BASE_URL}/teams/`, {
                     headers: {
                     'Content-Type': 'application/json'
@@ -151,20 +151,21 @@ const CreateAC= ({mode}) => {   //mode:create or update
                     ...prev,
                     teamOptions:teamListSelectData
                 }));
-                console.log("teams api hit")
+                console.log("teams api hit god leader")
                 console.log(teamListSelectData)
                 
-            } catch (error){
-                console.log("in the catch block")
-                console.log(error)
-                setACData((prev) => ({
-                    ...prev,
-                    teamOptions:[]
-                }));
-            } finally {
-                setLoadingTeamData(false)  
-                console.log("in the final block")       
-            }}
+                } catch (error){
+                    console.log("in the catch block god leader")
+                    console.log(error)
+                    setACData((prev) => ({
+                        ...prev,
+                        teamOptions:[]
+                    }));
+                } finally {
+                    setLoadingTeamData(false)  
+                    console.log("in the final block god leader")       
+                }
+            }
             }
             
         console.log("in use effect")
@@ -181,7 +182,7 @@ const CreateAC= ({mode}) => {   //mode:create or update
         console.log("teamInput", teamInput)
         console.log("acData.teamOptions", acData)
         if (userIn?.is_not_god_only_L2_L3_leader){
-            teamInput = acData.teamOptions[0].url
+            teamInput = acData.teamOptions[0]
             console.log("notgotteaminput", teamInput)
         }
         if (!teamInput) {

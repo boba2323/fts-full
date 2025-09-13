@@ -1,6 +1,6 @@
 
 # Stage 1: Build React app
-FROM node:14.17.3 AS build
+FROM node:20 AS build
 
 WORKDIR /frontend
 

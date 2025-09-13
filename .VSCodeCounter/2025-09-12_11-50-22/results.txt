@@ -1,0 +1,102 @@
+Date : 2025-09-12 11:50:22
+Directory : /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components
+Total : 48 files,  4631 codes, 328 comments, 495 blanks, all 5454 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JavaScript JSX |         47 |      4,631 |        325 |        495 |      5,451 |
+| PostCSS        |          1 |          0 |          3 |          0 |          3 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                   |         48 |      4,631 |        328 |        495 |      5,454 |
+| AccessCode                                                                                                          |          1 |        125 |         10 |         17 |        152 |
+| AdminSupervisor                                                                                                     |         13 |      1,199 |         70 |        127 |      1,396 |
+| ApiFetch                                                                                                            |          2 |        107 |          5 |         13 |        125 |
+| ApiFetch/TeamAPI                                                                                                    |          2 |        107 |          5 |         13 |        125 |
+| Breadcrumb                                                                                                          |          1 |         62 |         12 |          9 |         83 |
+| Dashboard                                                                                                           |          1 |         35 |          2 |          4 |         41 |
+| DashboardMain                                                                                                       |          1 |        177 |          0 |         11 |        188 |
+| File                                                                                                                |          1 |        119 |          9 |         18 |        146 |
+| FileUpload                                                                                                          |          1 |        390 |         18 |         37 |        445 |
+| Footer                                                                                                              |          1 |         56 |          3 |          6 |         65 |
+| Header                                                                                                              |          3 |        106 |         12 |         13 |        131 |
+| Header2                                                                                                             |          1 |         60 |         17 |         12 |         89 |
+| Header3                                                                                                             |          1 |         49 |         17 |         12 |         78 |
+| Input                                                                                                               |          1 |         32 |          1 |          5 |         38 |
+| Landing                                                                                                             |          1 |        272 |          1 |         14 |        287 |
+| Loading                                                                                                             |          1 |          8 |          9 |          3 |         20 |
+| Modal                                                                                                               |          2 |        178 |          1 |          7 |        186 |
+| Modification                                                                                                        |          1 |        115 |          6 |         14 |        135 |
+| Pagination                                                                                                          |          1 |         43 |          0 |          3 |         46 |
+| RemoveYourself                                                                                                      |          1 |         36 |          0 |          5 |         41 |
+| RightBar                                                                                                            |          1 |         99 |         18 |         11 |        128 |
+| SelectInputs                                                                                                        |          1 |         50 |          7 |          5 |         62 |
+| Sidebar                                                                                                             |          1 |         83 |         10 |         12 |        105 |
+| SpaceBetweenFields                                                                                                  |          1 |          8 |          0 |          4 |         12 |
+| Team                                                                                                                |          4 |        955 |         56 |         97 |      1,108 |
+| TestComp                                                                                                            |          1 |          0 |         18 |          4 |         22 |
+| UsersList                                                                                                           |          1 |        122 |         18 |         17 |        157 |
+| UtilsErrorRendering                                                                                                 |          2 |         51 |          5 |          7 |         63 |
+| Workspace                                                                                                           |          1 |         94 |          3 |          8 |        105 |
++---------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                            | language       | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AccessCode/AccessCodeList.jsx             | JavaScript JSX |        125 |         10 |         17 |        152 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminAC.jsx               | JavaScript JSX |         17 |          1 |          3 |         21 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminAccCodeDel.jsx       | JavaScript JSX |         40 |          1 |          5 |         46 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminFileDelete.jsx       | JavaScript JSX |         41 |          1 |          4 |         46 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminFileList.jsx         | JavaScript JSX |         12 |          0 |          3 |         15 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminModelCard.jsx        | JavaScript JSX |         36 |         24 |          8 |         68 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminModification.jsx     | JavaScript JSX |         11 |          1 |          2 |         14 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminPanel.jsx            | JavaScript JSX |         53 |          1 |          7 |         61 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminTeam.jsx             | JavaScript JSX |         16 |          1 |          3 |         20 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminTeamDelete.jsx       | JavaScript JSX |         40 |          1 |          4 |         45 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminUser.jsx             | JavaScript JSX |         11 |          0 |          5 |         16 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/AdminUserDelete.jsx       | JavaScript JSX |         54 |          1 |          4 |         59 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/CreateAccCode.jsx         | JavaScript JSX |        328 |         15 |         38 |        381 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/AdminSupervisor/CreateTeam.jsx            | JavaScript JSX |        540 |         23 |         41 |        604 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/ApiFetch/TeamAPI/TeamPostApi.jsx          | JavaScript JSX |         99 |          5 |          9 |        113 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/ApiFetch/TeamAPI/TeamgetApi.jsx           | JavaScript JSX |          8 |          0 |          4 |         12 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Breadcrumb/Breadcrumb.jsx                 | JavaScript JSX |         62 |         12 |          9 |         83 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Dashboard/FtsDashboard.jsx                | JavaScript JSX |         35 |          2 |          4 |         41 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/DashboardMain/DashboardMain.jsx           | JavaScript JSX |        177 |          0 |         11 |        188 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/File/FileList.jsx                         | JavaScript JSX |        119 |          9 |         18 |        146 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/FileUpload/FileUpload.jsx                 | JavaScript JSX |        390 |         18 |         37 |        445 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Footer/Footer.jsx                         | JavaScript JSX |         56 |          3 |          6 |         65 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Header/Header.jsx                         | JavaScript JSX |         39 |          0 |          5 |         44 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Header/HeaderLanding.jsx                  | JavaScript JSX |         67 |          9 |          8 |         84 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Header/header.css                         | PostCSS        |          0 |          3 |          0 |          3 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Header2/Header2.jsx                       | JavaScript JSX |         60 |         17 |         12 |         89 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Header3/Header3.jsx                       | JavaScript JSX |         49 |         17 |         12 |         78 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Input/InputNoRequire.jsx                  | JavaScript JSX |         32 |          1 |          5 |         38 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Landing/Landing.jsx                       | JavaScript JSX |        272 |          1 |         14 |        287 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Loading/Loading.jsx                       | JavaScript JSX |          8 |          9 |          3 |         20 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Modal/ModalDeleteTeam.jsx                 | JavaScript JSX |         87 |          0 |          4 |         91 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Modal/ModalSearch.jsx                     | JavaScript JSX |         91 |          1 |          3 |         95 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Modification/Modification.jsx             | JavaScript JSX |        115 |          6 |         14 |        135 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Pagination/PaginationSticker.jsx          | JavaScript JSX |         43 |          0 |          3 |         46 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/RemoveYourself/RemoveYourself.jsx         | JavaScript JSX |         36 |          0 |          5 |         41 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/RightBar/Rightbar.jsx                     | JavaScript JSX |         99 |         18 |         11 |        128 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/SelectInputs/SelectInput.jsx              | JavaScript JSX |         50 |          7 |          5 |         62 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Sidebar/Sidebar.jsx                       | JavaScript JSX |         83 |         10 |         12 |        105 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/SpaceBetweenFields/Space2.jsx             | JavaScript JSX |          8 |          0 |          4 |         12 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Team/CreateTeamNonSup.jsx                 | JavaScript JSX |        413 |         20 |         34 |        467 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Team/DeleteSelfMembership.jsx             | JavaScript JSX |         53 |          0 |          8 |         61 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Team/Team.jsx                             | JavaScript JSX |        138 |          9 |         17 |        164 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Team/TeamView.jsx                         | JavaScript JSX |        351 |         27 |         38 |        416 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/TestComp/Test.jsx                         | JavaScript JSX |          0 |         18 |          4 |         22 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/UsersList/UserList.jsx                    | JavaScript JSX |        122 |         18 |         17 |        157 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/UtilsErrorRendering/BelongsToTeam.jsx     | JavaScript JSX |         17 |          0 |          4 |         21 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/UtilsErrorRendering/ErrorRenderHandle.jsx | JavaScript JSX |         34 |          5 |          3 |         42 |
+| /home/boba2323/crumpet/fts-full/ftsfrontend/react-frontend/src/components/Workspace/Workspace.jsx                   | JavaScript JSX |         94 |          3 |          8 |        105 |
+| Total                                                                                                               |                |      4,631 |        328 |        495 |      5,454 |
++---------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

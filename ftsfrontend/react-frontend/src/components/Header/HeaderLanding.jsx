@@ -71,9 +71,11 @@ const HeaderLanding = () => {
                     </div>
                 </div>
                 </> :<div className={scrollPos > 0
-                    ?"flex justify-center items-center userbox border-2 bg-white border-orange-300 w-20 m-2 rounded-md text-gray-700"
-                    :"flex justify-center items-center userbox border-2  bg-orange-300 border-orange-300 w-20 m-2 font-semibold rounded-md text-gray-700"}>
-                        <p className='text-base '>Login</p>
+                    ?"flex justify-center items-center userbox border-2 cursor:pointer bg-white border-orange-300 w-20 m-2 rounded-md text-gray-700"
+                    :"flex justify-center items-center userbox border-2  cursor:pointer bg-orange-300 border-orange-300 w-20 m-2 font-semibold rounded-md text-gray-700"}>
+                        <Link to={`/login`}>
+                            <p className='text-base '>Login</p>
+                        </Link>
                     </div>
             }
     </nav>

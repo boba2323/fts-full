@@ -61,3 +61,11 @@ We can just copy paste the local env into the droplet env.
      POSTGRES_PASSWORD: 'xxxx'
 9.	The above is your docker compose and how it will download the docker images
 10.	sudo docker compose up –d
+
+## More notes
+in index.html, keep
+<meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests" />
+
+to force django to generate https scheme
